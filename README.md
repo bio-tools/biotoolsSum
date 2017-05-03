@@ -1,3 +1,5 @@
+THIS IS README CREATED WITH BASIC TEMPLATE, IT DOES NOT CONTAIN ANY INFORMATION ABOUT THIS PROJECT YET.
+
 This project was bootstrapped with [Create React App](https://github.com/facebookincubator/create-react-app).
 
 Below you will find some information on how to perform common tasks.<br>
