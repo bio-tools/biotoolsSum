@@ -1,0 +1,3 @@
+/flow-typed/*
+*/**/__snapshots__/*
+*.stories.js
