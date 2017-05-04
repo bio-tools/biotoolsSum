@@ -12,7 +12,9 @@ class ProteinServices extends Component {
 
   render () {
     return (
-      <div className='container'>
+      <div>
+        <h2>Protein Services</h2>
+        <p className='lead'>All ELIXIR CZ Services for studies on protein structures.</p>
         <BioToolsFetch url={this.state.query} />
       </div>
     )

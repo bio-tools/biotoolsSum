@@ -70,7 +70,7 @@ class BioToolsFetch extends Component {
         <div>
           {toolsCount
             ? <div>
-              <h2>There are {toolsCount} results</h2>
+              <p className='lead'>There are {toolsCount} services available.</p>
               {toolsCount > 25 && <Pagination
                 activePage={this.state.currentPage}
                 itemsCountPerPage={this.state.itemsCountPerPage}
@@ -96,7 +96,7 @@ class BioToolsFetch extends Component {
               </Loader>
             </div>
             : <div>
-              <h2 className='text-center'>We are sorry, but there are no results</h2>
+              <h2 className='text-center'>We are sorry, but there are no services.</h2>
             </div>
           }
         </div>

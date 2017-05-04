@@ -12,7 +12,9 @@ class RNAServices extends Component {
 
   render () {
     return (
-      <div className='container'>
+      <div>
+        <h2>RNA Services</h2>
+        <p className='lead'>All ELIXIR CZ Services for studies on RNA structures.</p>
         <BioToolsFetch url={this.state.query} />
       </div>
     )

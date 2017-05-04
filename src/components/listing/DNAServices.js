@@ -12,7 +12,9 @@ class DNAServices extends Component {
 
   render () {
     return (
-      <div className='container'>
+      <div>
+        <h2>DNA Services</h2>
+        <p className='lead'>All ELIXIR CZ Services for studies on DNA structures.</p>
         <BioToolsFetch url={this.state.query} />
       </div>
     )

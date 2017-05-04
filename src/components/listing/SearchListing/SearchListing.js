@@ -17,6 +17,10 @@ const bioToolsApiCallUrl = R.compose(
   R.unless(
     R.has('ord'),
     R.assoc('ord', 'asc')
+  ),
+  R.unless(
+    R.has('collectionID'),
+    R.assoc('collectionID', 'elixir-cz')
   )
 )
 
@@ -42,7 +46,8 @@ class SearchListing extends Component {
 
   render () {
     return (
-      <div className='container'>
+      <div>
+        <h2>Search services from bio.tools database</h2>
         <Form onSubmit={this.handleFormSubmit} />
         {this.state.submitted && <div>
           <BioToolsFetch url={bioToolsApiCallUrl(this.state.query)} />
