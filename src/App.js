@@ -7,6 +7,10 @@ import './styles/App.css'
 import '../node_modules/spectre.css/docs/dist/spectre.min.css'
 import '../node_modules/react-table/react-table.css'
 import '../node_modules/bootstrap/dist/css/bootstrap.min.css'
+import rna from './images/rna.svg'
+import dna from './images/dna.svg'
+import protein from './images/protein.svg'
+import glass from './images/mag_glass.svg'
 import FormListing from './components/listing/SearchListing/SearchListing'
 import RNAServices from './components/listing/RNAServices'
 import DNAServices from './components/listing/DNAServices'
@@ -42,7 +46,7 @@ class App extends Component {
                 <Link to='/dna-services'>
                   <div className='card greyscale '>
                     <div className='card-image'>
-                      <img className='img-responsive' src='http://i.imgbox.com/gVyLgccq.jpg' alt='DNA icon' />
+                      <img className='img-responsive center' src={dna} alt='DNA icon' style={{ height: '100' }} />
                     </div>
                     <div className='card-header'>
                       <h2 className='card-title text-center'>DNA services</h2>
@@ -54,7 +58,7 @@ class App extends Component {
                 <Link to='/rna-services'>
                   <div className='card greyscale'>
                     <div className='card-image'>
-                      <img className='img-responsive' src='./images/rna.svg' alt='RNA icon' />
+                      <img className='img-responsive center' src={rna} alt='RNA icon' style={{ height: '100' }} />
                     </div>
                     <div className='card-header'>
                       <h2 className='card-title text-center'>RNA services</h2>
@@ -66,7 +70,7 @@ class App extends Component {
                 <div className='card greyscale'>
                   <Link to='/protein-services'>
                     <div className='card-image'>
-                      <img className='img-responsive' src='http://i.imgbox.com/gVyLgccq.jpg' alt='Protein icon' />
+                      <img className='img-responsive center' src={protein} alt='Protein icon' style={{ height: '100' }} />
                     </div>
                     <div className='card-header'>
                       <h2 className='card-title text-center'>Protein services</h2>
@@ -78,7 +82,7 @@ class App extends Component {
                 <div className='card greyscale'>
                   <Link to='/search-services'>
                     <div className='card-image'>
-                      <img className='img-responsive' src='http://i.imgbox.com/gVyLgccq.jpg' alt='Search icon' />
+                      <img className='img-responsive center' src={glass} alt='Search icon' style={{ height: '100' }} />
                     </div>
                     <div className='card-header'>
                       <h2 className='card-title text-center'>Search</h2>

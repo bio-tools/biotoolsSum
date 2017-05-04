@@ -11,5 +11,10 @@ ol li {
 }
 
 .greyscale:hover {
-  background-color: #dadada
+  background-color: #dadada;
+}
+
+img.center {
+  display: block;
+  margin: 0 auto;
 }
