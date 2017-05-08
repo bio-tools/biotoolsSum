@@ -1,7 +1,7 @@
 import React, { Component } from 'react'
 import R from 'ramda'
 import 'whatwg-fetch'
-import ToolsTable from './ToolsTable'
+import ToolsTable from './BioToolsTable'
 import Pagination from 'react-js-pagination'
 import Loader from 'react-loader'
 

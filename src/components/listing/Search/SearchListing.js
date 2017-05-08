@@ -1,7 +1,7 @@
 import React, { Component } from 'react'
 import R from 'ramda'
 import Form from './Form'
-import BioToolsFetch from '../../BioToolsFetch'
+import BioToolsFetch from '../../BioToolsData'
 
 const bioToolsApiCallUrl = R.compose(
   R.concat('https://bio.tools/api/tool/?'),

@@ -11,6 +11,7 @@ const pluckData = tools => {
       R.assoc('topic', tool.topic),
       R.assoc('description', tool.description),
       R.assoc('homepage', tool.homepage),
+      R.assoc('version', tool.version),
       R.assoc('name', tool.name)
     )({})
   })
@@ -22,12 +23,16 @@ const columns = [{
   minWidth: 120,
   maxWidth: 180,
   header: 'Name',
-  accessor: data => <a href={data.homepage} target='_blank'>{data.name}</a>,
+  accessor: data => <div>
+    <a href={data.homepage} target='_blank'>{data.name}</a>
+    {data.version && <span> v.{data.version}</span>}
+  </div>,
 }, {
   id: 'description',
   sortable: false,
   minWidth: 150,
   maxWidth: 300,
+  aggregate: true,
   header: 'Description',
   accessor: data => data.description,
 }, {

@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import BioToolsFetch from '../BioToolsFetch'
+import BioToolsFetch from '../BioToolsData'
 
 class RNAServices extends Component {
   constructor (props) {
