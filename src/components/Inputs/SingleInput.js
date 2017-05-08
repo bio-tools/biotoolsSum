@@ -1,33 +1,15 @@
 import React from 'react'
-import PropTypes from 'prop-types'
+import {Col, ControlLabel, FormControl, FormGroup} from 'react-bootstrap'
 
-const SingleInput = (props) => (
-  <div className='form-group'>
-    <div className='col-3'>
-      <label className='form-label'>{props.title}</label>
-    </div>
-    <div className='col-9'>
-      <input
-        className='form-input'
-        name={props.name}
-        type={props.inputType}
-        value={props.content}
-        onChange={props.controlFunc}
-        placeholder={props.placeholder} />
-    </div>
-  </div>
+const SingleInput = ({ label, input, ...props }) => (
+  <FormGroup>
+    <Col componentClass={ControlLabel} sm={2}>
+      {label}
+    </Col>
+    <Col sm={10}>
+      <FormControl {...input} {...props} />
+    </Col>
+  </FormGroup>
 )
-
-SingleInput.propTypes = {
-  inputType: PropTypes.oneOf(['text', 'number']).isRequired,
-  title: PropTypes.string.isRequired,
-  name: PropTypes.string.isRequired,
-  controlFunc: PropTypes.func.isRequired,
-  content: PropTypes.oneOfType([
-    PropTypes.string,
-    PropTypes.number,
-  ]).isRequired,
-  placeholder: PropTypes.string,
-}
 
 export default SingleInput
