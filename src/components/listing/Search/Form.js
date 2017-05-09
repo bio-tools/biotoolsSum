@@ -1,7 +1,10 @@
 import React, { Component } from 'react'
 import { Field, reduxForm } from 'redux-form'
-import {Col, Form} from 'react-bootstrap'
+import {Button, Col, Form, FormGroup, Radio} from 'react-bootstrap'
 import SingleInput from '../../Inputs/SingleInput'
+import RadioGroup from '../../Inputs/RadioGroup'
+import Select from '../../Inputs/Select'
+import SingleRadio from "../../Inputs/SingleRadio";
 
 class FormContainer extends Component {
   render () {
@@ -10,7 +13,7 @@ class FormContainer extends Component {
     return (
       <div>
         <div className='columns'>
-          <Col md={9} sm={12}>
+          <Col md={10} sm={12}>
             <Form horizontal onSubmit={handleSubmit}>
               <Field
                 name='q'
@@ -30,48 +33,30 @@ class FormContainer extends Component {
                 label='Collection'
                 type='text'
                 placeholder='Collection (e.g. "ELIXIR-CZ")' />
-              <div className='form-group'>
-                <div className='col-2'>
-                  <label className='form-label'>Order</label>
-                </div>
-                <div className='col-10'>
-                  <label className='form-radio'>
-                    <Field name='ord' component='input' type='radio' value='asc' />
-                    <i className='form-icon' />
-                    Ascending
-                  </label>
-                  <label className='form-radio'>
-                    <Field name='ord' component='input' type='radio' value='desc' />
-                    <i className='form-icon' />
-                    Descending
-                  </label>
-                </div>
-              </div>
-              <div className='form-group'>
-                <div className='col-2'>
-                  <label className='form-label'>Sort by</label>
-                </div>
-                <div className='col-10'>
-                  <Field name='sort' component='select' value='lastUpdate' className='form-select'>
-                    <option />
-                    <option value='lastUpdate'>Updated</option>
-                    <option value='additionDate'>Added</option>
-                    <option value='name'>Name</option>
-                  </Field>
-                </div>
-              </div>
-              <div className='form-group'>
-                <button type='submit'
-                  className='btn btn-primary'
-                  disabled={pristine || submitting}>
-                Submit
-              </button>
-                <button type='button'
-                  className='btn btn-link'
-                  disabled={pristine || submitting} onClick={reset}>
-                Clear Values
-              </button>
-              </div>
+              <Field name='sort' component={Select} tape='' label='Sort by'>
+                <option value='' />
+                <option value='lastUpdate'>Updated</option>
+                <option value='additionDate'>Added</option>
+                <option value='name'>Name</option>
+              </Field>
+              <RadioGroup label='Order'>
+                <Field name='ord' component={SingleRadio} type='radio' value='asc' label='Ascending' />
+                <Field name='ord' component={SingleRadio} type='radio' value='desc' label='Descending' />
+              </RadioGroup>
+              <FormGroup>
+                <Col smOffset={2} sm={10}>
+                  <Button type='submit'
+                    className='btn btn-primary'
+                    disabled={pristine || submitting}>
+                    Submit
+                  </Button>
+                  <Button type='button'
+                    className='btn btn-link'
+                    disabled={pristine || submitting} onClick={reset}>
+                    Clear Values
+                  </Button>
+                </Col>
+              </FormGroup>
             </Form>
           </Col>
         </div>

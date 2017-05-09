@@ -1,5 +1,5 @@
 import React from 'react'
-import {Col, ControlLabel, FormControl, FormGroup} from 'react-bootstrap'
+import { Col, ControlLabel, FormControl, FormGroup } from 'react-bootstrap'
 
 const SingleInput = ({ label, input, ...props }) => (
   <FormGroup>

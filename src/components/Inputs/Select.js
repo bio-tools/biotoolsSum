@@ -1,33 +1,17 @@
 import React from 'react'
-import PropTypes from 'prop-types'
+import { Col, ControlLabel, FormControl, FormGroup } from 'react-bootstrap'
 
-const Select = (props) => (
-  <div className='form-group'>
-    <div className='col-3'>
-      <label className='form-label'>{props.title}</label>
-    </div>
-    <div className='col-9'>
-      <select
-        name={props.name}
-        value={props.selectedOption}
-        onChange={props.controlFunc}
-        className='form-select'>
-        {props.options.map(opt => {
-          return (
-            <option key={opt} value={opt}>{opt}</option>
-          )
-        })}
-      </select>
-    </div>
-  </div>
+const Select = ({ label, input, children, ...custom }) => (
+  <FormGroup controlId='form-control-select'>
+    <Col componentClass={ControlLabel} sm={2}>
+      {label}
+    </Col>
+    <Col sm={10}>
+      <FormControl componentClass='select' {...input}>
+        {children}
+      </FormControl>
+    </Col>
+  </FormGroup>
 )
-
-Select.propTypes = {
-  name: PropTypes.string.isRequired,
-  options: PropTypes.array.isRequired,
-  selectedOption: PropTypes.string,
-  controlFunc: PropTypes.func.isRequired,
-  placeholder: PropTypes.string,
-}
 
 export default Select

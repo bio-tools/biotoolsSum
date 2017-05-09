@@ -1,36 +1,15 @@
 import React from 'react'
-import PropTypes from 'prop-types'
+import {Col, ControlLabel, FormGroup} from 'react-bootstrap'
 
-const RadioGroup = (props) => (
-  <div className='form-group'>
-    <div className='col-3'>
-      <label className='form-label'>{props.title}</label>
-    </div>
-    <div className='col-9'>
-      {props.options.map(option => {
-        return (
-          <label key={option} className='form-radio'>
-            <input
-              name={props.setName}
-              onChange={props.controlFunc}
-              value={option}
-              checked={props.selectedOptions === option}
-              type='radio' />
-            <i className='form-icon' />
-            {option}
-          </label>
-        )
-      })}
-    </div>
-  </div>
+const RadioGroup = ({ label, children, ...props }) => (
+  <FormGroup controlId='form-control-radio' {...props}>
+    <Col componentClass={ControlLabel} sm={2}>
+      {label}
+    </Col>
+    <Col sm={10}>
+      {children}
+    </Col>
+  </FormGroup>
 )
-
-RadioGroup.propTypes = {
-  title: PropTypes.string.isRequired,
-  setName: PropTypes.string.isRequired,
-  options: PropTypes.array.isRequired,
-  selectedOptions: PropTypes.string.isRequired,
-  controlFunc: PropTypes.func.isRequired,
-}
 
 export default RadioGroup
