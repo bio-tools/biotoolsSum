@@ -7,7 +7,7 @@ const SingleInput = ({ label, input, ...props }) => (
       {label}
     </Col>
     <Col sm={10}>
-      <FormControl {...input} {...props} />
+      <FormControl {...input} />
     </Col>
   </FormGroup>
 )

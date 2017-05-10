@@ -8,6 +8,7 @@
     "ramda": "^0.23.0",
     "react": "^15.5.4",
     "react-bootstrap": "^0.31.0",
+    "react-bootstrap-table": "^3.3.3",
     "react-dom": "^15.5.4",
     "react-js-pagination": "^2.0.2",
     "react-loader": "^2.4.0",

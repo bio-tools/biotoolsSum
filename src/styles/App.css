@@ -6,15 +6,16 @@ ol li {
   list-style-position: outside;
 }
 
-.greyscale {
-  transition: background-color 0.6s ease;
-}
-
-.greyscale:hover {
-  background-color: #dadada;
-}
-
 img.center {
   display: block;
   margin: 0 auto;
+}
+
+table, th, td {
+  border: 1px solid black;
+  border-collapse: collapse;
+}
+th, td {
+  padding: 20px !important;
+  text-align: center;
 }
