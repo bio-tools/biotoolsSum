@@ -49,9 +49,7 @@ class SearchListing extends Component {
       <div>
         <h2>Search services from bio.tools database</h2>
         <Form onSubmit={this.handleFormSubmit} />
-        {this.state.submitted && <div>
-          <BioToolsFetch url={bioToolsApiCallUrl(this.state.query)} />
-        </div>}
+        {this.state.submitted && <BioToolsFetch url={bioToolsApiCallUrl(this.state.query)} />}
       </div>
     )
   }

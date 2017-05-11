@@ -8,6 +8,13 @@ class DNAServices extends Component {
       submitted: false,
       query: 'https://bio.tools/api/tool/?collectionID=elixir-cz&q=dna&sort=lastUpdate&ord=asc',
     }
+
+    this.handleSelect = this.handleSelect.bind(this)
+  }
+
+  handleSelect (eventKey, event) {
+    this.setState({ activeMenuItem: eventKey })
+    console.log(event)
   }
 
   render () {

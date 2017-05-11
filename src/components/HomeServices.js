@@ -22,22 +22,22 @@ class App extends Component {
             <tr>
               <td>DNA</td>
               <td>
-                <Link to='/dna-services'>
+                <Link to='/services/dna-services'>
                   <Image src={dnaSequence} rounded />
                 </Link>
               </td>
               <td>
-                <Link to='/dna-services'>
+                <Link to='/services/dna-services'>
                   <Image src={dnaSequence} rounded />
                 </Link>
               </td>
               <td>
-                <Link to='/dna-services'>
+                <Link to='/services/dna-services'>
                   <Image src={dnaSequence} rounded />
                 </Link>
               </td>
               <td>
-                <Link to='/dna-services'>
+                <Link to='/services/dna-services'>
                   <Image src={dnaSequence} rounded />
                 </Link>
               </td>
@@ -45,22 +45,22 @@ class App extends Component {
             <tr>
               <td>RNA</td>
               <td>
-                <Link to='/rna-services'>
+                <Link to='/services/rna-services'>
                   <Image src={rnaSequence} rounded />
                 </Link>
               </td>
               <td>
-                <Link to='/rna-services'>
+                <Link to='/services/rna-services'>
                   <Image src={rnaSequence} rounded />
                 </Link>
               </td>
               <td>
-                <Link to='/rna-services'>
+                <Link to='/services/rna-services'>
                   <Image src={rnaSequence} rounded />
                 </Link>
               </td>
               <td>
-                <Link to='/rna-services'>
+                <Link to='/services/rna-services'>
                   <Image src={rnaSequence} rounded />
                 </Link>
               </td>
@@ -68,22 +68,22 @@ class App extends Component {
             <tr>
               <td>Protein</td>
               <td>
-                <Link to='/protein-services'>
+                <Link to='/services/protein-services'>
                   <Image src={proteinSequence} rounded />
                 </Link>
               </td>
               <td>
-                <Link to='/protein-services'>
+                <Link to='/services/protein-services'>
                   <Image src={proteinSequence} rounded />
                 </Link>
               </td>
               <td>
-                <Link to='/protein-services'>
+                <Link to='/services/protein-services'>
                   <Image src={proteinSequence} rounded />
                 </Link>
               </td>
               <td>
-                <Link to='/protein-services'>
+                <Link to='/services/protein-services'>
                   <Image src={proteinSequence} rounded />
                 </Link>
               </td>
@@ -91,22 +91,22 @@ class App extends Component {
             <tr>
               <td><p>Drugs and other small molecules</p></td>
               <td className='greyscale'>
-                <Link to='/search-services'>
+                <Link to='/services/search-services'>
                   <Image src={drugSequence} rounded />
                 </Link>
               </td>
               <td>
-                <Link to='/search-services'>
+                <Link to='/services/search-services'>
                   <Image src={drugSequence} rounded />
                 </Link>
               </td>
               <td>
-                <Link to='/search-services'>
+                <Link to='/services/search-services'>
                   <Image src={drugSequence} rounded />
                 </Link>
               </td>
               <td>
-                <Link to='/search-services'>
+                <Link to='/services/search-services'>
                   <Image src={drugSequence} rounded />
                 </Link>
               </td>

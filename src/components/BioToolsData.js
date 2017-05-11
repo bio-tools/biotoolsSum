@@ -70,7 +70,6 @@ class BioToolsFetch extends Component {
         <div>
           {toolsCount
             ? <div>
-              <p className='lead'>There are {toolsCount} services available.</p>
               {toolsCount > 25 && <Pagination
                 activePage={this.state.currentPage}
                 itemsCountPerPage={this.state.itemsCountPerPage}

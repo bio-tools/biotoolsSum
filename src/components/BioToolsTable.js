@@ -1,6 +1,7 @@
 import React, { Component } from 'react'
 import R from 'ramda'
 import ReactTable from 'react-table'
+import {TextTruncate} from 'react-text-truncate'
 
 const pluckData = tools => {
   return tools.map(tool => {
@@ -34,7 +35,8 @@ const columns = [{
   maxWidth: 300,
   aggregate: true,
   header: 'Description',
-  accessor: data => data.description,
+  accessor: data => data.description
+
 }, {
   id: 'topic',
   sortable: false,

@@ -1,14 +1,12 @@
 import React from 'react'
-import {Col, ControlLabel, FormGroup} from 'react-bootstrap'
+import {ControlLabel, FormControl, FormGroup} from 'react-bootstrap'
 
 const RadioGroup = ({ label, children, ...props }) => (
   <FormGroup controlId='form-control-radio' {...props}>
-    <Col componentClass={ControlLabel} sm={2}>
-      {label}
-    </Col>
-    <Col sm={10}>
+    <ControlLabel>{label}</ControlLabel>
+    <FormGroup>
       {children}
-    </Col>
+    </FormGroup>
   </FormGroup>
 )
 

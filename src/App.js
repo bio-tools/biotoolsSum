@@ -4,15 +4,14 @@ import { Provider } from 'react-redux'
 import R from 'ramda'
 import { BrowserRouter as Router, Route } from 'react-router-dom'
 import './styles/App.css'
-import '../node_modules/spectre.css/docs/dist/spectre.min.css'
 import '../node_modules/react-table/react-table.css'
 import '../node_modules/bootstrap/dist/css/bootstrap.min.css'
-import '../node_modules/react-bootstrap-table/dist/react-bootstrap-table-all.min.css'
 import FormListing from './components/listing/Search/SearchListing'
 import RNAServices from './components/listing/RNAServices'
 import DNAServices from './components/listing/DNAServices'
 import ProteinServices from './components/listing/ProteinServices'
 import HomeServices from './components/HomeServices'
+import ServicesNavbar from './components/ServicesNavbar'
 
 class App extends Component {
   constructor (props) {
@@ -39,11 +38,12 @@ class App extends Component {
       <Provider store={store}>
         <Router>
           <div className='container'>
-            <Route path='/' exact component={HomeServices} />
-            <Route path='/dna-services' component={DNAServices} />
-            <Route path='/rna-services' component={RNAServices} />
-            <Route path='/protein-services' component={ProteinServices} />
-            <Route path='/search-services' component={FormListing} />
+            <Route exact path='/services' component={HomeServices} />
+            <Route path='/services/*' component={ServicesNavbar} />
+            <Route path='/services/dna-services' component={DNAServices} />
+            <Route path='/services/rna-services' component={RNAServices} />
+            <Route path='/services/protein-services' component={ProteinServices} />
+            <Route path='/services/search-services' component={FormListing} />
           </div>
         </Router>
       </Provider>
