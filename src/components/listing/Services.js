@@ -80,25 +80,25 @@ function getStateObject (id) {
       }
     case '1d-drug-services':
       return {
-        query: 'https://bio.tools/api/tool/?collectionID=elixir-cz&sort=lastUpdate&ord=asc&q="drug-sequence"',
+        query: 'https://bio.tools/api/tool/?collectionID=elixir-cz&sort=lastUpdate&ord=asc&q="small-molecule-primary-sequence"',
         header: '1D DNA Services',
         message: 'DNA sequences',
       }
     case '2d-drug-services':
       return {
-        query: 'https://bio.tools/api/tool/?collectionID=elixir-cz&sort=lastUpdate&ord=asc&q="drug-secondary-structure"',
+        query: 'https://bio.tools/api/tool/?collectionID=elixir-cz&sort=lastUpdate&ord=asc&q="small-molecule-secondary-structure"',
         header: '2D DNA Services',
         message: 'secondary DNA structures',
       }
     case '3d-drug-services':
       return {
-        query: 'https://bio.tools/api/tool/?collectionID=elixir-cz&sort=lastUpdate&ord=asc&q="drug-structure"',
+        query: 'https://bio.tools/api/tool/?collectionID=elixir-cz&sort=lastUpdate&ord=asc&q="small-molecule-structure"',
         header: '3D DNA Services',
         message: 'DNA structures',
       }
     case 'xd-drug-services':
       return {
-        query: 'https://bio.tools/api/tool/?collectionID=elixir-cz&sort=lastUpdate&ord=asc&q="drug-omics"',
+        query: 'https://bio.tools/api/tool/?collectionID=elixir-cz&sort=lastUpdate&ord=asc&q="small-molecule-omics"',
         header: 'xD DNA Services',
         message: 'DNA-omics',
       }

@@ -1,20 +1,21 @@
 import React, { Component } from 'react'
 import {MenuItem, Nav, Navbar, NavDropdown} from 'react-bootstrap'
-import {Link, NavLink} from 'react-router-dom'
+import {Link} from 'react-router-dom'
+import {LinkContainer} from 'react-router-bootstrap'
 
 class ServicesNavbar extends Component {
   constructor (props) {
     super(props)
     this.state = {
-      activeMenuItemKey: 1.1,
+      activeMenuItemKey: null,
     }
 
     this.handleSelect = this.handleSelect.bind(this)
   }
 
   handleSelect (eventKey, event) {
+    console.log('eventKey, ', eventKey)
     this.setState({ activeMenuItem: eventKey })
-    console.log(event)
   }
 
   render () {
@@ -29,92 +30,60 @@ class ServicesNavbar extends Component {
         <Navbar.Collapse>
           <Nav activeKey={this.state.activeMenuItem} onSelect={this.handleSelect}>
             <NavDropdown eventKey={1} title='DNA Services' id='dna-nav-dropdown'>
-              <MenuItem eventKey={1.1}>
-                <NavLink to='/services/dna-services' style={{ textDecoration: 'none', color: 'black' }}>
-                  1D DNA Services
-                </NavLink>
-              </MenuItem>
-              <MenuItem eventKey={1.2}>
-                <NavLink to='/services/dna-services' style={{ textDecoration: 'none', color: 'black' }}>
-                  2D DNA Services
-                </NavLink>
-              </MenuItem>
-              <MenuItem eventKey={1.3}>
-                <NavLink to='/services/dna-services' style={{ textDecoration: 'none', color: 'black' }}>
-                  3D DNA Services
-                </NavLink>
-              </MenuItem>
-              <MenuItem eventKey={1.4}>
-                <NavLink to='/services/dna-services' style={{ textDecoration: 'none', color: 'black' }}>
-                  xD DNA Services
-                </NavLink>
-              </MenuItem>
+              <LinkContainer to='/services/1d-dna-services'>
+                <MenuItem eventKey={5}>1D DNA Services</MenuItem>
+              </LinkContainer>
+              <LinkContainer to='/services/2d-dna-services'>
+                <MenuItem eventKey={6}>2D DNA Services</MenuItem>
+              </LinkContainer>
+              <LinkContainer to='/services/3d-dna-services'>
+                <MenuItem eventKey={7}>3D DNA Services</MenuItem>
+              </LinkContainer>
+              <LinkContainer to='/services/xd-dna-services'>
+                <MenuItem eventKey={8}>xD DNA Services</MenuItem>
+              </LinkContainer>
             </NavDropdown>
             <NavDropdown eventKey={2} title='RNA Services' id='rna-nav-dropdown'>
-              <MenuItem eventKey={2.1}>
-                <NavLink to='/services/rna-services' style={{ textDecoration: 'none', color: 'black' }}>
-                  1D RNA Services
-                </NavLink>
-              </MenuItem>
-              <MenuItem eventKey={2.2}>
-                <NavLink to='/services/rna-services' style={{ textDecoration: 'none', color: 'black' }}>
-                  2D RNA Services
-                </NavLink>
-              </MenuItem>
-              <MenuItem eventKey={2.3}>
-                <NavLink to='/services/rna-services' style={{ textDecoration: 'none', color: 'black' }}>
-                  3D RNA Services
-                </NavLink>
-              </MenuItem>
-              <MenuItem eventKey={2.4}>
-                <NavLink to='/services/rna-services' style={{ textDecoration: 'none', color: 'black' }}>
-                  xD RNA Services
-                </NavLink>
-              </MenuItem>
+              <LinkContainer to='/services/1d-rna-services'>
+                <MenuItem eventKey={2.1}>1D RNA Services</MenuItem>
+              </LinkContainer>
+              <LinkContainer to='/services/2d-rna-services'>
+                <MenuItem eventKey={2.2}>2D RNA Services</MenuItem>
+              </LinkContainer>
+              <LinkContainer to='/services/3d-rna-services'>
+                <MenuItem eventKey={2.3}>3D RNA Services</MenuItem>
+              </LinkContainer>
+              <LinkContainer to='/services/xd-rna-services'>
+                <MenuItem eventKey={2.4}>xD RNA Services</MenuItem>
+              </LinkContainer>
             </NavDropdown>
             <NavDropdown eventKey={3} title='Protein Services' id='protein-nav-dropdown'>
-              <MenuItem eventKey={3.1}>
-                <NavLink to='/services/protein-services' style={{ textDecoration: 'none', color: 'black' }}>
-                  1D Protein Services
-                </NavLink>
-              </MenuItem>
-              <MenuItem eventKey={3.2}>
-                <NavLink to='/services/protein-services' style={{ textDecoration: 'none', color: 'black' }}>
-                  2D Protein Services
-                </NavLink>
-              </MenuItem>
-              <MenuItem eventKey={3.3}>
-                <NavLink to='/services/protein-services' style={{ textDecoration: 'none', color: 'black' }}>
-                  3D Protein Services
-                </NavLink>
-              </MenuItem>
-              <MenuItem eventKey={3.4}>
-                <NavLink to='/services/protein-services' style={{ textDecoration: 'none', color: 'black' }}>
-                  xD Protein Services
-                </NavLink>
-              </MenuItem>
+              <LinkContainer to='/services/1d-protein-services'>
+                <MenuItem eventKey={3.1}>1D Protein Services</MenuItem>
+              </LinkContainer>
+              <LinkContainer to='/services/2d-protein-services'>
+                <MenuItem eventKey={3.2}>2D Protein Services</MenuItem>
+              </LinkContainer>
+              <LinkContainer to='/services/3d-protein-services'>
+                <MenuItem eventKey={3.3}>3D Protein Services</MenuItem>
+              </LinkContainer>
+              <LinkContainer to='/services/xd-protein-services'>
+                <MenuItem eventKey={3.4}>xD Protein Services</MenuItem>
+              </LinkContainer>
             </NavDropdown>
             <NavDropdown eventKey={4} title='Drug Services' id='drug-nav-dropdown'>
-              <MenuItem eventKey={4.1}>
-                <NavLink to='/services/search-services' style={{ textDecoration: 'none', color: 'black' }}>
-                  1D Drug Services
-                </NavLink>
-              </MenuItem>
-              <MenuItem eventKey={4.2}>
-                <NavLink to='/services/search-services' style={{ textDecoration: 'none', color: 'black' }}>
-                  2D Drug Services
-                </NavLink>
-              </MenuItem>
-              <MenuItem eventKey={4.3}>
-                <NavLink to='/services/search-services' style={{ textDecoration: 'none', color: 'black' }}>
-                  3D Drug Services
-                </NavLink>
-              </MenuItem>
-              <MenuItem eventKey={4.4}>
-                <NavLink to='/services/search-services' style={{ textDecoration: 'none', color: 'black' }}>
-                  xD Drug Services
-                </NavLink>
-              </MenuItem>
+              <LinkContainer to='/services/1d-drug-services'>
+                <MenuItem eventKey={4.1}>1D Drug Services</MenuItem>
+              </LinkContainer>
+              <LinkContainer to='/services/2d-drug-services'>
+                <MenuItem eventKey={4.2}>2D Drug Services</MenuItem>
+              </LinkContainer>
+              <LinkContainer to='/services/3d-drug-services'>
+                <MenuItem eventKey={4.3}>3D Drug Services</MenuItem>
+              </LinkContainer>
+              <LinkContainer to='/services/xd-drug-services'>
+                <MenuItem eventKey={4.4}>xD Drug Services</MenuItem>
+              </LinkContainer>
             </NavDropdown>
           </Nav>
         </Navbar.Collapse>

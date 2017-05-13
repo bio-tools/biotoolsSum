@@ -1,7 +1,6 @@
 import React, { Component } from 'react'
 import R from 'ramda'
 import ReactTable from 'react-table'
-import {TextTruncate} from 'react-text-truncate'
 
 const pluckData = tools => {
   return tools.map(tool => {
@@ -35,7 +34,7 @@ const columns = [{
   maxWidth: 300,
   aggregate: true,
   header: 'Description',
-  accessor: data => data.description
+  accessor: data => data.description,
 
 }, {
   id: 'topic',
@@ -133,8 +132,6 @@ class ToolsTable extends Component {
     const defaultPageSize = next === null
       ? R.modulo(count, 25)
       : 25
-
-    console.log(defaultPageSize)
 
     return (
       <ReactTable
