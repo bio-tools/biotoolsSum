@@ -7,7 +7,8 @@ import '../node_modules/react-table/react-table.css'
 import '../node_modules/bootstrap/dist/css/bootstrap.min.css'
 import HomeServices from './components/HomeServices'
 import ServicesNavbar from './components/ServicesNavbar'
-import Services from './components/listing/Services'
+import Services from './components/Services'
+import Home from './components/Home'
 
 class App extends Component {
   render () {
@@ -15,6 +16,7 @@ class App extends Component {
       <Provider store={store}>
         <Router>
           <div className='container'>
+            <Route exact path='/' component={Home} />
             <Route exact path='/services' component={HomeServices} />
             <Route path='/services/:id' component={ServicesNavbar} />
             <Route path='/services/:id' component={Services} />

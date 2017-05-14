@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import BioToolsFetch from '../BioToolsData'
+import BioToolsFetch from './BioToolsData'
 import { PageHeader } from 'react-bootstrap'
 import * as R from 'ramda'
 

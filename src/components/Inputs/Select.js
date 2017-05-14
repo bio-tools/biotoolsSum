@@ -1,7 +1,7 @@
 import React from 'react'
-import { Col, ControlLabel, FormControl, FormGroup } from 'react-bootstrap'
+import { ControlLabel, FormControl, FormGroup } from 'react-bootstrap'
 
-const Select = ({ label, input, children, ...custom }) => (
+const Select = ({ label, input, children, ...props }) => (
   <FormGroup controlId='form-control-select'>
     <ControlLabel>{label}</ControlLabel>
     <FormControl componentClass='select' {...input}>
