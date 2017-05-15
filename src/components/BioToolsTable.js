@@ -1,6 +1,7 @@
 import React, { Component } from 'react'
 import R from 'ramda'
 import ReactTable from 'react-table'
+import ReadMore from './ReadMore'
 
 const pluckData = tools => {
   return tools.map(tool => {
@@ -30,11 +31,11 @@ const columns = [{
 }, {
   id: 'description',
   sortable: false,
-  minWidth: 150,
+  minWidth: 200,
   maxWidth: 300,
   aggregate: true,
   header: 'Description',
-  accessor: data => data.description,
+  accessor: data => <ReadMore lines={3}>{data.description}</ReadMore>,
 
 }, {
   id: 'topic',

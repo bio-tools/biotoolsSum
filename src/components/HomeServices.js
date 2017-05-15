@@ -16,10 +16,9 @@ import drug1D from '../images/1d-drug.png'
 import drug2D from '../images/2d-drug.png'
 import drug3D from '../images/3d-drug.png'
 import drugxD from '../images/xd-drug.png'
-import drugSequence from '../images/1d-drug.png'
 import { Grid, Image } from 'react-bootstrap'
 
-class App extends Component {
+class Home extends Component {
   render () {
     return (
       <Grid>
@@ -131,4 +130,4 @@ class App extends Component {
   }
 }
 
-export default App
+export default Home
