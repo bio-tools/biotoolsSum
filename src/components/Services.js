@@ -4,7 +4,6 @@ import { PageHeader } from 'react-bootstrap'
 import * as R from 'ramda'
 
 function getStateObject (id) {
-  console.log(id)
   switch (id) {
     case '1d-dna-services':
       return {

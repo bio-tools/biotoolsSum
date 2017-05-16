@@ -14,7 +14,6 @@ class ServicesNavbar extends Component {
   }
 
   handleSelect (eventKey, event) {
-    console.log('eventKey, ', eventKey)
     this.setState({ activeMenuItem: eventKey })
   }
 

@@ -1,9 +1,11 @@
 import React, { Component } from 'react'
 import R from 'ramda'
 import 'whatwg-fetch'
-import ToolsTable from './BioToolsTable'
+import BioToolsTable from './BioToolsTable'
 import Pagination from 'react-js-pagination'
 import Loader from 'react-loader'
+import {PAGE_SIZE} from './constants/toolsTable'
+import {Alert} from 'react-bootstrap'
 
 class BioToolsFetch extends Component {
   constructor (props) {
@@ -14,7 +16,7 @@ class BioToolsFetch extends Component {
     this.state = {
       bioToolsData: { list: [], count: 0 },
       currentPage: 1,
-      itemsCountPerPage: 25,
+      itemsCountPerPage: PAGE_SIZE,
       loadingData: true,
       loadingPage: false,
     }
@@ -50,7 +52,7 @@ class BioToolsFetch extends Component {
       loadingPage: true,
     })
 
-    const url = this.props.url.concat(`&page=${newPage}`)
+    const url = R.concat(this.props.url, `&page=${newPage}`)
 
     fetch(url)
       .then(response => response.json())
@@ -64,15 +66,16 @@ class BioToolsFetch extends Component {
 
   render () {
     const toolsCount = this.state.bioToolsData.count
+    const { currentPage, itemsCountPerPage, loadingData, loadingPage, bioToolsData } = this.state
 
     return (
-      <Loader loaded={!this.state.loadingData}>
+      <Loader loaded={!loadingData}>
         <div>
           {toolsCount
             ? <div>
-              {toolsCount > 25 && <Pagination
-                activePage={this.state.currentPage}
-                itemsCountPerPage={this.state.itemsCountPerPage}
+              {toolsCount > itemsCountPerPage && <Pagination
+                activePage={currentPage}
+                itemsCountPerPage={itemsCountPerPage}
                 totalItemsCount={toolsCount}
                 prevPageText='&laquo;'
                 nextPageText='&raquo;'
@@ -80,11 +83,11 @@ class BioToolsFetch extends Component {
                 lastPageText='Last'
                 onChange={this.handlePageChange}
               />}
-              <Loader loaded={!this.state.loadingPage}>
-                <ToolsTable tools={this.state.bioToolsData} />
-                {toolsCount > 25 && <Pagination
-                  activePage={this.state.currentPage}
-                  itemsCountPerPage={this.state.itemsCountPerPage}
+              <Loader loaded={!loadingPage}>
+                <BioToolsTable tools={bioToolsData} pageSize={itemsCountPerPage} />
+                {toolsCount > itemsCountPerPage && <Pagination
+                  activePage={currentPage}
+                  itemsCountPerPage={itemsCountPerPage}
                   totalItemsCount={toolsCount}
                   prevPageText='&laquo;'
                   nextPageText='&raquo;'
@@ -95,7 +98,9 @@ class BioToolsFetch extends Component {
               </Loader>
             </div>
             : <div>
-              <h2 className='text-center'>We are sorry, but there are no services.</h2>
+              <Alert bsStyle='danger' onDismiss={this.handleAlertDismiss}>
+                <h4 className='text-center'>We are sorry, but there are no services.</h4>
+              </Alert>
             </div>
           }
         </div>
