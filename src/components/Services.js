@@ -129,6 +129,7 @@ class Services extends Component {
     return (
       <div>
         <PageHeader>{this.state.header} <small>All ELIXIR CZ services for studies on {this.state.message}</small></PageHeader>
+        <h4>Query string used: {this.state.query}</h4>
         <BioToolsFetch url={this.state.query} />
       </div>
     )
