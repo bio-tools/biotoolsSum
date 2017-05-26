@@ -1,7 +1,7 @@
 import React, { PureComponent } from 'react'
-import {MenuItem, Nav, Navbar, NavDropdown} from 'react-bootstrap'
-import {Link} from 'react-router-dom'
-import {LinkContainer} from 'react-router-bootstrap'
+import { MenuItem, Nav, Navbar, NavDropdown } from 'react-bootstrap'
+import { Link } from 'react-router-dom'
+import { LinkContainer } from 'react-router-bootstrap'
 
 class ServicesNavbar extends PureComponent {
   constructor (props) {

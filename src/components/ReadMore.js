@@ -40,16 +40,11 @@ export default class ReadMore extends PureComponent {
       <div>
         <Truncate
           lines={!expanded && lines}
-          ellipsis={(
-            <span>... <a href='#' onClick={this.toggleLines}>{more}</a></span>
-          )}
-          onTruncate={this.handleTruncate}
-        >
+          ellipsis={(<span>... <a href='#' onClick={this.toggleLines}>{more}</a></span>)}
+          onTruncate={this.handleTruncate}>
           {children}
         </Truncate>
-        {!truncated && expanded && (
-          <span> <a href='#' onClick={this.toggleLines}>{less}</a></span>
-        )}
+        {!truncated && expanded && (<span> <a href='#' onClick={this.toggleLines}>{less}</a></span>)}
       </div>
     )
   }
@@ -63,6 +58,7 @@ ReadMore.defaultProps = {
 
 ReadMore.propTypes = {
   children: PropTypes.node.isRequired,
-  text: PropTypes.node,
+  more: PropTypes.string,
+  less: PropTypes.string,
   lines: PropTypes.number,
 }

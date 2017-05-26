@@ -6,14 +6,15 @@ import { Label } from 'react-bootstrap'
 import FontAwesome from 'react-fontawesome'
 import { OverlayTooltip } from './OverlayTooltip'
 
-const pickData = tools => {
-  return tools.map(tool => {
-    return R.compose(
-      R.assoc('function', R.head(tool.function).operation),
-      R.pick(['name', 'homepage', 'version', 'description', 'topic', 'maturity', 'operatingSystem'])
-    )(tool)
-  })
-}
+const pickData = R.map(
+  R.compose(
+    R.evolve(
+      {
+        function: R.compose(R.prop('operation'), R.head),
+      }),
+    R.pick(['name', 'homepage', 'version', 'description', 'topic', 'maturity', 'operatingSystem', 'function'])
+  )
+)
 
 const columns = [
   {
@@ -95,9 +96,7 @@ const columns = [
 ]
 
 export const ToolsTable = ({ count, next, list, pageSize }) => {
-  const defaultPageSize = next === null
-    ? R.modulo(count, pageSize)
-    : pageSize
+  const defaultPageSize = next === null ? R.modulo(count, pageSize) : pageSize
 
   return (
     <ReactTable

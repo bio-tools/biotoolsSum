@@ -1,6 +1,6 @@
 import React from 'react'
-import {Jumbotron} from 'react-bootstrap'
-import {Link} from 'react-router-dom'
+import { Jumbotron } from 'react-bootstrap'
+import { Link } from 'react-router-dom'
 
 const Home = () => (
   <Jumbotron>

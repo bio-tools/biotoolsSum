@@ -124,4 +124,4 @@ export const ServicesMatrix = () => (
       </tbody>
     </table>
   </Grid>
-    )
+)
