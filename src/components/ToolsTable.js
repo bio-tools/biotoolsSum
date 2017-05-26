@@ -1,12 +1,12 @@
-import React, { Component } from 'react'
+import React from 'react'
 import R from 'ramda'
 import ReactTable from 'react-table'
 import ReadMore from './ReadMore'
-import {Label, OverlayTrigger} from 'react-bootstrap'
+import { Label } from 'react-bootstrap'
 import FontAwesome from 'react-fontawesome'
-import {OverlayTooltip} from './OverlayTooltip'
+import { OverlayTooltip } from './OverlayTooltip'
 
-const pluckData = tools => {
+const pickData = tools => {
   return tools.map(tool => {
     return R.compose(
       R.assoc('function', R.head(tool.function).operation),
@@ -94,22 +94,18 @@ const columns = [
   },
 ]
 
-export default class ToolsTable extends Component {
-  render () {
-    const { count, next, list, pageSize } = this.props
+export const ToolsTable = ({ count, next, list, pageSize }) => {
+  const defaultPageSize = next === null
+    ? R.modulo(count, pageSize)
+    : pageSize
 
-    const defaultPageSize = next === null
-      ? R.modulo(count, pageSize)
-      : pageSize
-
-    return (
-      <ReactTable
-        data={pluckData(list)}
-        columns={columns}
-        showPagination={false}
-        defaultPageSize={defaultPageSize}
-        className='-striped'
+  return (
+    <ReactTable
+      data={pickData(list)}
+      columns={columns}
+      showPagination={false}
+      defaultPageSize={defaultPageSize}
+      className='-striped'
       />
-    )
-  }
+  )
 }

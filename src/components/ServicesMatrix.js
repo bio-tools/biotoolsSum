@@ -18,7 +18,7 @@ import drug2D from '../images/2d-drug.png'
 import drug3D from '../images/3d-drug.png'
 import drugxD from '../images/xd-drug.png'
 
-export const Services = () => (
+export const ServicesMatrix = () => (
   <Grid>
     <table>
       <tbody>

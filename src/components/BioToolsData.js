@@ -1,17 +1,24 @@
-import React, { Component } from 'react'
+import React, { PureComponent } from 'react'
 import R from 'ramda'
 import 'whatwg-fetch'
-import BioToolsTable from './BioToolsTable'
+import { Alert } from 'react-bootstrap'
 import Pagination from 'react-js-pagination'
 import Loader from 'react-loader'
-import {PAGE_SIZE} from './constants/toolsTable'
-import {Alert} from 'react-bootstrap'
+import { PAGE_SIZE } from './constants/toolsTable'
+import { ToolsTable } from './ToolsTable'
 
-class BioToolsFetch extends Component {
+class BioToolsFetch extends PureComponent {
   constructor (props) {
     super(props)
 
-    this.handlePageChange = this.handlePageChange.bind(this)
+    fetch(props.url)
+      .then(response => response.json())
+      .then(data => {
+        this.setState({
+          bioToolsData: data,
+          loadingData: false,
+        })
+      })
 
     this.state = {
       bioToolsData: { list: [], count: 0 },
@@ -20,17 +27,6 @@ class BioToolsFetch extends Component {
       loadingData: true,
       loadingPage: false,
     }
-  }
-
-  componentDidMount () {
-    fetch(this.props.url)
-      .then(response => response.json())
-      .then(data => {
-        this.setState({
-          bioToolsData: data,
-          loadingData: false,
-        })
-      })
   }
 
   componentWillReceiveProps (newProps) {
@@ -46,7 +42,7 @@ class BioToolsFetch extends Component {
     }
   }
 
-  handlePageChange (newPage) {
+  handlePageChange = newPage => {
     this.setState({
       currentPage: newPage,
       loadingPage: true,
@@ -65,27 +61,16 @@ class BioToolsFetch extends Component {
   }
 
   render () {
-    const toolsCount = this.state.bioToolsData.count
     const { currentPage, itemsCountPerPage, loadingData, loadingPage, bioToolsData } = this.state
+    const toolsCount = bioToolsData.count
 
     return (
       <Loader loaded={!loadingData}>
         <div>
           {toolsCount
             ? <div>
-              {toolsCount > itemsCountPerPage && <Pagination
-                activePage={currentPage}
-                itemsCountPerPage={itemsCountPerPage}
-                totalItemsCount={toolsCount}
-                prevPageText='&laquo;'
-                nextPageText='&raquo;'
-                firstPageText='First'
-                lastPageText='Last'
-                onChange={this.handlePageChange}
-              />}
-              <Loader loaded={!loadingPage}>
-                <BioToolsTable tools={bioToolsData} pageSize={itemsCountPerPage} />
-                {toolsCount > itemsCountPerPage && <Pagination
+              {toolsCount > itemsCountPerPage &&
+                <Pagination
                   activePage={currentPage}
                   itemsCountPerPage={itemsCountPerPage}
                   totalItemsCount={toolsCount}
@@ -94,12 +79,32 @@ class BioToolsFetch extends Component {
                   firstPageText='First'
                   lastPageText='Last'
                   onChange={this.handlePageChange}
-                />}
+                />
+              }
+              <Loader loaded={!loadingPage}>
+                <ToolsTable
+                  count={bioToolsData.count}
+                  next={bioToolsData.next}
+                  list={bioToolsData.list}
+                  pageSize={itemsCountPerPage}
+                />
+                {toolsCount > itemsCountPerPage &&
+                  <Pagination
+                    activePage={currentPage}
+                    itemsCountPerPage={itemsCountPerPage}
+                    totalItemsCount={toolsCount}
+                    prevPageText='&laquo;'
+                    nextPageText='&raquo;'
+                    firstPageText='First'
+                    lastPageText='Last'
+                    onChange={this.handlePageChange}
+                  />
+                }
               </Loader>
             </div>
             : <div>
-              <Alert bsStyle='danger' onDismiss={this.handleAlertDismiss}>
-                <h4 className='text-center'>We are sorry, but there are no services.</h4>
+              <Alert bsStyle='danger'>
+                <h3 className='text-center'>We are sorry, but there are no services.</h3>
               </Alert>
             </div>
           }

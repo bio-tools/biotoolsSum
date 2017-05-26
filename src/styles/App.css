@@ -21,3 +21,8 @@ th, td {
   padding: 20px !important;
   text-align: center;
 }
+
+.icons {
+  padding-right: 5px;
+  padding-left: 5px;
+}

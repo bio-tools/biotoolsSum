@@ -1,4 +1,4 @@
-import React, { Component } from 'react'
+import React, { PureComponent } from 'react'
 import BioToolsFetch from './BioToolsData'
 import { PageHeader } from 'react-bootstrap'
 import * as R from 'ramda'
@@ -110,7 +110,7 @@ function getStateObject (id) {
   }
 }
 
-class Services extends Component {
+class Services extends PureComponent {
   constructor (props) {
     super(props)
     const newState = getStateObject(props.match.params.id)

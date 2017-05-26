@@ -1,19 +1,18 @@
-import React, { Component } from 'react'
+import React, { PureComponent } from 'react'
 import {MenuItem, Nav, Navbar, NavDropdown} from 'react-bootstrap'
 import {Link} from 'react-router-dom'
 import {LinkContainer} from 'react-router-bootstrap'
 
-class ServicesNavbar extends Component {
+class ServicesNavbar extends PureComponent {
   constructor (props) {
     super(props)
+
     this.state = {
       activeMenuItemKey: null,
     }
-
-    this.handleSelect = this.handleSelect.bind(this)
   }
 
-  handleSelect (eventKey, event) {
+  handleSelect = eventKey => {
     this.setState({ activeMenuItem: eventKey })
   }
 
@@ -30,16 +29,16 @@ class ServicesNavbar extends Component {
           <Nav activeKey={this.state.activeMenuItem} onSelect={this.handleSelect}>
             <NavDropdown eventKey={1} title='DNA Services' id='dna-nav-dropdown'>
               <LinkContainer to='/services/1d-dna-services'>
-                <MenuItem eventKey={5}>1D DNA Services</MenuItem>
+                <MenuItem eventKey={1.1}>1D DNA Services</MenuItem>
               </LinkContainer>
               <LinkContainer to='/services/2d-dna-services'>
-                <MenuItem eventKey={6}>2D DNA Services</MenuItem>
+                <MenuItem eventKey={1.2}>2D DNA Services</MenuItem>
               </LinkContainer>
               <LinkContainer to='/services/3d-dna-services'>
-                <MenuItem eventKey={7}>3D DNA Services</MenuItem>
+                <MenuItem eventKey={1.3}>3D DNA Services</MenuItem>
               </LinkContainer>
               <LinkContainer to='/services/xd-dna-services'>
-                <MenuItem eventKey={8}>xD DNA Services</MenuItem>
+                <MenuItem eventKey={1.4}>xD DNA Services</MenuItem>
               </LinkContainer>
             </NavDropdown>
             <NavDropdown eventKey={2} title='RNA Services' id='rna-nav-dropdown'>

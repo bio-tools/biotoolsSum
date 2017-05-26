@@ -1,8 +1,8 @@
-import React, { Component } from 'react'
+import React, { PureComponent } from 'react'
 import PropTypes from 'prop-types'
 import Truncate from 'react-truncate'
 
-class ReadMore extends Component {
+export default class ReadMore extends PureComponent {
   constructor (props) {
     super(props)
 
@@ -32,17 +32,9 @@ class ReadMore extends Component {
   }
 
   render () {
-    const {
-      children,
-      more,
-      less,
-      lines,
-    } = this.props
+    const { children, more, less, lines } = this.props
 
-    const {
-      expanded,
-      truncated,
-    } = this.state
+    const { expanded, truncated } = this.state
 
     return (
       <div>
@@ -74,5 +66,3 @@ ReadMore.propTypes = {
   text: PropTypes.node,
   lines: PropTypes.number,
 }
-
-export default ReadMore
