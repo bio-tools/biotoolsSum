@@ -31,3 +31,11 @@ th, td {
   margin-top: 10px;
   margin-bottom: 10px;
 }
+
+.pagination-no-margin-top {
+  margin-top: 0 !important;
+}
+
+.rt-td{
+  white-space: normal !important;
+}

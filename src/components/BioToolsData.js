@@ -10,6 +10,14 @@ class BioToolsData extends PureComponent {
   constructor (props) {
     super(props)
 
+    this.state = {
+      bioToolsData: { list: [], count: 0 },
+      currentPage: 1,
+      itemsCountPerPage: PAGE_SIZE,
+      loadingData: true,
+      loadingPage: false,
+    }
+
     fetch(props.query)
       .then(response => response.json())
       .then(data => {
@@ -18,14 +26,6 @@ class BioToolsData extends PureComponent {
           loadingData: false,
         })
       })
-
-    this.state = {
-      bioToolsData: { list: [], count: 0 },
-      currentPage: 1,
-      itemsCountPerPage: PAGE_SIZE,
-      loadingData: true,
-      loadingPage: false,
-    }
   }
 
   componentWillReceiveProps (newProps) {
@@ -36,7 +36,9 @@ class BioToolsData extends PureComponent {
         .then(data => {
           this.setState({
             bioToolsData: data,
-            loadingData: false })
+            loadingData: false,
+            currentPage: 1,
+          })
         })
     }
   }
@@ -71,9 +73,30 @@ class BioToolsData extends PureComponent {
 
     return (
       <Loader loaded={!loadingData}>
-        <div>
-          {toolsCount
-            ? <div>
+        {toolsCount
+          ? <div>
+            <Alert bsStyle='success'>
+              There is a total number of <strong>{toolsCount}</strong> tools available
+            </Alert>
+            <Pagination
+              className='pagination-no-margin-top'
+              activePage={currentPage}
+              items={numberOfPages}
+              prev
+              next
+              first='First'
+              last='Last'
+              maxButtons={5}
+              ellipsis
+              onSelect={this.handlePageChange}
+            />
+            <Loader loaded={!loadingPage}>
+              <ToolsTable
+                count={bioToolsData.count}
+                next={bioToolsData.next}
+                list={bioToolsData.list}
+                pageSize={itemsCountPerPage}
+              />
               <Pagination
                 activePage={currentPage}
                 items={numberOfPages}
@@ -85,32 +108,12 @@ class BioToolsData extends PureComponent {
                 ellipsis
                 onSelect={this.handlePageChange}
               />
-              <Loader loaded={!loadingPage}>
-                <ToolsTable
-                  count={bioToolsData.count}
-                  next={bioToolsData.next}
-                  list={bioToolsData.list}
-                  pageSize={itemsCountPerPage}
-                />
-                <Pagination
-                  activePage={currentPage}
-                  items={numberOfPages}
-                  prev
-                  next
-                  first='First'
-                  last='Last'
-                  maxButtons={5}
-                  ellipsis
-                  onSelect={this.handlePageChange}
-                />
-                <hr />
-                <h5>Query string used: {query}</h5>
-              </Loader>
-            </div>
-            : <Alert bsStyle='danger'>We are sorry, but there are no services.</Alert>
-
-          }
-        </div>
+              <hr className='table-delimiter' />
+              <h5>Query string used: {query}</h5>
+            </Loader>
+          </div>
+          : <Alert bsStyle='danger'>We are sorry, but there are no services.</Alert>
+        }
       </Loader>
     )
   }

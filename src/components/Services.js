@@ -1,6 +1,6 @@
 import React, { PureComponent } from 'react'
 import BioToolsData from './BioToolsData'
-import { PageHeader } from 'react-bootstrap'
+import { Alert } from 'react-bootstrap'
 import * as R from 'ramda'
 
 function getStateObject (id) {
@@ -128,7 +128,7 @@ class Services extends PureComponent {
   render () {
     return (
       <div>
-        <PageHeader>{this.state.header} <small>All ELIXIR CZ services for studies on {this.state.message}</small></PageHeader>
+        <Alert bsStyle='info'><h4>{this.state.header}</h4> <small>All ELIXIR CZ services for studies on {this.state.message}</small></Alert>
         <BioToolsData query={this.state.query} />
       </div>
     )
