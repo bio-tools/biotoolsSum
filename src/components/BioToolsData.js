@@ -1,17 +1,16 @@
 import React, { PureComponent } from 'react'
 import R from 'ramda'
 import 'whatwg-fetch'
-import { Alert } from 'react-bootstrap'
-import Pagination from 'react-js-pagination'
+import { Alert, Pagination } from 'react-bootstrap'
 import Loader from 'react-loader'
 import { PAGE_SIZE } from './constants/toolsTable'
 import { ToolsTable } from './ToolsTable'
 
-class BioToolsFetch extends PureComponent {
+class BioToolsData extends PureComponent {
   constructor (props) {
     super(props)
 
-    fetch(props.url)
+    fetch(props.query)
       .then(response => response.json())
       .then(data => {
         this.setState({
@@ -32,7 +31,7 @@ class BioToolsFetch extends PureComponent {
   componentWillReceiveProps (newProps) {
     if (!R.equals(newProps, this.props)) {
       this.setState({ loadingData: true })
-      fetch(newProps.url)
+      fetch(newProps.query)
         .then(response => response.json())
         .then(data => {
           this.setState({
@@ -43,14 +42,18 @@ class BioToolsFetch extends PureComponent {
   }
 
   handlePageChange = newPage => {
+    if (newPage === this.state.currentPage) {
+      return
+    }
+
     this.setState({
       currentPage: newPage,
       loadingPage: true,
     })
 
-    const url = R.concat(this.props.url, `&page=${newPage}`)
+    const query = R.concat(this.props.query, `&page=${newPage}`)
 
-    fetch(url)
+    fetch(query)
       .then(response => response.json())
       .then(data => {
         this.setState({
@@ -61,26 +64,27 @@ class BioToolsFetch extends PureComponent {
   }
 
   render () {
+    const { query } = this.props
     const { currentPage, itemsCountPerPage, loadingData, loadingPage, bioToolsData } = this.state
     const toolsCount = bioToolsData.count
+    const numberOfPages = Math.ceil(toolsCount / itemsCountPerPage)
 
     return (
       <Loader loaded={!loadingData}>
         <div>
           {toolsCount
             ? <div>
-              {toolsCount > itemsCountPerPage &&
-                <Pagination
-                  activePage={currentPage}
-                  itemsCountPerPage={itemsCountPerPage}
-                  totalItemsCount={toolsCount}
-                  prevPageText='&laquo;'
-                  nextPageText='&raquo;'
-                  firstPageText='First'
-                  lastPageText='Last'
-                  onChange={this.handlePageChange}
-                />
-              }
+              <Pagination
+                activePage={currentPage}
+                items={numberOfPages}
+                prev
+                next
+                first='First'
+                last='Last'
+                maxButtons={5}
+                ellipsis
+                onSelect={this.handlePageChange}
+              />
               <Loader loaded={!loadingPage}>
                 <ToolsTable
                   count={bioToolsData.count}
@@ -88,25 +92,23 @@ class BioToolsFetch extends PureComponent {
                   list={bioToolsData.list}
                   pageSize={itemsCountPerPage}
                 />
-                {toolsCount > itemsCountPerPage &&
-                  <Pagination
-                    activePage={currentPage}
-                    itemsCountPerPage={itemsCountPerPage}
-                    totalItemsCount={toolsCount}
-                    prevPageText='&laquo;'
-                    nextPageText='&raquo;'
-                    firstPageText='First'
-                    lastPageText='Last'
-                    onChange={this.handlePageChange}
-                  />
-                }
+                <Pagination
+                  activePage={currentPage}
+                  items={numberOfPages}
+                  prev
+                  next
+                  first='First'
+                  last='Last'
+                  maxButtons={5}
+                  ellipsis
+                  onSelect={this.handlePageChange}
+                />
+                <hr />
+                <h5>Query string used: {query}</h5>
               </Loader>
             </div>
-            : <div>
-              <Alert bsStyle='danger'>
-                <h3 className='text-center'>We are sorry, but there are no services.</h3>
-              </Alert>
-            </div>
+            : <Alert bsStyle='danger'>We are sorry, but there are no services.</Alert>
+
           }
         </div>
       </Loader>
@@ -114,4 +116,4 @@ class BioToolsFetch extends PureComponent {
   }
 }
 
-export default BioToolsFetch
+export default BioToolsData

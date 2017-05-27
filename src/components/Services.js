@@ -1,5 +1,5 @@
 import React, { PureComponent } from 'react'
-import BioToolsFetch from './BioToolsData'
+import BioToolsData from './BioToolsData'
 import { PageHeader } from 'react-bootstrap'
 import * as R from 'ramda'
 
@@ -103,7 +103,7 @@ function getStateObject (id) {
       }
     default:
       return {
-        query: 'https://bio.tools/api/tool/?collectionID=elixir-cz&sort=lastUpdate&ord=asc&',
+        query: 'https://bio.tools/api/tool/?collectionID=elixir-cz&sort=lastUpdate&ord=asc',
         header: 'ELIXIR CZ',
         message: 'DNA, RNA, protein and drugs',
       }
@@ -129,8 +129,7 @@ class Services extends PureComponent {
     return (
       <div>
         <PageHeader>{this.state.header} <small>All ELIXIR CZ services for studies on {this.state.message}</small></PageHeader>
-        <h4>Query string used: {this.state.query}</h4>
-        <BioToolsFetch url={this.state.query} />
+        <BioToolsData query={this.state.query} />
       </div>
     )
   }

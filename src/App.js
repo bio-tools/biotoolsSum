@@ -8,7 +8,7 @@ import '../node_modules/bootstrap/dist/css/bootstrap.min.css'
 import '../node_modules/font-awesome/css/font-awesome.min.css'
 import ServicesNavbar from './components/ServicesNavbar'
 import Services from './components/Services'
-import Home from './components/Home'
+import { Home } from './components/Home'
 import { ServicesMatrix } from './components/ServicesMatrix'
 
 class App extends Component {
