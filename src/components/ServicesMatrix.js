@@ -17,6 +17,7 @@ import drug1D from '../images/1d-drug.png'
 import drug2D from '../images/2d-drug.png'
 import drug3D from '../images/3d-drug.png'
 import drugxD from '../images/xd-drug.png'
+import ShowToolsCount from './ShowToolsCount'
 
 export const ServicesMatrix = () => (
   <Grid>
@@ -123,5 +124,6 @@ export const ServicesMatrix = () => (
         </tr>
       </tbody>
     </table>
+    <ShowToolsCount />
   </Grid>
 )

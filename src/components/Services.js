@@ -1,7 +1,7 @@
 import React, { PureComponent } from 'react'
+import * as R from 'ramda'
 import BioToolsData from './BioToolsData'
 import { Alert } from 'react-bootstrap'
-import * as R from 'ramda'
 
 function getStateObject (id) {
   switch (id) {
@@ -120,7 +120,6 @@ class Services extends PureComponent {
   componentWillReceiveProps (newProps) {
     if (!R.equals(newProps, this.props)) {
       const newState = getStateObject(newProps.match.params.id)
-
       this.setState({ ...newState })
     }
   }
