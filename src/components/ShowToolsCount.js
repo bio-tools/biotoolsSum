@@ -12,18 +12,21 @@ class ShowToolsCount extends PureComponent {
       loadingToolsCount: true,
     }
 
-    fetch('https://bio.tools/api/tool/?collectionID=elixir-cz&q="database-portal"')
+    const collection = props.collection || 'elixir-cz'
+
+    fetch(`https://bio.tools/api/tool/?collectionID=${collection}&q="database-portal"`)
       .then(response => response.json())
       .then(data => {
         this.setState({
           databaseCount: data.count,
         })
       })
-      .then(fetch('https://bio.tools/api/tool/?collectionID=elixir-cz')
+      .then(fetch(`https://bio.tools/api/tool/?collectionID=${collection}`)
         .then(response => response.json())
         .then(data => {
+          const otherToolsCount = data.count - this.state.databaseCount
           this.setState({
-            otherToolsCount: data.count - this.state.databaseCount,
+            otherToolsCount,
             loadingToolsCount: false,
           })
         }))

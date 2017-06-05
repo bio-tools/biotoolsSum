@@ -11,15 +11,81 @@ img.center {
   margin: 0 auto;
 }
 
-table, th, td {
-  border: 1px solid black;
-  border-collapse: collapse;
-  margin: 0px auto !important;
+.matrix {
+  position: relative;
+  width: 85%;
+  padding-bottom: 85%;
+  margin-left: auto;
+  margin-right: auto;
 }
 
-th, td {
-  padding: 15px !important;
+.square {
+  float: left;
+  position: relative;
+  width: 18.6%;
+  padding-bottom: 18.6%; /* = width for a 1:1 aspect ratio */
+  margin: 0.7%;
+}
+
+.light-grey-background {
+  background-color: #ececec;
+}
+
+.dark-grey-background {
+  background-color: #d6d6d6;
+}
+
+.square-content {
+  position: absolute;
+  height: 100%; /* = 100% - 2*10% padding */
+  width: 100%; /* = 100% - 2*5% padding */
+  padding: 10% 10%;
   text-align: center;
+}
+
+.table{
+  display:table;
+  height:100%;
+  width:100%;
+}
+
+.table-cell{
+  display:table-cell;
+  vertical-align:middle;
+  height:100%;
+  width:100%;
+}
+
+@media all and (min-width: 992px) {
+  .text-big{
+    font-size: 20px;
+  }
+}
+
+@media all and (max-width: 991px) and (min-width: 766px) {
+  .text-big{
+    font-size: 15px;
+  }
+}
+
+@media all and (max-width: 766px) {
+  .text-big{
+    font-size: 1.9vw;
+  }
+}
+
+.responsive-img {
+  max-width: 100%;
+  height: auto;
+}
+
+.greyscale {
+  -webkit-transition: background-color 0.7s;
+  transition: background-color 0.7s;
+}
+
+.greyscale:hover {
+  background-color: #dddddd;
 }
 
 .icons {
