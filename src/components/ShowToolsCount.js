@@ -1,6 +1,7 @@
 import React, { PureComponent } from 'react'
 import 'whatwg-fetch'
 import { Alert } from 'react-bootstrap'
+import {DEFAULT_COLLECTION} from './constants/queryString'
 
 class ShowToolsCount extends PureComponent {
   constructor (props) {
@@ -12,7 +13,7 @@ class ShowToolsCount extends PureComponent {
       loadingToolsCount: true,
     }
 
-    const collection = props.collection || 'elixir-cz'
+    const collection = props.collection || DEFAULT_COLLECTION
 
     fetch(`https://bio.tools/api/tool/?collectionID=${collection}&q="database-portal"`)
       .then(response => response.json())
@@ -24,9 +25,8 @@ class ShowToolsCount extends PureComponent {
       .then(fetch(`https://bio.tools/api/tool/?collectionID=${collection}`)
         .then(response => response.json())
         .then(data => {
-          const otherToolsCount = data.count - this.state.databaseCount
           this.setState({
-            otherToolsCount,
+            otherToolsCount: data.count - this.state.databaseCount,
             loadingToolsCount: false,
           })
         }))

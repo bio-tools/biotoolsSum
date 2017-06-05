@@ -2,9 +2,10 @@ import React, { PureComponent } from 'react'
 import * as R from 'ramda'
 import BioToolsData from './BioToolsData'
 import { Alert } from 'react-bootstrap'
+import {DEFAULT_COLLECTION} from './constants/queryString'
 
 function getStateObject (id, collection) {
-  const collectionID = collection || 'elixir-cz'
+  const collectionID = collection || DEFAULT_COLLECTION
 
   switch (id) {
     case '1d-dna-services':
@@ -115,25 +116,32 @@ function getStateObject (id, collection) {
 class Services extends PureComponent {
   constructor (props) {
     super(props)
-    const newState = getStateObject(props.match.params.id, props.match.params.collection)
-    this.state = { ...newState }
+
+    const { id, collection } = props.match.params
+    const newState = getStateObject(id, collection)
+    this.state = {
+      ...newState,
+      id,
+      collection: collection || DEFAULT_COLLECTION,
+    }
   }
 
   componentWillReceiveProps (newProps) {
     if (!R.equals(newProps, this.props)) {
-      const newState = getStateObject(newProps.match.params.id, newProps.match.params.collection)
-      this.setState({ ...newState })
+      const { id, collection } = newProps.match.params
+      const newState = getStateObject(id, collection)
+      this.setState({
+        ...newState,
+        id,
+        collection: collection || DEFAULT_COLLECTION,
+      })
     }
   }
 
   render () {
-    const { collection } = this.props.match.params
-
-    const collectionID = collection || 'Elixir-cz'
-
     return (
       <div>
-        <Alert bsStyle='info'><h4>{this.state.header}</h4> <small>{`All ${collectionID} services for studies on ${this.state.message}`}</small></Alert>
+        <Alert bsStyle='info'><h4>{this.state.header}</h4> <small>{`All ${this.state.collection} services for studies on ${this.state.message}`}</small></Alert>
         <BioToolsData query={this.state.query} />
       </div>
     )

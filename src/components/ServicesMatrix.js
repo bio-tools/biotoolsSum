@@ -1,6 +1,5 @@
 import React from 'react'
-import { Link } from 'react-router-dom'
-import { Grid, Image } from 'react-bootstrap'
+import { Grid } from 'react-bootstrap'
 import dna1D from '../images/1d-dna.png'
 import dna2D from '../images/2d-dna.png'
 import dna3D from '../images/3d-dna.png'
@@ -18,6 +17,8 @@ import drug2D from '../images/2d-drug.png'
 import drug3D from '../images/3d-drug.png'
 import drugxD from '../images/xd-drug.png'
 import ShowToolsCount from './ShowToolsCount'
+import { MatrixCell } from './MatrixCell'
+import { MatrixCellWithLink } from './MatrixCellWithLink'
 
 export const ServicesMatrix = ({ match }) => {
   const { collection } = match.params
@@ -27,249 +28,35 @@ export const ServicesMatrix = ({ match }) => {
   return (
     <Grid>
       <div className='matrix'>
-        <div className='square dark-grey-background'>
-          <div className='square-content'>
-            <div className='table'>
-              <div className='table-cell text-big'>All Services</div>
-            </div>
-          </div>
-        </div>
-        <div className='square dark-grey-background'>
-          <div className='square-content'>
-            <div className='table'>
-              <div className='table-cell text-big'>1D sequence</div>
-            </div>
-          </div>
-        </div>
-        <div className='square dark-grey-background'>
-          <div className='square-content'>
-            <div className='table'>
-              <div className='table-cell text-big'>2D typology</div>
-            </div>
-          </div>
-        </div>
-        <div className='square dark-grey-background'>
-          <div className='square-content'>
-            <div className='table'>
-              <div className='table-cell text-big'>3D structure</div>
-            </div>
-          </div>
-        </div>
-        <div className='square dark-grey-background'>
-          <div className='square-content'>
-            <div className='table'>
-              <div className='table-cell text-big'>xD omics</div>
-            </div>
-          </div>
-        </div>
+        <MatrixCell text='All services' />
+        <MatrixCell text='1D sequence' />
+        <MatrixCell text='2D typology' />
+        <MatrixCell text='3D structure' />
+        <MatrixCell text='xD omics' />
 
-        <div className='square dark-grey-background'>
-          <div className='square-content'>
-            <div className='table'>
-              <div className='table-cell text-big'>DNA</div>
-            </div>
-          </div>
-        </div>
-        <div className='square light-grey-background greyscale'>
-          <Link to={`${queryString}/1d-dna-services`}>
-            <div className='square-content'>
-              <div className='table'>
-                <div className='table-cell'>
-                  <Image src={dna1D} rounded className='responsive-img' />
-                </div>
-              </div>
-            </div>
-          </Link>
-        </div>
-        <div className='square light-grey-background greyscale'>
-          <Link to={`${queryString}/2d-dna-services`}>
-            <div className='square-content'>
-              <div className='table'>
-                <div className='table-cell'>
-                  <Image src={dna2D} rounded className='responsive-img' />
-                </div>
-              </div>
-            </div>
-          </Link>
-        </div>
-        <div className='square light-grey-background greyscale'>
-          <Link to={`${queryString}/3d-dna-services`}>
-            <div className='square-content'>
-              <div className='table'>
-                <div className='table-cell'>
-                  <Image src={dna3D} rounded className='responsive-img' />
-                </div>
-              </div>
-            </div>
-          </Link>
-        </div>
-        <div className='square light-grey-background greyscale'>
-          <Link to={`${queryString}/xd-dna-services`}>
-            <div className='square-content'>
-              <div className='table'>
-                <div className='table-cell'>
-                  <Image src={dnaxD} rounded className='responsive-img' />
-                </div>
-              </div>
-            </div>
-          </Link>
-        </div>
+        <MatrixCell text='DNA' />
+        <MatrixCellWithLink linkTo={`${queryString}/1d-dna-services`} image={dna1D} />
+        <MatrixCellWithLink linkTo={`${queryString}/2d-dna-services`} image={dna2D} />
+        <MatrixCellWithLink linkTo={`${queryString}/3d-dna-services`} image={dna3D} />
+        <MatrixCellWithLink linkTo={`${queryString}/xd-dna-services`} image={dnaxD} />
 
-        <div className='square dark-grey-background'>
-          <div className='square-content'>
-            <div className='table'>
-              <div className='table-cell text-big'>RNA</div>
-            </div>
-          </div>
-        </div>
-        <div className='square light-grey-background greyscale'>
-          <Link to={`${queryString}/1d-rna-services`}>
-            <div className='square-content'>
-              <div className='table'>
-                <div className='table-cell'>
-                  <Image src={rna1D} rounded className='responsive-img' />
-                </div>
-              </div>
-            </div>
-          </Link>
-        </div>
-        <div className='square light-grey-background greyscale'>
-          <Link to={`${queryString}/2d-rna-services`}>
-            <div className='square-content'>
-              <div className='table'>
-                <div className='table-cell'>
-                  <Image src={rna2D} rounded className='responsive-img' />
-                </div>
-              </div>
-            </div>
-          </Link>
-        </div>
-        <div className='square light-grey-background greyscale'>
-          <Link to={`${queryString}/3d-rna-services`}>
-            <div className='square-content'>
-              <div className='table'>
-                <div className='table-cell'>
-                  <Image src={rna3D} rounded className='responsive-img' />
-                </div>
-              </div>
-            </div>
-          </Link>
-        </div>
-        <div className='square light-grey-background greyscale'>
-          <Link to={`${queryString}/xd-rna-services`}>
-            <div className='square-content'>
-              <div className='table'>
-                <div className='table-cell'>
-                  <Image src={rnaxD} rounded className='responsive-img' />
-                </div>
-              </div>
-            </div>
-          </Link>
-        </div>
+        <MatrixCell text='RNA' />
+        <MatrixCellWithLink linkTo={`${queryString}/1d-rna-services`} image={rna1D} />
+        <MatrixCellWithLink linkTo={`${queryString}/2d-rna-services`} image={rna2D} />
+        <MatrixCellWithLink linkTo={`${queryString}/3d-rna-services`} image={rna3D} />
+        <MatrixCellWithLink linkTo={`${queryString}/xd-rna-services`} image={rnaxD} />
 
-        <div className='square dark-grey-background'>
-          <div className='square-content'>
-            <div className='table'>
-              <div className='table-cell text-big'>Protein</div>
-            </div>
-          </div>
-        </div>
-        <div className='square light-grey-background greyscale'>
-          <Link to={`${queryString}/1d-protein-services`}>
-            <div className='square-content'>
-              <div className='table'>
-                <div className='table-cell'>
-                  <Image src={protein1D} rounded className='responsive-img' />
-                </div>
-              </div>
-            </div>
-          </Link>
-        </div>
-        <div className='square light-grey-background greyscale'>
-          <Link to={`${queryString}/2d-protein-services`}>
-            <div className='square-content'>
-              <div className='table'>
-                <div className='table-cell'>
-                  <Image src={protein2D} rounded className='responsive-img' />
-                </div>
-              </div>
-            </div>
-          </Link>
-        </div>
-        <div className='square light-grey-background greyscale'>
-          <Link to={`${queryString}/3d-protein-services`}>
-            <div className='square-content'>
-              <div className='table'>
-                <div className='table-cell'>
-                  <Image src={protein3D} rounded className='responsive-img' />
-                </div>
-              </div>
-            </div>
-          </Link>
-        </div>
-        <div className='square light-grey-background greyscale'>
-          <Link to={`${queryString}/xd-protein-services`}>
-            <div className='square-content'>
-              <div className='table'>
-                <div className='table-cell'>
-                  <Image src={proteinxD} rounded className='responsive-img' />
-                </div>
-              </div>
-            </div>
-          </Link>
-        </div>
+        <MatrixCell text='Protein' />
+        <MatrixCellWithLink linkTo={`${queryString}/1d-protein-services`} image={protein1D} />
+        <MatrixCellWithLink linkTo={`${queryString}/2d-protein-services`} image={protein2D} />
+        <MatrixCellWithLink linkTo={`${queryString}/3d-protein-services`} image={protein3D} />
+        <MatrixCellWithLink linkTo={`${queryString}/xd-protein-services`} image={proteinxD} />
 
-        <div className='square dark-grey-background'>
-          <div className='square-content'>
-            <div className='table'>
-              <div className='table-cell text-big'>Drugs and other small molecules</div>
-            </div>
-          </div>
-        </div>
-        <div className='square light-grey-background greyscale'>
-          <Link to={`${queryString}/1d-drug-services`}>
-            <div className='square-content'>
-              <div className='table'>
-                <div className='table-cell'>
-                  <Image src={drug1D} rounded className='responsive-img' />
-                </div>
-              </div>
-            </div>
-          </Link>
-        </div>
-        <div className='square light-grey-background greyscale'>
-          <Link to={`${queryString}/2d-drug-services`}>
-            <div className='square-content'>
-              <div className='table'>
-                <div className='table-cell'>
-                  <Image src={drug2D} rounded className='responsive-img' />
-                </div>
-              </div>
-            </div>
-          </Link>
-        </div>
-        <div className='square light-grey-background greyscale'>
-          <Link to={`${queryString}/3d-drug-services`}>
-            <div className='square-content'>
-              <div className='table'>
-                <div className='table-cell'>
-                  <Image src={drug3D} rounded className='responsive-img' />
-                </div>
-              </div>
-            </div>
-          </Link>
-        </div>
-        <div className='square light-grey-background greyscale'>
-          <Link to={`${queryString}/xd-drug-services`}>
-            <div className='square-content'>
-              <div className='table'>
-                <div className='table-cell'>
-                  <Image src={drugxD} rounded className='responsive-img' />
-                </div>
-              </div>
-            </div>
-          </Link>
-        </div>
+        <MatrixCell text='Drugs and other small molecules' />
+        <MatrixCellWithLink linkTo={`${queryString}/1d-drug-services`} image={drug1D} />
+        <MatrixCellWithLink linkTo={`${queryString}/2d-drug-services`} image={drug2D} />
+        <MatrixCellWithLink linkTo={`${queryString}/3d-drug-services`} image={drug3D} />
+        <MatrixCellWithLink linkTo={`${queryString}/xd-drug-services`} image={drugxD} />
       </div>
       <ShowToolsCount collection={collection} />
     </Grid>

@@ -7,9 +7,11 @@ export const OverlayTooltip = ({ id, tooltipText, children, delayShow, delayHide
 
   return (
     <OverlayTrigger
-      overlay={tooltip} placement={placement}
-      delayShow={delayShow} delayHide={delayHide}
-      >
+      overlay={tooltip}
+      placement={placement}
+      delayShow={delayShow}
+      delayHide={delayHide}
+    >
       {children}
     </OverlayTrigger>
   )

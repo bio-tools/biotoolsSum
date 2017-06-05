@@ -1,3 +1,1 @@
-/**
- * Created by danad02 on 5.6.17.
- */
+export const DEFAULT_COLLECTION = 'elixir-cz'
