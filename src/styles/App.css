@@ -38,7 +38,7 @@ img.center {
 .square-content {
   position: absolute;
   height: 100%; /* = 100% - 2*10% padding */
-  width: 100%; /* = 100% - 2*5% padding */
+  width: 100%; /* = 100% - 2*10% padding */
   padding: 10% 10%;
   text-align: center;
 }

@@ -1,7 +1,7 @@
 import React, { PureComponent } from 'react'
 import 'whatwg-fetch'
 import { Alert } from 'react-bootstrap'
-import {DEFAULT_COLLECTION} from './constants/queryString'
+import {DEFAULT_COLLECTION} from '../../constants/queryString'
 
 class ShowToolsCount extends PureComponent {
   constructor (props) {

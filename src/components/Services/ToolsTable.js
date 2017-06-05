@@ -1,10 +1,10 @@
 import React from 'react'
 import R from 'ramda'
 import ReactTable from 'react-table'
-import ReadMore from './ReadMore'
+import ReadMore from '../common/ReadMore'
 import { Label } from 'react-bootstrap'
 import FontAwesome from 'react-fontawesome'
-import { OverlayTooltip } from './OverlayTooltip'
+import { OverlayTooltip } from '../common/OverlayTooltip'
 
 const pickData = R.map(
   R.compose(

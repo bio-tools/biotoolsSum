@@ -2,7 +2,7 @@ import React, { PureComponent } from 'react'
 import * as R from 'ramda'
 import BioToolsData from './BioToolsData'
 import { Alert } from 'react-bootstrap'
-import {DEFAULT_COLLECTION} from './constants/queryString'
+import {DEFAULT_COLLECTION} from '../../constants/queryString'
 
 function getStateObject (id, collection) {
   const collectionID = collection || DEFAULT_COLLECTION

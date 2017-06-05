@@ -3,7 +3,7 @@ import R from 'ramda'
 import 'whatwg-fetch'
 import { Alert, Pagination } from 'react-bootstrap'
 import Loader from 'react-loader'
-import { PAGE_SIZE } from './constants/toolsTable'
+import { PAGE_SIZE } from '../../constants/toolsTable'
 import { ToolsTable } from './ToolsTable'
 
 class BioToolsData extends PureComponent {

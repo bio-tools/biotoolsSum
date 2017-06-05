@@ -4,10 +4,10 @@ import './styles/App.css'
 import '../node_modules/react-table/react-table.css'
 import '../node_modules/bootstrap/dist/css/bootstrap.min.css'
 import '../node_modules/font-awesome/css/font-awesome.min.css'
-import ServicesNavbar from './components/ServicesNavbar'
-import Services from './components/Services'
+import ServicesNavbar from './components/Services/ServicesNavbar'
+import Services from './components/Services/Services'
 import { Home } from './components/Home'
-import { ServicesMatrix } from './components/ServicesMatrix'
+import { ServicesMatrix } from './components/Matrix/ServicesMatrix'
 
 class App extends Component {
   render () {
