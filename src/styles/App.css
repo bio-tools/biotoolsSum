@@ -79,9 +79,14 @@ img.center {
   height: auto;
 }
 
+.grey {
+  opacity: 0.25;
+  filter: alpha(opacity=40); /* IE */
+}
+
 .greyscale {
   -webkit-transition: background-color 0.7s;
-  transition: background-color 0.7s;
+  transition: background-color 0.7s; /* IE */
 }
 
 .greyscale:hover {

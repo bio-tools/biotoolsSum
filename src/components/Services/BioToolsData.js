@@ -17,8 +17,10 @@ class BioToolsData extends PureComponent {
       loadingData: true,
       loadingPage: false,
     }
+  }
 
-    fetch(props.query)
+  componentDidMount () {
+    fetch(this.props.query)
       .then(response => response.json())
       .then(data => {
         this.setState({

@@ -7,7 +7,7 @@ import '../node_modules/font-awesome/css/font-awesome.min.css'
 import ServicesNavbar from './components/Services/ServicesNavbar'
 import Services from './components/Services/Services'
 import { Home } from './components/Home'
-import { ServicesMatrix } from './components/Matrix/ServicesMatrix'
+import ServicesMatrix from './components/Matrix/ServicesMatrix'
 
 class App extends Component {
   render () {
