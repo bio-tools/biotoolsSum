@@ -5,6 +5,7 @@ import ReadMore from '../common/ReadMore'
 import { Label } from 'react-bootstrap'
 import FontAwesome from 'react-fontawesome'
 import { OverlayTooltip } from '../common/OverlayTooltip'
+import ShowMore from '../common/ShowMore'
 
 const pickData = R.map(
   R.compose(
@@ -12,7 +13,7 @@ const pickData = R.map(
       {
         function: R.compose(R.prop('operation'), R.head),
       }),
-    R.pick(['name', 'homepage', 'version', 'description', 'topic', 'maturity', 'operatingSystem', 'function', 'toolType'])
+    R.pick(['id', 'name', 'homepage', 'version', 'description', 'topic', 'maturity', 'operatingSystem', 'function', 'toolType'])
   )
 )
 
@@ -25,14 +26,17 @@ const columns = [
     header: 'Name',
     accessor: data =>
       <div>
-        <a href={data.homepage} target='_blank'>{data.name}</a>
+        <a href={`https://bio.tools/tool/${data.id}/version/${data.version}`} target='_blank'>{data.name}</a>
         {data.version && <span> v.{data.version}</span>}
         <hr className='table-delimiter' />
-        {!R.contains('Database portal', data.toolType)
-          ? <p><Label>Tool</Label></p>
-          : data.toolType.length >= 2
-            ? <p><Label bsStyle='primary'>Database</Label> <Label>Tool</Label></p>
-            : <p><Label bsStyle='primary'>Database</Label></p>}
+        <p>
+          {data.toolType.map((value, index) =>
+            <span key={index}>
+              <Label bsStyle='warning'>{value}</Label>
+              <br />
+            </span>
+          )}
+        </p>
       </div>,
   }, {
     id: 'description',
@@ -48,26 +52,14 @@ const columns = [
     minWidth: 130,
     maxWidth: 300,
     header: 'Topic',
-    accessor: data => data.topic,
-    render: topics =>
-      <ul>
-        {topics.value.map((topic, index) => {
-          return <li key={index}><a href={topic.uri} target='_blank'>{topic.term}</a></li>
-        })}
-      </ul>,
+    accessor: data => <ShowMore lines={3} searchTermName='topic' list={data.topic} />,
   }, {
     id: 'function',
     sortable: false,
     minWidth: 130,
     maxWidth: 300,
     header: 'Function',
-    accessor: data => data.function,
-    render: funccs =>
-      <ul>
-        {funccs.value.map((funcc, index) => {
-          return <li key={index}><a href={funcc.uri} target='_blank'>{funcc.term}</a></li>
-        })}
-      </ul>,
+    accessor: data => <ShowMore lines={3} searchTermName='function' list={data.function} />,
   }, {
     id: 'additional-info',
     sortable: false,
@@ -80,7 +72,7 @@ const columns = [
           ? <p><Label bsStyle='success'>Mature</Label></p>
           : data.maturity === 'Emerging'
             ? <p><Label bsStyle='info'>Emerging</Label></p>
-            : data.maturity === 'Legacy' && <p><Label bsStyle='warning'>Legacy</Label></p>}
+            : data.maturity === 'Legacy' && <p><Label bsStyle='danger'>Legacy</Label></p>}
         <hr className='table-delimiter' />
         {R.contains('Windows', data.operatingSystem) &&
           <OverlayTooltip id='tooltip-windows' tooltipText='Platform: Windows'>

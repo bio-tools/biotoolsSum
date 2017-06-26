@@ -1,4 +1,6 @@
 import React, { PureComponent } from 'react'
+import * as Rx from 'rx'
+import * as R from 'ramda'
 import { Grid } from 'react-bootstrap'
 import dna1D from '../../images/1d-dna.png'
 import dna2D from '../../images/2d-dna.png'
@@ -16,65 +18,10 @@ import drug1D from '../../images/1d-drug.png'
 import drug2D from '../../images/2d-drug.png'
 import drug3D from '../../images/3d-drug.png'
 import drugxD from '../../images/xd-drug.png'
-import ShowToolsCount from './ShowToolsCount'
 import { MatrixCell } from './MatrixCell'
 import { MatrixCellWithLink } from './MatrixCellWithLink'
-import * as Type from '../../constants/services'
-
-function getApiUrl (id, collection) {
-  switch (id) {
-    case Type.DNA_1D_SERVICES:
-      return `https://bio.tools/api/tool/?collectionID=${collection}&sort=name&ord=asc&q="dna-sequence"`
-
-    case Type.DNA_2D_SERVICES:
-      return `https://bio.tools/api/tool/?collectionID=${collection}&sort=name&ord=asc&q="dna-secondary-structure"`
-
-    case Type.DNA_3D_SERVICES:
-      return `https://bio.tools/api/tool/?collectionID=${collection}&sort=name&ord=asc&q="dna-structure"`
-
-    case Type.DNA_XD_SERVICES:
-      return `https://bio.tools/api/tool/?collectionID=${collection}&sort=name&ord=asc&q="genomics"`
-
-    case Type.RNA_1D_SERVICES:
-      return `https://bio.tools/api/tool/?collectionID=${collection}&sort=name&ord=asc&q="rna-sequence"`
-
-    case Type.RNA_2D_SERVICES:
-      return `https://bio.tools/api/tool/?collectionID=${collection}&sort=name&ord=asc&q="rna-secondary-structure"`
-
-    case Type.RNA_3D_SERVICES:
-      return `https://bio.tools/api/tool/?collectionID=${collection}&sort=name&ord=asc&q="rna-structure"`
-
-    case Type.RNA_XD_SERVICES:
-      return `https://bio.tools/api/tool/?collectionID=${collection}&sort=name&ord=asc&q="rna-omics"`
-
-    case Type.PROTEIN_1D_SERVICES:
-      return `https://bio.tools/api/tool/?collectionID=${collection}&sort=name&ord=asc&q="protein-sequence"`
-
-    case Type.PROTEIN_2D_SERVICES:
-      return `https://bio.tools/api/tool/?collectionID=${collection}&sort=name&ord=asc&q="protein-secondary-structure"`
-
-    case Type.PROTEIN_3D_SERVICES:
-      return `https://bio.tools/api/tool/?collectionID=${collection}&sort=name&ord=asc&q="protein-structure"`
-
-    case Type.PROTEIN_XD_SERVICES:
-      return `https://bio.tools/api/tool/?collectionID=${collection}&sort=name&ord=asc&q="protein-omics"`
-
-    case Type.DRUG_1D_SERVICES:
-      return `https://bio.tools/api/tool/?collectionID=${collection}&sort=name&ord=asc&q="small-molecule-primary-sequence"`
-
-    case Type.DRUG_2D_SERVICES:
-      return `https://bio.tools/api/tool/?collectionID=${collection}&sort=name&ord=asc&q="small-molecule-secondary-structure"`
-
-    case Type.DRUG_3D_SERVICES:
-      return `https://bio.tools/api/tool/?collectionID=${collection}&sort=name&ord=asc&q="small-molecule-structure"`
-
-    case Type.DRUG_XD_SERVICES:
-      return `https://bio.tools/api/tool/?collectionID=${collection}&sort=name&ord=asc&q="small-molecule-omics"`
-
-    default:
-      return `https://bio.tools/api/tool/?collectionID=${collection}&sort=name&ord=asc`
-  }
-}
+import * as Type from '../../constants/servicesConstants'
+import { getApiUrl } from '../../common/helperFunctions'
 
 export default class ServicesMatrix extends PureComponent {
   constructor (props) {
@@ -97,139 +44,91 @@ export default class ServicesMatrix extends PureComponent {
       drug2d: null,
       drug3d: null,
       drugxd: null,
+      all: null,
     }
   }
 
   componentDidMount () {
-    const collection = this.props.match.params.collection || Type.DEFAULT_COLLECTION
+    const collection = this.props.match.params.collection
 
-    fetch(getApiUrl(Type.DNA_1D_SERVICES, collection))
-      .then(response => response.json())
-      .then(data => {
-        this.setState({
-          dna1d: data.count === 0,
-        })
-      })
+    Rx.Observable
+      .combineLatest(
+        Rx.Observable.fromPromise(fetch(getApiUrl(Type.DNA_1D_SERVICES, collection))
+          .then(response => response.json())
+          .then(data => data.count)
+        ),
+        Rx.Observable.fromPromise(fetch(getApiUrl(Type.DNA_2D_SERVICES, collection))
+          .then(response => response.json())
+          .then(data => data.count)
+        ),
+        Rx.Observable.fromPromise(fetch(getApiUrl(Type.DNA_3D_SERVICES, collection))
+          .then(response => response.json())
+          .then(data => data.count)
+        ),
+        Rx.Observable.fromPromise(fetch(getApiUrl(Type.DNA_XD_SERVICES, collection))
+          .then(response => response.json())
+          .then(data => data.count)
+        ),
+        Rx.Observable.fromPromise(fetch(getApiUrl(Type.RNA_1D_SERVICES, collection))
+          .then(response => response.json())
+          .then(data => data.count)
+        ),
+        Rx.Observable.fromPromise(fetch(getApiUrl(Type.RNA_2D_SERVICES, collection))
+          .then(response => response.json())
+          .then(data => data.count)
+        ),
+        Rx.Observable.fromPromise(fetch(getApiUrl(Type.RNA_3D_SERVICES, collection))
+          .then(response => response.json())
+          .then(data => data.count)
+        ),
+        Rx.Observable.fromPromise(fetch(getApiUrl(Type.RNA_XD_SERVICES, collection))
+          .then(response => response.json())
+          .then(data => data.count)
+        ),
+        Rx.Observable.fromPromise(fetch(getApiUrl(Type.PROTEIN_1D_SERVICES, collection))
+          .then(response => response.json())
+          .then(data => data.count)
+        ),
+        Rx.Observable.fromPromise(fetch(getApiUrl(Type.PROTEIN_2D_SERVICES, collection))
+          .then(response => response.json())
+          .then(data => data.count)
+        ),
+        Rx.Observable.fromPromise(fetch(getApiUrl(Type.PROTEIN_3D_SERVICES, collection))
+          .then(response => response.json())
+          .then(data => data.count)
+        ),
+        Rx.Observable.fromPromise(fetch(getApiUrl(Type.PROTEIN_XD_SERVICES, collection))
+          .then(response => response.json())
+          .then(data => data.count)
+        ),
+        Rx.Observable.fromPromise(fetch(getApiUrl(Type.DRUG_1D_SERVICES, collection))
+          .then(response => response.json())
+          .then(data => data.count)
+        ),
+        Rx.Observable.fromPromise(fetch(getApiUrl(Type.DRUG_2D_SERVICES, collection))
+          .then(response => response.json())
+          .then(data => data.count)
+        ),
+        Rx.Observable.fromPromise(fetch(getApiUrl(Type.DRUG_3D_SERVICES, collection))
+          .then(response => response.json())
+          .then(data => data.count)
+        ),
+        Rx.Observable.fromPromise(fetch(getApiUrl(Type.DRUG_XD_SERVICES, collection))
+          .then(response => response.json())
+          .then(data => data.count)
+        ),
+        Rx.Observable.fromPromise(fetch(getApiUrl(Type.ALL_SERVICES, collection))
+          .then(response => response.json())
+          .then(data => data.count))
+      )
+      .subscribe(values => {
+        const services = R.zipObj([
+          'dna1d', 'dna2d', 'dna3d', 'dnaxd',
+          'rna1d', 'rna2d', 'rna3d', 'rnaxd',
+          'protein1d', 'protein2d', 'protein3d', 'proteinxd',
+          'drug1d', 'drug2d', 'drug3d', 'drugxd', 'all'], values)
 
-    fetch(getApiUrl(Type.DNA_2D_SERVICES, collection))
-      .then(response => response.json())
-      .then(data => {
-        this.setState({
-          dna2d: data.count === 0,
-        })
-      })
-
-    fetch(getApiUrl(Type.DNA_3D_SERVICES, collection))
-      .then(response => response.json())
-      .then(data => {
-        this.setState({
-          dna3d: data.count === 0,
-        })
-      })
-
-    fetch(getApiUrl(Type.DNA_XD_SERVICES, collection))
-      .then(response => response.json())
-      .then(data => {
-        this.setState({
-          dnaxd: data.count === 0,
-        })
-      })
-
-    fetch(getApiUrl(Type.RNA_1D_SERVICES, collection))
-      .then(response => response.json())
-      .then(data => {
-        this.setState({
-          rna1d: data.count === 0,
-        })
-      })
-
-    fetch(getApiUrl(Type.RNA_2D_SERVICES, collection))
-      .then(response => response.json())
-      .then(data => {
-        this.setState({
-          rna2d: data.count === 0,
-        })
-      })
-
-    fetch(getApiUrl(Type.RNA_3D_SERVICES, collection))
-      .then(response => response.json())
-      .then(data => {
-        this.setState({
-          rna3d: data.count === 0,
-        })
-      })
-
-    fetch(getApiUrl(Type.RNA_XD_SERVICES, collection))
-      .then(response => response.json())
-      .then(data => {
-        this.setState({
-          rnaxd: data.count === 0,
-        })
-      })
-
-    fetch(getApiUrl(Type.PROTEIN_1D_SERVICES, collection))
-      .then(response => response.json())
-      .then(data => {
-        this.setState({
-          protein1d: data.count === 0,
-        })
-      })
-
-    fetch(getApiUrl(Type.PROTEIN_2D_SERVICES, collection))
-      .then(response => response.json())
-      .then(data => {
-        this.setState({
-          protein2d: data.count === 0,
-        })
-      })
-
-    fetch(getApiUrl(Type.PROTEIN_3D_SERVICES, collection))
-      .then(response => response.json())
-      .then(data => {
-        this.setState({
-          protein3d: data.count === 0,
-        })
-      })
-
-    fetch(getApiUrl(Type.PROTEIN_XD_SERVICES, collection))
-      .then(response => response.json())
-      .then(data => {
-        console.log(data.count)
-        this.setState({
-          proteinxd: data.count === 0,
-        })
-      })
-
-    fetch(getApiUrl(Type.DRUG_1D_SERVICES, collection))
-      .then(response => response.json())
-      .then(data => {
-        this.setState({
-          drug1d: data.count === 0,
-        })
-      })
-
-    fetch(getApiUrl(Type.DRUG_2D_SERVICES, collection))
-      .then(response => response.json())
-      .then(data => {
-        this.setState({
-          drug2d: data.count === 0,
-        })
-      })
-
-    fetch(getApiUrl(Type.DRUG_3D_SERVICES, collection))
-      .then(response => response.json())
-      .then(data => {
-        this.setState({
-          drug3d: data.count === 0,
-        })
-      })
-
-    fetch(getApiUrl(Type.DRUG_XD_SERVICES, collection))
-      .then(response => response.json())
-      .then(data => {
-        this.setState({
-          drugxd: data.count === 0,
-        })
+        this.setState(services)
       })
   }
 
@@ -241,37 +140,36 @@ export default class ServicesMatrix extends PureComponent {
     return (
       <Grid>
         <div className='matrix'>
-          <MatrixCell text='All services' />
+          <MatrixCellWithLink linkTo={`${collectionID}/${Type.ALL_SERVICES}`} text='All services' numberOfServices={this.state.all} />
           <MatrixCell text='1D sequence' />
-          <MatrixCell text='2D typology' />
+          <MatrixCell text='2D topology' />
           <MatrixCell text='3D structure' />
           <MatrixCell text='xD omics' />
 
           <MatrixCell text='DNA' />
-          <MatrixCellWithLink linkTo={`${collectionID}/${Type.DNA_1D_SERVICES}`} image={dna1D} grey={this.state.dna1d} />
-          <MatrixCellWithLink linkTo={`${collectionID}/${Type.DNA_2D_SERVICES}`} image={dna2D} grey={this.state.dna2d} />
-          <MatrixCellWithLink linkTo={`${collectionID}/${Type.DNA_3D_SERVICES}`} image={dna3D} grey={this.state.dna3d} />
-          <MatrixCellWithLink linkTo={`${collectionID}/${Type.DNA_XD_SERVICES}`} image={dnaxD} grey={this.state.dnaxd} />
+          <MatrixCellWithLink linkTo={`${collectionID}/${Type.DNA_1D_SERVICES}`} image={dna1D} numberOfServices={this.state.dna1d} />
+          <MatrixCellWithLink linkTo={`${collectionID}/${Type.DNA_2D_SERVICES}`} image={dna2D} numberOfServices={this.state.dna2d} />
+          <MatrixCellWithLink linkTo={`${collectionID}/${Type.DNA_3D_SERVICES}`} image={dna3D} numberOfServices={this.state.dna3d} />
+          <MatrixCellWithLink linkTo={`${collectionID}/${Type.DNA_XD_SERVICES}`} image={dnaxD} numberOfServices={this.state.dnaxd} />
 
           <MatrixCell text='RNA' />
-          <MatrixCellWithLink linkTo={`${collectionID}/1d-rna-services`} image={rna1D} grey={this.state.rna1d} />
-          <MatrixCellWithLink linkTo={`${collectionID}/2d-rna-services`} image={rna2D} grey={this.state.rna2d} />
-          <MatrixCellWithLink linkTo={`${collectionID}/3d-rna-services`} image={rna3D} grey={this.state.rna3d} />
-          <MatrixCellWithLink linkTo={`${collectionID}/xd-rna-services`} image={rnaxD} grey={this.state.rnaxd} />
+          <MatrixCellWithLink linkTo={`${collectionID}/${Type.RNA_1D_SERVICES}`} image={rna1D} numberOfServices={this.state.rna1d} />
+          <MatrixCellWithLink linkTo={`${collectionID}/${Type.RNA_2D_SERVICES}`} image={rna2D} numberOfServices={this.state.rna2d} />
+          <MatrixCellWithLink linkTo={`${collectionID}/${Type.RNA_3D_SERVICES}`} image={rna3D} numberOfServices={this.state.rna3d} />
+          <MatrixCellWithLink linkTo={`${collectionID}/${Type.RNA_XD_SERVICES}`} image={rnaxD} numberOfServices={this.state.rnaxd} />
 
           <MatrixCell text='Protein' />
-          <MatrixCellWithLink linkTo={`${collectionID}/1d-protein-services`} image={protein1D} grey={this.state.protein1d} />
-          <MatrixCellWithLink linkTo={`${collectionID}/2d-protein-services`} image={protein2D} grey={this.state.protein2d} />
-          <MatrixCellWithLink linkTo={`${collectionID}/3d-protein-services`} image={protein3D} grey={this.state.protein3d} />
-          <MatrixCellWithLink linkTo={`${collectionID}/xd-protein-services`} image={proteinxD} grey={this.state.proteinxd} />
+          <MatrixCellWithLink linkTo={`${collectionID}/${Type.PROTEIN_1D_SERVICES}`} image={protein1D} numberOfServices={this.state.protein1d} />
+          <MatrixCellWithLink linkTo={`${collectionID}/${Type.PROTEIN_2D_SERVICES}`} image={protein2D} numberOfServices={this.state.protein2d} />
+          <MatrixCellWithLink linkTo={`${collectionID}/${Type.PROTEIN_3D_SERVICES}`} image={protein3D} numberOfServices={this.state.protein3d} />
+          <MatrixCellWithLink linkTo={`${collectionID}/${Type.PROTEIN_XD_SERVICES}`} image={proteinxD} numberOfServices={this.state.proteinxd} />
 
           <MatrixCell text='Drugs and other small molecules' />
-          <MatrixCellWithLink linkTo={`${collectionID}/1d-drug-services`} image={drug1D} grey={this.state.drug1d} />
-          <MatrixCellWithLink linkTo={`${collectionID}/2d-drug-services`} image={drug2D} grey={this.state.drug2d} />
-          <MatrixCellWithLink linkTo={`${collectionID}/3d-drug-services`} image={drug3D} grey={this.state.drug3d} />
-          <MatrixCellWithLink linkTo={`${collectionID}/xd-drug-services`} image={drugxD} grey={this.state.drugxd} />
+          <MatrixCellWithLink linkTo={`${collectionID}/${Type.DRUG_1D_SERVICES}`} image={drug1D} numberOfServices={this.state.drug1d} />
+          <MatrixCellWithLink linkTo={`${collectionID}/${Type.DRUG_2D_SERVICES}`} image={drug2D} numberOfServices={this.state.drug2d} />
+          <MatrixCellWithLink linkTo={`${collectionID}/${Type.DRUG_3D_SERVICES}`} image={drug3D} numberOfServices={this.state.drug3d} />
+          <MatrixCellWithLink linkTo={`${collectionID}/${Type.DRUG_XD_SERVICES}`} image={drugxD} numberOfServices={this.state.drugxd} />
         </div>
-        <ShowToolsCount collection={collection} />
       </Grid>
     )
   }

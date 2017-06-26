@@ -77,7 +77,7 @@ class BioToolsData extends PureComponent {
       <Loader loaded={!loadingData}>
         {toolsCount
           ? <div>
-            <Alert bsStyle='success'>
+            <Alert bsStyle='warning'>
               There is a total number of <strong>{toolsCount}</strong> tools available
             </Alert>
             <Pagination

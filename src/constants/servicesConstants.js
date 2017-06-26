@@ -1,5 +1,3 @@
-export const DEFAULT_COLLECTION = 'elixir-cz'
-
 export const DNA_1D_SERVICES = '1d-dna-services'
 export const DNA_2D_SERVICES = '2d-dna-services'
 export const DNA_3D_SERVICES = '3d-dna-services'
@@ -19,3 +17,5 @@ export const DRUG_1D_SERVICES = '1d-drug-services'
 export const DRUG_2D_SERVICES = '2d-drug-services'
 export const DRUG_3D_SERVICES = '3d-drug-services'
 export const DRUG_XD_SERVICES = 'xd-drug-services'
+
+export const ALL_SERVICES = 'all-services'

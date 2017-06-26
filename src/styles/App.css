@@ -74,6 +74,28 @@ img.center {
   }
 }
 
+@media all and (min-width: 992px) {
+  .text-little{
+    font-size: 13px;
+  }
+}
+
+@media all and (max-width: 991px) and (min-width: 766px) {
+  .text-little{
+    font-size: 10px;
+  }
+}
+
+@media all and (max-width: 766px) {
+  .text-little{
+    font-size: 1.4vw;
+  }
+}
+
+.text-little {
+  color: #d68a37;
+}
+
 .responsive-img {
   max-width: 100%;
   height: auto;
@@ -104,9 +126,5 @@ img.center {
 }
 
 .pagination-no-margin-top {
-  margin-top: 0 !important;
-}
-
-.rt-td{
-  white-space: normal !important;
+  margin-top: 5px !important;
 }
