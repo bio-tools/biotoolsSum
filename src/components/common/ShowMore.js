@@ -44,7 +44,11 @@ export default class ReadMore extends PureComponent {
             </li>
           })}
         </ul>
-        {list.length > lines && <span><a href='#' onClick={this.toggleLines}>{expanded ? less : more}</a></span>}
+        {list.length > lines &&
+          <span className='toolstable-showmore-button'>
+            <a href='#' onClick={this.toggleLines}>{expanded ? less : more}</a>
+          </span>
+        }
       </div>
     )
   }
