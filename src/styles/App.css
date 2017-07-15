@@ -60,11 +60,19 @@ img.center {
   .text-big{
     font-size: 20px;
   }
+
+  .text-little{
+    font-size: 13px;
+  }
 }
 
 @media all and (max-width: 991px) and (min-width: 766px) {
   .text-big{
     font-size: 15px;
+  }
+
+  .text-little{
+    font-size: 10px;
   }
 }
 
@@ -72,21 +80,7 @@ img.center {
   .text-big{
     font-size: 1.9vw;
   }
-}
 
-@media all and (min-width: 992px) {
-  .text-little{
-    font-size: 13px;
-  }
-}
-
-@media all and (max-width: 991px) and (min-width: 766px) {
-  .text-little{
-    font-size: 10px;
-  }
-}
-
-@media all and (max-width: 766px) {
   .text-little{
     font-size: 1.4vw;
   }

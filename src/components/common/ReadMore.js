@@ -1,6 +1,5 @@
 import React, { PureComponent } from 'react'
 import PropTypes from 'prop-types'
-import Truncate from 'react-truncate'
 
 export default class ReadMore extends PureComponent {
   constructor (props) {
@@ -8,57 +7,43 @@ export default class ReadMore extends PureComponent {
 
     this.state = {
       expanded: false,
-      truncated: false,
-    }
-
-    this.handleTruncate = this.handleTruncate.bind(this)
-    this.toggleLines = this.toggleLines.bind(this)
-  }
-
-  handleTruncate (truncated) {
-    if (this.state.truncated !== truncated) {
-      this.setState({
-        truncated,
-      })
     }
   }
 
-  toggleLines (e) {
-    e.preventDefault()
-
+  toggleLines = () => {
     this.setState({
       expanded: !this.state.expanded,
     })
   }
 
   render () {
-    const { children, more, less, lines } = this.props
+    const { more, less, chars, text } = this.props
+    const { expanded } = this.state
 
-    const { expanded, truncated } = this.state
+    const showText = expanded ? text : text.slice(0, chars)
 
     return (
       <div>
-        <Truncate
-          lines={!expanded && lines}
-          ellipsis={(<span>... <a href='#' onClick={this.toggleLines}>{more}</a></span>)}
-          onTruncate={this.handleTruncate}>
-          {children}
-        </Truncate>
-        {!truncated && expanded && (<span> <a href='#' onClick={this.toggleLines}>{less}</a></span>)}
+        <span onClick={this.toggleLines}>{showText}</span>
+        {text.length > chars &&
+          <span>
+            {expanded ? ' ' : '... '}
+            <a href='#' onClick={this.toggleLines}>{expanded ? less : more}</a>
+          </span>
+        }
       </div>
     )
   }
 }
 
 ReadMore.defaultProps = {
-  lines: 3,
+  chars: 50,
   more: 'Show more',
   less: 'Show less',
 }
 
 ReadMore.propTypes = {
-  children: PropTypes.node.isRequired,
   more: PropTypes.string,
   less: PropTypes.string,
-  lines: PropTypes.number,
+  chars: PropTypes.number,
 }

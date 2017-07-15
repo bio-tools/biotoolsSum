@@ -2,7 +2,7 @@ import React, { PureComponent } from 'react'
 import PropTypes from 'prop-types'
 import * as R from 'ramda'
 import FontAwesome from 'react-fontawesome'
-import {OverlayTooltip} from './OverlayTooltip'
+import { OverlayTooltip } from './OverlayTooltip'
 
 export default class ReadMore extends PureComponent {
   constructor (props) {
@@ -13,9 +13,7 @@ export default class ReadMore extends PureComponent {
     }
   }
 
-  toggleLines = (e) => {
-    e.preventDefault()
-
+  toggleLines = () => {
     this.setState({
       expanded: !this.state.expanded,
     })
@@ -23,7 +21,6 @@ export default class ReadMore extends PureComponent {
 
   render () {
     const { list, more, less, lines, searchTermName } = this.props
-
     const { expanded } = this.state
 
     const showList = expanded ? list : R.take(lines, list)

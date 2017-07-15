@@ -45,7 +45,7 @@ const columns = [
     maxWidth: 300,
     aggregate: true,
     header: 'Description',
-    accessor: data => <ReadMore lines={3}>{data.description}</ReadMore>,
+    accessor: data => <ReadMore chars={150} text={data.description} />,
   }, {
     id: 'topic',
     sortable: false,
