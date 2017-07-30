@@ -1,5 +1,4 @@
 import React, { PureComponent } from 'react'
-import * as Rx from 'rx'
 import * as R from 'ramda'
 import { Grid } from 'react-bootstrap'
 import dna1D from '../../images/1d-dna.png'
@@ -22,8 +21,13 @@ import { MatrixCell } from './MatrixCell'
 import { MatrixCellWithLink } from './MatrixCellWithLink'
 import * as Type from '../../constants/servicesConstants'
 import { getApiUrl } from '../../common/helperFunctions'
+import * as Rx from 'rxjs'
+import { connect } from 'react-redux'
+import * as ActionTypes from '../../constants/actionTypes'
+import buildActionCreators from '../../helpers/buildActionCreators'
+import * as QueryConst from '../../constants/queryConstants'
 
-export default class ServicesMatrix extends PureComponent {
+class ServicesMatrix extends PureComponent {
   constructor (props) {
     super(props)
 
@@ -130,6 +134,29 @@ export default class ServicesMatrix extends PureComponent {
 
         this.setState(services)
       })
+
+    const { servicesFetch } = this.props
+
+    servicesFetch({
+      name: 'all',
+      query: '',
+    })
+    servicesFetch({
+      name: 'dna1d',
+      query: QueryConst.DNA_1D_QUERY,
+    })
+    servicesFetch({
+      name: 'dna2d',
+      query: QueryConst.DNA_2D_QUERY,
+    })
+    servicesFetch({
+      name: 'dna3d',
+      query: QueryConst.DNA_3D_QUERY,
+    })
+    servicesFetch({
+      name: 'dnaxd',
+      query: QueryConst.DNA_XD_QUERY,
+    })
   }
 
   render () {
@@ -174,3 +201,7 @@ export default class ServicesMatrix extends PureComponent {
     )
   }
 }
+
+export default ServicesMatrix = connect(state => ({}), buildActionCreators({
+  servicesFetch: ActionTypes.SERVICES_FETCH,
+}))(ServicesMatrix)

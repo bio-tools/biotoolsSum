@@ -10,7 +10,10 @@ export default class ReadMore extends PureComponent {
     }
   }
 
-  toggleLines = () => {
+  toggleLines = (e) => {
+    // Stops <a href=# </a> from scrolling to the top of the page
+    e.preventDefault()
+
     this.setState({
       expanded: !this.state.expanded,
     })

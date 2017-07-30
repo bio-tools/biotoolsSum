@@ -100,6 +100,11 @@ export const ToolsTable = ({ count, next, list, pageSize }) => {
       showPagination={false}
       defaultPageSize={defaultPageSize}
       className='-striped'
+      SubComponent={(row) =>
+        <div style={{padding: '20px'}}>
+          <em>You can put any component you want here, even another React Table!</em>
+        </div>
+      }
       />
   )
 }
