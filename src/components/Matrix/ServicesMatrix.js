@@ -1,6 +1,4 @@
 import React, { PureComponent } from 'react'
-import * as R from 'ramda'
-import * as Rx from 'rxjs'
 import { connect } from 'react-redux'
 import { Grid } from 'react-bootstrap'
 import dna1D from '../../images/1d-dna.png'
@@ -26,9 +24,6 @@ import * as ServicesNames from '../../constants/routeConstants'
 
 class ServicesMatrix extends PureComponent {
   render () {
-    const { collection } = this.props.match.params
-    const collectionID = collection ? `/${collection}/services` : '/services'
-
     const { allServicesCount, dna1dServicesCount, dna2dServicesCount, dna3dServicesCount, dnaxdServicesCount,
       rna1dServicesCount, rna2dServicesCount, rna3dServicesCount, rnaxdServicesCount,
       protein1dServicesCount, protein2dServicesCount, protein3dServicesCount, proteinxdServicesCount,
@@ -37,35 +32,35 @@ class ServicesMatrix extends PureComponent {
     return (
       <Grid>
         <div className='matrix'>
-          <MatrixCellWithLink linkTo={`${collectionID}/${ServicesNames.ALL_SERVICES_ROUTE}`} text='All services' numberOfServices={allServicesCount} />
+          <MatrixCellWithLink linkTo={`/services/${ServicesNames.ALL_SERVICES_ROUTE}`} text='All services' numberOfServices={allServicesCount} />
           <MatrixCell text='1D sequence' />
           <MatrixCell text='2D topology' />
           <MatrixCell text='3D structure' />
           <MatrixCell text='xD omics' />
 
           <MatrixCell text='DNA' />
-          <MatrixCellWithLink linkTo={`${collectionID}/${ServicesNames.DNA_1D_SERVICES_ROUTE}`} image={dna1D} numberOfServices={dna1dServicesCount} />
-          <MatrixCellWithLink linkTo={`${collectionID}/${ServicesNames.DNA_2D_SERVICES_ROUTE}`} image={dna2D} numberOfServices={dna2dServicesCount} />
-          <MatrixCellWithLink linkTo={`${collectionID}/${ServicesNames.DNA_3D_SERVICES_ROUTE}`} image={dna3D} numberOfServices={dna3dServicesCount} />
-          <MatrixCellWithLink linkTo={`${collectionID}/${ServicesNames.DNA_XD_SERVICES_ROUTE}`} image={dnaxD} numberOfServices={dnaxdServicesCount} />
+          <MatrixCellWithLink linkTo={`/services/${ServicesNames.DNA_1D_SERVICES_ROUTE}`} image={dna1D} numberOfServices={dna1dServicesCount} />
+          <MatrixCellWithLink linkTo={`/services/${ServicesNames.DNA_2D_SERVICES_ROUTE}`} image={dna2D} numberOfServices={dna2dServicesCount} />
+          <MatrixCellWithLink linkTo={`/services/${ServicesNames.DNA_3D_SERVICES_ROUTE}`} image={dna3D} numberOfServices={dna3dServicesCount} />
+          <MatrixCellWithLink linkTo={`/services/${ServicesNames.DNA_XD_SERVICES_ROUTE}`} image={dnaxD} numberOfServices={dnaxdServicesCount} />
 
           <MatrixCell text='RNA' />
-          <MatrixCellWithLink linkTo={`${collectionID}/${ServicesNames.RNA_1D_SERVICES_ROUTE}`} image={rna1D} numberOfServices={rna1dServicesCount} />
-          <MatrixCellWithLink linkTo={`${collectionID}/${ServicesNames.RNA_2D_SERVICES_ROUTE}`} image={rna2D} numberOfServices={rna2dServicesCount} />
-          <MatrixCellWithLink linkTo={`${collectionID}/${ServicesNames.RNA_3D_SERVICES_ROUTE}`} image={rna3D} numberOfServices={rna3dServicesCount} />
-          <MatrixCellWithLink linkTo={`${collectionID}/${ServicesNames.RNA_XD_SERVICES_ROUTE}`} image={rnaxD} numberOfServices={rnaxdServicesCount} />
+          <MatrixCellWithLink linkTo={`/services/${ServicesNames.RNA_1D_SERVICES_ROUTE}`} image={rna1D} numberOfServices={rna1dServicesCount} />
+          <MatrixCellWithLink linkTo={`/services/${ServicesNames.RNA_2D_SERVICES_ROUTE}`} image={rna2D} numberOfServices={rna2dServicesCount} />
+          <MatrixCellWithLink linkTo={`/services/${ServicesNames.RNA_3D_SERVICES_ROUTE}`} image={rna3D} numberOfServices={rna3dServicesCount} />
+          <MatrixCellWithLink linkTo={`/services/${ServicesNames.RNA_XD_SERVICES_ROUTE}`} image={rnaxD} numberOfServices={rnaxdServicesCount} />
 
           <MatrixCell text='Protein' />
-          <MatrixCellWithLink linkTo={`${collectionID}/${ServicesNames.PROTEIN_1D_SERVICES_ROUTE}`} image={protein1D} numberOfServices={protein1dServicesCount} />
-          <MatrixCellWithLink linkTo={`${collectionID}/${ServicesNames.PROTEIN_2D_SERVICES_ROUTE}`} image={protein2D} numberOfServices={protein2dServicesCount} />
-          <MatrixCellWithLink linkTo={`${collectionID}/${ServicesNames.PROTEIN_3D_SERVICES_ROUTE}`} image={protein3D} numberOfServices={protein3dServicesCount} />
-          <MatrixCellWithLink linkTo={`${collectionID}/${ServicesNames.PROTEIN_XD_SERVICES_ROUTE}`} image={proteinxD} numberOfServices={proteinxdServicesCount} />
+          <MatrixCellWithLink linkTo={`/services/${ServicesNames.PROTEIN_1D_SERVICES_ROUTE}`} image={protein1D} numberOfServices={protein1dServicesCount} />
+          <MatrixCellWithLink linkTo={`/services/${ServicesNames.PROTEIN_2D_SERVICES_ROUTE}`} image={protein2D} numberOfServices={protein2dServicesCount} />
+          <MatrixCellWithLink linkTo={`/services/${ServicesNames.PROTEIN_3D_SERVICES_ROUTE}`} image={protein3D} numberOfServices={protein3dServicesCount} />
+          <MatrixCellWithLink linkTo={`/services/${ServicesNames.PROTEIN_XD_SERVICES_ROUTE}`} image={proteinxD} numberOfServices={proteinxdServicesCount} />
 
           <MatrixCell text='Drugs and other small molecules' />
-          <MatrixCellWithLink linkTo={`${collectionID}/${ServicesNames.DRUG_1D_SERVICES_ROUTE}`} image={drug1D} numberOfServices={drug1dServicesCount} />
-          <MatrixCellWithLink linkTo={`${collectionID}/${ServicesNames.DRUG_2D_SERVICES_ROUTE}`} image={drug2D} numberOfServices={drug2dServicesCount} />
-          <MatrixCellWithLink linkTo={`${collectionID}/${ServicesNames.DRUG_3D_SERVICES_ROUTE}`} image={drug3D} numberOfServices={drug3dServicesCount} />
-          <MatrixCellWithLink linkTo={`${collectionID}/${ServicesNames.DRUG_XD_SERVICES_ROUTE}`} image={drugxD} numberOfServices={drugxdServicesCount} />
+          <MatrixCellWithLink linkTo={`/services/${ServicesNames.DRUG_1D_SERVICES_ROUTE}`} image={drug1D} numberOfServices={drug1dServicesCount} />
+          <MatrixCellWithLink linkTo={`/services/${ServicesNames.DRUG_2D_SERVICES_ROUTE}`} image={drug2D} numberOfServices={drug2dServicesCount} />
+          <MatrixCellWithLink linkTo={`/services/${ServicesNames.DRUG_3D_SERVICES_ROUTE}`} image={drug3D} numberOfServices={drug3dServicesCount} />
+          <MatrixCellWithLink linkTo={`/services/${ServicesNames.DRUG_XD_SERVICES_ROUTE}`} image={drugxD} numberOfServices={drugxdServicesCount} />
         </div>
       </Grid>
     )

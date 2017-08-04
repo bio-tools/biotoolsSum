@@ -12,7 +12,7 @@ const portalApp = combineReducers({
   rna1dServices: specificServicesWithName(ServicesNames.RNA_1D_SERVICES_ROUTE),
   rna2dServices: specificServicesWithName(ServicesNames.RNA_2D_SERVICES_ROUTE),
   rna3dServices: specificServicesWithName(ServicesNames.RNA_3D_SERVICES_ROUTE),
-  rna4dServices: specificServicesWithName(ServicesNames.RNA_XD_SERVICES_ROUTE),
+  rnaxdServices: specificServicesWithName(ServicesNames.RNA_XD_SERVICES_ROUTE),
   protein1dServices: specificServicesWithName(ServicesNames.PROTEIN_1D_SERVICES_ROUTE),
   protein2dServices: specificServicesWithName(ServicesNames.PROTEIN_2D_SERVICES_ROUTE),
   protein3dServices: specificServicesWithName(ServicesNames.PROTEIN_3D_SERVICES_ROUTE),

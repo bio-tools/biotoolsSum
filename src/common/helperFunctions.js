@@ -58,7 +58,7 @@ export const getApiUrl = (id, collection = QueryConst.DEFAULT_COLLECTION) => {
 
 export const getServiceInfo = (id) => {
   switch (id) {
-    case Type.DNA_SERVICES:
+    case Type.DNA_SERVICES_ROUTE:
       return {
         header: 'All DNA Services',
         message: 'DNA',
@@ -83,7 +83,7 @@ export const getServiceInfo = (id) => {
         header: 'xD DNA Services',
         message: 'DNA-omics',
       }
-    case Type.RNA_SERVICES:
+    case Type.RNA_SERVICES_ROUTE:
       return {
         header: 'All RNA Services',
         message: 'RNA',
@@ -108,7 +108,7 @@ export const getServiceInfo = (id) => {
         header: 'xD RNA Services',
         message: 'RNA-omics',
       }
-    case Type.PROTEIN_SERVICES:
+    case Type.PROTEIN_SERVICES_ROUTE:
       return {
         header: 'All Protein Services',
         message: 'Protein',
@@ -133,7 +133,7 @@ export const getServiceInfo = (id) => {
         header: 'xD Protein Services',
         message: 'proteomics',
       }
-    case Type.DRUG_SERVICES:
+    case Type.DRUG_SERVICES_ROUTE:
       return {
         header: 'All Drug Services',
         message: 'Drug',
