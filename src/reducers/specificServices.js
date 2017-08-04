@@ -10,15 +10,13 @@ const initialState = {
 }
 
 export const specificServicesWithName = (servicesName = '') => {
-  return function specificServicesReducer (state = initialState, action) {
+  return (state = initialState, action) => {
     const { type, payload, name } = action
-    console.log(action)
-    console.log(type)
     if (name !== servicesName) return state
 
     switch (type) {
       case Actions.SERVICES_FETCH_SUCCESS:
-        const {count, previous, next, list} = payload
+        const { count, previous, next, list } = payload
         const pickedData = pickData(list)
 
         return R.evolve({

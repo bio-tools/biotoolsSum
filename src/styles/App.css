@@ -120,14 +120,14 @@ img.center {
 }
 
 .toolstable-showmore-button {
-  padding-left: 25px;
-}
-
-.pagination-no-margin-top {
-  margin-top: 5px !important;
+  padding-left: 40px;
 }
 
 /*for wrapping lines in react-table*/
-.rt-td{
+.rt-td {
   white-space: normal !important;
+}
+
+.label-margin {
+  margin-right: 15px;
 }

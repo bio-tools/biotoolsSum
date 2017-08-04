@@ -1,5 +1,7 @@
 import React, { PureComponent } from 'react'
 import * as R from 'ramda'
+import * as Rx from 'rxjs'
+import { connect } from 'react-redux'
 import { Grid } from 'react-bootstrap'
 import dna1D from '../../images/1d-dna.png'
 import dna2D from '../../images/2d-dna.png'
@@ -19,189 +21,75 @@ import drug3D from '../../images/3d-drug.png'
 import drugxD from '../../images/xd-drug.png'
 import { MatrixCell } from './MatrixCell'
 import { MatrixCellWithLink } from './MatrixCellWithLink'
-import * as Type from '../../constants/servicesConstants'
-import { getApiUrl } from '../../common/helperFunctions'
-import * as Rx from 'rxjs'
-import { connect } from 'react-redux'
-import * as ActionTypes from '../../constants/actionTypes'
-import buildActionCreators from '../../helpers/buildActionCreators'
-import * as QueryConst from '../../constants/queryConstants'
+import { getServicesCount } from '../../selectors/servicesSelector'
+import * as ServicesNames from '../../constants/routeConstants'
 
 class ServicesMatrix extends PureComponent {
-  constructor (props) {
-    super(props)
-
-    this.state = {
-      dna1d: null,
-      dna2d: null,
-      dna3d: null,
-      dnaxd: null,
-      rna1d: null,
-      rna2d: null,
-      rna3d: null,
-      rnaxd: null,
-      protein1d: null,
-      protein2d: null,
-      protein3d: null,
-      proteinxd: null,
-      drug1d: null,
-      drug2d: null,
-      drug3d: null,
-      drugxd: null,
-      all: null,
-    }
-  }
-
-  componentDidMount () {
-    const collection = this.props.match.params.collection
-
-    Rx.Observable
-      .combineLatest(
-        Rx.Observable.fromPromise(fetch(getApiUrl(Type.DNA_1D_SERVICES, collection))
-          .then(response => response.json())
-          .then(data => data.count)
-        ),
-        Rx.Observable.fromPromise(fetch(getApiUrl(Type.DNA_2D_SERVICES, collection))
-          .then(response => response.json())
-          .then(data => data.count)
-        ),
-        Rx.Observable.fromPromise(fetch(getApiUrl(Type.DNA_3D_SERVICES, collection))
-          .then(response => response.json())
-          .then(data => data.count)
-        ),
-        Rx.Observable.fromPromise(fetch(getApiUrl(Type.DNA_XD_SERVICES, collection))
-          .then(response => response.json())
-          .then(data => data.count)
-        ),
-        Rx.Observable.fromPromise(fetch(getApiUrl(Type.RNA_1D_SERVICES, collection))
-          .then(response => response.json())
-          .then(data => data.count)
-        ),
-        Rx.Observable.fromPromise(fetch(getApiUrl(Type.RNA_2D_SERVICES, collection))
-          .then(response => response.json())
-          .then(data => data.count)
-        ),
-        Rx.Observable.fromPromise(fetch(getApiUrl(Type.RNA_3D_SERVICES, collection))
-          .then(response => response.json())
-          .then(data => data.count)
-        ),
-        Rx.Observable.fromPromise(fetch(getApiUrl(Type.RNA_XD_SERVICES, collection))
-          .then(response => response.json())
-          .then(data => data.count)
-        ),
-        Rx.Observable.fromPromise(fetch(getApiUrl(Type.PROTEIN_1D_SERVICES, collection))
-          .then(response => response.json())
-          .then(data => data.count)
-        ),
-        Rx.Observable.fromPromise(fetch(getApiUrl(Type.PROTEIN_2D_SERVICES, collection))
-          .then(response => response.json())
-          .then(data => data.count)
-        ),
-        Rx.Observable.fromPromise(fetch(getApiUrl(Type.PROTEIN_3D_SERVICES, collection))
-          .then(response => response.json())
-          .then(data => data.count)
-        ),
-        Rx.Observable.fromPromise(fetch(getApiUrl(Type.PROTEIN_XD_SERVICES, collection))
-          .then(response => response.json())
-          .then(data => data.count)
-        ),
-        Rx.Observable.fromPromise(fetch(getApiUrl(Type.DRUG_1D_SERVICES, collection))
-          .then(response => response.json())
-          .then(data => data.count)
-        ),
-        Rx.Observable.fromPromise(fetch(getApiUrl(Type.DRUG_2D_SERVICES, collection))
-          .then(response => response.json())
-          .then(data => data.count)
-        ),
-        Rx.Observable.fromPromise(fetch(getApiUrl(Type.DRUG_3D_SERVICES, collection))
-          .then(response => response.json())
-          .then(data => data.count)
-        ),
-        Rx.Observable.fromPromise(fetch(getApiUrl(Type.DRUG_XD_SERVICES, collection))
-          .then(response => response.json())
-          .then(data => data.count)
-        ),
-        Rx.Observable.fromPromise(fetch(getApiUrl(Type.ALL_SERVICES, collection))
-          .then(response => response.json())
-          .then(data => data.count))
-      )
-      .subscribe(values => {
-        const services = R.zipObj([
-          'dna1d', 'dna2d', 'dna3d', 'dnaxd',
-          'rna1d', 'rna2d', 'rna3d', 'rnaxd',
-          'protein1d', 'protein2d', 'protein3d', 'proteinxd',
-          'drug1d', 'drug2d', 'drug3d', 'drugxd', 'all'], values)
-
-        this.setState(services)
-      })
-
-    const { servicesFetch } = this.props
-
-    servicesFetch({
-      name: 'all',
-      query: '',
-    })
-    servicesFetch({
-      name: 'dna1d',
-      query: QueryConst.DNA_1D_QUERY,
-    })
-    servicesFetch({
-      name: 'dna2d',
-      query: QueryConst.DNA_2D_QUERY,
-    })
-    servicesFetch({
-      name: 'dna3d',
-      query: QueryConst.DNA_3D_QUERY,
-    })
-    servicesFetch({
-      name: 'dnaxd',
-      query: QueryConst.DNA_XD_QUERY,
-    })
-  }
-
   render () {
     const { collection } = this.props.match.params
-
     const collectionID = collection ? `/${collection}/services` : '/services'
+
+    const { allServicesCount, dna1dServicesCount, dna2dServicesCount, dna3dServicesCount, dnaxdServicesCount,
+      rna1dServicesCount, rna2dServicesCount, rna3dServicesCount, rnaxdServicesCount,
+      protein1dServicesCount, protein2dServicesCount, protein3dServicesCount, proteinxdServicesCount,
+      drug1dServicesCount, drug2dServicesCount, drug3dServicesCount, drugxdServicesCount} = this.props
 
     return (
       <Grid>
         <div className='matrix'>
-          <MatrixCellWithLink linkTo={`${collectionID}/${Type.ALL_SERVICES}`} text='All services' numberOfServices={this.state.all} />
+          <MatrixCellWithLink linkTo={`${collectionID}/${ServicesNames.ALL_SERVICES_ROUTE}`} text='All services' numberOfServices={allServicesCount} />
           <MatrixCell text='1D sequence' />
           <MatrixCell text='2D topology' />
           <MatrixCell text='3D structure' />
           <MatrixCell text='xD omics' />
 
           <MatrixCell text='DNA' />
-          <MatrixCellWithLink linkTo={`${collectionID}/${Type.DNA_1D_SERVICES}`} image={dna1D} numberOfServices={this.state.dna1d} />
-          <MatrixCellWithLink linkTo={`${collectionID}/${Type.DNA_2D_SERVICES}`} image={dna2D} numberOfServices={this.state.dna2d} />
-          <MatrixCellWithLink linkTo={`${collectionID}/${Type.DNA_3D_SERVICES}`} image={dna3D} numberOfServices={this.state.dna3d} />
-          <MatrixCellWithLink linkTo={`${collectionID}/${Type.DNA_XD_SERVICES}`} image={dnaxD} numberOfServices={this.state.dnaxd} />
+          <MatrixCellWithLink linkTo={`${collectionID}/${ServicesNames.DNA_1D_SERVICES_ROUTE}`} image={dna1D} numberOfServices={dna1dServicesCount} />
+          <MatrixCellWithLink linkTo={`${collectionID}/${ServicesNames.DNA_2D_SERVICES_ROUTE}`} image={dna2D} numberOfServices={dna2dServicesCount} />
+          <MatrixCellWithLink linkTo={`${collectionID}/${ServicesNames.DNA_3D_SERVICES_ROUTE}`} image={dna3D} numberOfServices={dna3dServicesCount} />
+          <MatrixCellWithLink linkTo={`${collectionID}/${ServicesNames.DNA_XD_SERVICES_ROUTE}`} image={dnaxD} numberOfServices={dnaxdServicesCount} />
 
           <MatrixCell text='RNA' />
-          <MatrixCellWithLink linkTo={`${collectionID}/${Type.RNA_1D_SERVICES}`} image={rna1D} numberOfServices={this.state.rna1d} />
-          <MatrixCellWithLink linkTo={`${collectionID}/${Type.RNA_2D_SERVICES}`} image={rna2D} numberOfServices={this.state.rna2d} />
-          <MatrixCellWithLink linkTo={`${collectionID}/${Type.RNA_3D_SERVICES}`} image={rna3D} numberOfServices={this.state.rna3d} />
-          <MatrixCellWithLink linkTo={`${collectionID}/${Type.RNA_XD_SERVICES}`} image={rnaxD} numberOfServices={this.state.rnaxd} />
+          <MatrixCellWithLink linkTo={`${collectionID}/${ServicesNames.RNA_1D_SERVICES_ROUTE}`} image={rna1D} numberOfServices={rna1dServicesCount} />
+          <MatrixCellWithLink linkTo={`${collectionID}/${ServicesNames.RNA_2D_SERVICES_ROUTE}`} image={rna2D} numberOfServices={rna2dServicesCount} />
+          <MatrixCellWithLink linkTo={`${collectionID}/${ServicesNames.RNA_3D_SERVICES_ROUTE}`} image={rna3D} numberOfServices={rna3dServicesCount} />
+          <MatrixCellWithLink linkTo={`${collectionID}/${ServicesNames.RNA_XD_SERVICES_ROUTE}`} image={rnaxD} numberOfServices={rnaxdServicesCount} />
 
           <MatrixCell text='Protein' />
-          <MatrixCellWithLink linkTo={`${collectionID}/${Type.PROTEIN_1D_SERVICES}`} image={protein1D} numberOfServices={this.state.protein1d} />
-          <MatrixCellWithLink linkTo={`${collectionID}/${Type.PROTEIN_2D_SERVICES}`} image={protein2D} numberOfServices={this.state.protein2d} />
-          <MatrixCellWithLink linkTo={`${collectionID}/${Type.PROTEIN_3D_SERVICES}`} image={protein3D} numberOfServices={this.state.protein3d} />
-          <MatrixCellWithLink linkTo={`${collectionID}/${Type.PROTEIN_XD_SERVICES}`} image={proteinxD} numberOfServices={this.state.proteinxd} />
+          <MatrixCellWithLink linkTo={`${collectionID}/${ServicesNames.PROTEIN_1D_SERVICES_ROUTE}`} image={protein1D} numberOfServices={protein1dServicesCount} />
+          <MatrixCellWithLink linkTo={`${collectionID}/${ServicesNames.PROTEIN_2D_SERVICES_ROUTE}`} image={protein2D} numberOfServices={protein2dServicesCount} />
+          <MatrixCellWithLink linkTo={`${collectionID}/${ServicesNames.PROTEIN_3D_SERVICES_ROUTE}`} image={protein3D} numberOfServices={protein3dServicesCount} />
+          <MatrixCellWithLink linkTo={`${collectionID}/${ServicesNames.PROTEIN_XD_SERVICES_ROUTE}`} image={proteinxD} numberOfServices={proteinxdServicesCount} />
 
           <MatrixCell text='Drugs and other small molecules' />
-          <MatrixCellWithLink linkTo={`${collectionID}/${Type.DRUG_1D_SERVICES}`} image={drug1D} numberOfServices={this.state.drug1d} />
-          <MatrixCellWithLink linkTo={`${collectionID}/${Type.DRUG_2D_SERVICES}`} image={drug2D} numberOfServices={this.state.drug2d} />
-          <MatrixCellWithLink linkTo={`${collectionID}/${Type.DRUG_3D_SERVICES}`} image={drug3D} numberOfServices={this.state.drug3d} />
-          <MatrixCellWithLink linkTo={`${collectionID}/${Type.DRUG_XD_SERVICES}`} image={drugxD} numberOfServices={this.state.drugxd} />
+          <MatrixCellWithLink linkTo={`${collectionID}/${ServicesNames.DRUG_1D_SERVICES_ROUTE}`} image={drug1D} numberOfServices={drug1dServicesCount} />
+          <MatrixCellWithLink linkTo={`${collectionID}/${ServicesNames.DRUG_2D_SERVICES_ROUTE}`} image={drug2D} numberOfServices={drug2dServicesCount} />
+          <MatrixCellWithLink linkTo={`${collectionID}/${ServicesNames.DRUG_3D_SERVICES_ROUTE}`} image={drug3D} numberOfServices={drug3dServicesCount} />
+          <MatrixCellWithLink linkTo={`${collectionID}/${ServicesNames.DRUG_XD_SERVICES_ROUTE}`} image={drugxD} numberOfServices={drugxdServicesCount} />
         </div>
       </Grid>
     )
   }
 }
 
-export default ServicesMatrix = connect(state => ({}), buildActionCreators({
-  servicesFetch: ActionTypes.SERVICES_FETCH,
-}))(ServicesMatrix)
+export default ServicesMatrix = connect(state => {
+  return ({
+    allServicesCount: getServicesCount(state, 'allServices'),
+    dna1dServicesCount: getServicesCount(state, 'dna1dServices'),
+    dna2dServicesCount: getServicesCount(state, 'dna2dServices'),
+    dna3dServicesCount: getServicesCount(state, 'dna3dServices'),
+    dnaxdServicesCount: getServicesCount(state, 'dnaxdServices'),
+    rna1dServicesCount: getServicesCount(state, 'rna1dServices'),
+    rna2dServicesCount: getServicesCount(state, 'rna2dServices'),
+    rna3dServicesCount: getServicesCount(state, 'rna3dServices'),
+    rnaxdServicesCount: getServicesCount(state, 'rnaxdServices'),
+    protein1dServicesCount: getServicesCount(state, 'protein1dServices'),
+    protein2dServicesCount: getServicesCount(state, 'protein2dServices'),
+    protein3dServicesCount: getServicesCount(state, 'protein3dServices'),
+    proteinxdServicesCount: getServicesCount(state, 'proteinxdServices'),
+    drug1dServicesCount: getServicesCount(state, 'drug1dServices'),
+    drug2dServicesCount: getServicesCount(state, 'drug2dServices'),
+    drug3dServicesCount: getServicesCount(state, 'drug3dServices'),
+    drugxdServicesCount: getServicesCount(state, 'drugxdServices'),
+  })
+})(ServicesMatrix)

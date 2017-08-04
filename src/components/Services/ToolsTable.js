@@ -6,105 +6,114 @@ import { Label } from 'react-bootstrap'
 import FontAwesome from 'react-fontawesome'
 import { OverlayTooltip } from '../common/OverlayTooltip'
 import ShowMore from '../common/ShowMore'
-
-const pickData = R.map(
-  R.compose(
-    R.evolve(
-      {
-        function: R.compose(R.prop('operation'), R.head),
-      }),
-    R.pick(['id', 'name', 'homepage', 'version', 'description', 'topic', 'maturity', 'operatingSystem', 'function', 'toolType'])
-  )
-)
+import {PAGE_SIZE} from '../../constants/toolsTable'
 
 const columns = [
   {
+    Header: 'Name (Sortable A-Z or Z-A)',
     id: 'name',
-    sortable: false,
-    minWidth: 110,
-    maxWidth: 170,
-    header: 'Name',
-    accessor: data =>
-      <div>
-        <a href={`https://bio.tools/tool/${data.id}/version/${data.version}`} target='_blank'>{data.name}</a>
-        {data.version && <span> v.{data.version}</span>}
+    accessor: data => data.name,
+    sortable: true,
+    sortMethod: (a, b) => {
+      return a.toLowerCase() > b.toLowerCase() ? 1 : -1
+    },
+    Cell: data => {
+      const {id, version, name, toolType} = data.original
+      return <div>
+        <a href={`https://bio.tools/tool/${id}/version/${version || 'none'}`} target='_blank'>{name}</a>
+        {version && <span> v.{version}</span>}
         <hr className='table-delimiter' />
         <p>
-          {data.toolType.map((value, index) =>
+          {toolType.map((value, index) =>
             <span key={index}>
               <Label bsStyle='warning'>{value}</Label>
               <br />
             </span>
           )}
         </p>
-      </div>,
+      </div>
+    },
+    width: 220,
   }, {
+    Header: 'Description',
     id: 'description',
     sortable: false,
-    minWidth: 200,
-    maxWidth: 300,
-    aggregate: true,
-    header: 'Description',
-    accessor: data => <ReadMore chars={150} text={data.description} />,
+    accessor: data => <ReadMore chars={260} text={data.description} />,
   }, {
-    id: 'topic',
-    sortable: false,
-    minWidth: 130,
-    maxWidth: 300,
-    header: 'Topic',
-    accessor: data => <ShowMore lines={3} searchTermName='topic' list={data.topic} />,
-  }, {
-    id: 'function',
-    sortable: false,
-    minWidth: 130,
-    maxWidth: 300,
-    header: 'Function',
-    accessor: data => <ShowMore lines={3} searchTermName='function' list={data.function} />,
-  }, {
+    Header: 'Additional info (Sortable by citations)',
     id: 'additional-info',
-    sortable: false,
-    minWidth: 100,
-    maxWidth: 150,
-    header: 'Additional info',
-    accessor: data =>
-      <div>
-        {data.maturity === 'Mature'
-          ? <p><Label bsStyle='success'>Mature</Label></p>
-          : data.maturity === 'Emerging'
-            ? <p><Label bsStyle='info'>Emerging</Label></p>
-            : data.maturity === 'Legacy' && <p><Label bsStyle='danger'>Legacy</Label></p>}
+    accessor: data => data.citations ? data.citations.hitCount : 'unknown',
+    sortable: true,
+    sortMethod: (a, b) => {
+      if (a === 'unknown') return -1
+      if (b === 'unknown') return 1
+      return a - b
+    },
+    Cell: data => {
+      const { maturity, operatingSystem, citations } = data.original
+      const citationsCount = citations ? citations.hitCount : 'unknown'
+      const labelStyle = maturity === 'Mature' ? 'success' : maturity === 'Emerging' ? 'info' : 'danger'
+
+      return <div>
+        <Label bsStyle={labelStyle} className='label-margin'>{maturity}</Label>
+        {R.contains('Windows', operatingSystem) &&
+        <OverlayTooltip id='tooltip-windows' tooltipText='Platform: Windows'>
+          <FontAwesome className='icons' name='windows' />
+        </OverlayTooltip>}
+        {R.contains('Linux', operatingSystem) &&
+        <OverlayTooltip id='tooltip-linux' tooltipText='Platform: Linux'>
+          <FontAwesome className='icons' name='linux' />
+        </OverlayTooltip>}
+        {R.contains('Mac', operatingSystem) &&
+        <OverlayTooltip id='tooltip-mac' tooltipText='Platform: Mac'>
+          <FontAwesome className='icons' name='apple' />
+        </OverlayTooltip>}
         <hr className='table-delimiter' />
-        {R.contains('Windows', data.operatingSystem) &&
-          <OverlayTooltip id='tooltip-windows' tooltipText='Platform: Windows'>
-            <FontAwesome className='icons' name='windows' />
-          </OverlayTooltip>}
-        {R.contains('Linux', data.operatingSystem) &&
-          <OverlayTooltip id='tooltip-linux' tooltipText='Platform: Linux'>
-            <FontAwesome className='icons' name='linux' />
-          </OverlayTooltip>}
-        {R.contains('Mac', data.operatingSystem) &&
-          <OverlayTooltip id='tooltip-mac' tooltipText='Platform: Mac'>
-            <FontAwesome className='icons' name='apple' />
-          </OverlayTooltip>}
-      </div>,
+        <span className='citations'>
+          Citations: {citationsCount}
+        </span>
+      </div>
+    },
+    width: 240,
   },
 ]
 
-export const ToolsTable = ({ count, next, list, pageSize }) => {
-  const defaultPageSize = next === null ? R.modulo(count, pageSize) : pageSize
+const subColumns = [
+  {
+    Header: 'Topic',
+    id: 'topic',
+    accessor: data => <ShowMore lines={3} searchTermName='topic' list={data.topic} />,
+  }, {
+    Header: 'Function',
+    id: 'function',
+    accessor: data => <ShowMore lines={3} searchTermName='function' list={data.func} />,
+  },
+]
 
+export const ToolsTable = ({ list }) => {
   return (
     <ReactTable
-      data={pickData(list)}
+      data={list}
       columns={columns}
-      showPagination={false}
-      defaultPageSize={defaultPageSize}
+      resizable={false}
+      sortable={false}
+      showPaginationTop
+      showPageSizeOptions={false}
+      defaultPageSize={PAGE_SIZE}
       className='-striped'
-      SubComponent={(row) =>
-        <div style={{padding: '20px'}}>
-          <em>You can put any component you want here, even another React Table!</em>
-        </div>
-      }
-      />
+      SubComponent={row => {
+        const subList = [{ func: row.original.function, topic: row.original.topic }]
+        return (
+          <div style={{padding: '20px'}}>
+            <ReactTable
+              data={subList}
+              columns={subColumns}
+              defaultPageSize={1}
+              showPagination={false}
+            />
+          </div>
+        )
+      }}
+    />
   )
 }

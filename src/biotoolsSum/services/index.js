@@ -7,12 +7,23 @@ export const pickData = R.map(
       {
         function: R.compose(R.prop('operation'), R.head),
       }),
-    R.pick(['id', 'name', 'homepage', 'version', 'description', 'topic', 'maturity', 'operatingSystem', 'function', 'toolType'])
+    R.pick(['id', 'name', 'homepage', 'version', 'description', 'topic', 'maturity', 'operatingSystem', 'function', 'toolType', 'citations'])
   )
 )
 
-export function getServices (query, page = 1) {
-  const url = config.getUrl(`?collectionID=elixir-cz&$sort=name&$ord=asc&page=${page}&${query}`)
-  console.log(url)
-  return fetch(url).then(response => response.json())
+export function getServices (query, page = '?page=1') {
+  const url = config.getUrl(`${page}&collectionID=elixir-cz&$sort=name&$ord=asc&${query}`)
+  return fetch(url)
+    .then(response => response.json())
+    .then(data => {
+      if (data.next !== null) {
+        return getServices(query, data.next)
+          .then(nextData =>
+            R.evolve({
+              list: R.concat(nextData.list),
+            }, data)
+          )
+      }
+      return data
+    })
 }
