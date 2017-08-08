@@ -6,8 +6,9 @@ export const pickData = R.map(
     R.evolve(
       {
         function: R.compose(R.prop('operation'), R.head),
+        publication: R.length,
       }),
-    R.pick(['id', 'name', 'homepage', 'version', 'description', 'topic', 'maturity', 'operatingSystem', 'function', 'toolType', 'citations'])
+    R.pick(['id', 'name', 'homepage', 'version', 'description', 'topic', 'maturity', 'operatingSystem', 'function', 'toolType', 'citations', 'publication'])
   )
 )
 

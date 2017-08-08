@@ -42,7 +42,7 @@ const columns = [
   }, {
     Header: 'Additional info (Sortable by citations)',
     id: 'additional-info',
-    accessor: data => data.citations ? data.citations.hitCount : 'unknown',
+    accessor: data => R.isNil(data.citations) ? 'unknown' : data.citations,
     sortable: true,
     sortMethod: (a, b) => {
       if (a === 'unknown') return -1
@@ -50,8 +50,8 @@ const columns = [
       return a - b
     },
     Cell: data => {
-      const { maturity, operatingSystem, citations } = data.original
-      const citationsCount = citations ? citations.hitCount : 'unknown'
+      const { maturity, operatingSystem, publication } = data.original
+      const citations = data.value
       const labelStyle = maturity === 'Mature' ? 'success' : maturity === 'Emerging' ? 'info' : 'danger'
 
       return <div>
@@ -70,7 +70,11 @@ const columns = [
         </OverlayTooltip>}
         <hr className='table-delimiter' />
         <span className='citations'>
-          Citations: {citationsCount}
+          Citations: {citations}
+        </span>
+        <br />
+        <span className='citations'>
+          Publications: {publication}
         </span>
       </div>
     },
