@@ -104,6 +104,7 @@ export const ToolsTable = ({ list }) => {
       showPaginationTop
       showPageSizeOptions={false}
       defaultPageSize={PAGE_SIZE}
+      minRows={1}
       className='-striped'
       SubComponent={row => {
         const subList = [{ func: row.original.function, topic: row.original.topic }]

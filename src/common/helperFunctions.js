@@ -1,60 +1,12 @@
 import * as Type from '../constants/routeConstants'
-import * as QueryConst from '../constants/queryConstants'
+import * as R from 'ramda'
 
-export const getApiUrl = (id, collection = QueryConst.DEFAULT_COLLECTION) => {
-  switch (id) {
-    case Type.DNA_1D_SERVICES_ROUTE:
-      return `https://bio.tools/api/tool/?collectionID=${collection}&${QueryConst.SORT_BY}&${QueryConst.ORDER}&${QueryConst.DNA_1D_QUERY}`
-
-    case Type.DNA_2D_SERVICES_ROUTE:
-      return `https://bio.tools/api/tool/?collectionID=${collection}&${QueryConst.SORT_BY}&${QueryConst.ORDER}&${QueryConst.DNA_2D_QUERY}`
-
-    case Type.DNA_3D_SERVICES_ROUTE:
-      return `https://bio.tools/api/tool/?collectionID=${collection}&${QueryConst.SORT_BY}&${QueryConst.ORDER}&${QueryConst.DNA_3D_QUERY}`
-
-    case Type.DNA_XD_SERVICES_ROUTE:
-      return `https://bio.tools/api/tool/?collectionID=${collection}&${QueryConst.SORT_BY}&${QueryConst.ORDER}&${QueryConst.DNA_XD_QUERY}`
-
-    case Type.RNA_1D_SERVICES_ROUTE:
-      return `https://bio.tools/api/tool/?collectionID=${collection}&${QueryConst.SORT_BY}&${QueryConst.ORDER}&${QueryConst.RNA_1D_QUERY}`
-
-    case Type.RNA_2D_SERVICES_ROUTE:
-      return `https://bio.tools/api/tool/?collectionID=${collection}&${QueryConst.SORT_BY}&${QueryConst.ORDER}&${QueryConst.RNA_2D_QUERY}`
-
-    case Type.RNA_3D_SERVICES_ROUTE:
-      return `https://bio.tools/api/tool/?collectionID=${collection}&${QueryConst.SORT_BY}&${QueryConst.ORDER}&${QueryConst.RNA_3D_QUERY}`
-
-    case Type.RNA_XD_SERVICES_ROUTE:
-      return `https://bio.tools/api/tool/?collectionID=${collection}&${QueryConst.SORT_BY}&${QueryConst.ORDER}&${QueryConst.RNA_XD_QUERY}`
-
-    case Type.PROTEIN_1D_SERVICES_ROUTE:
-      return `https://bio.tools/api/tool/?collectionID=${collection}&${QueryConst.SORT_BY}&${QueryConst.ORDER}&${QueryConst.PROTEIN_1D_QUERY}`
-
-    case Type.PROTEIN_2D_SERVICES_ROUTE:
-      return `https://bio.tools/api/tool/?collectionID=${collection}&${QueryConst.SORT_BY}&${QueryConst.ORDER}&${QueryConst.PROTEIN_2D_QUERY}`
-
-    case Type.PROTEIN_3D_SERVICES_ROUTE:
-      return `https://bio.tools/api/tool/?collectionID=${collection}&${QueryConst.SORT_BY}&${QueryConst.ORDER}&${QueryConst.PROTEIN_3D_QUERY}`
-
-    case Type.PROTEIN_XD_SERVICES_ROUTE:
-      return `https://bio.tools/api/tool/?collectionID=${collection}&${QueryConst.SORT_BY}&${QueryConst.ORDER}&${QueryConst.PROTEIN_XD_QUERY}`
-
-    case Type.DRUG_1D_SERVICES_ROUTE:
-      return `https://bio.tools/api/tool/?collectionID=${collection}&${QueryConst.SORT_BY}&${QueryConst.ORDER}&${QueryConst.DRUG_1D_QUERY}`
-
-    case Type.DRUG_2D_SERVICES_ROUTE:
-      return `https://bio.tools/api/tool/?collectionID=${collection}&${QueryConst.SORT_BY}&${QueryConst.ORDER}&${QueryConst.DRUG_2D_QUERY}`
-
-    case Type.DRUG_3D_SERVICES_ROUTE:
-      return `https://bio.tools/api/tool/?collectionID=${collection}&${QueryConst.SORT_BY}&${QueryConst.ORDER}&${QueryConst.DRUG_3D_QUERY}`
-
-    case Type.DRUG_XD_SERVICES_ROUTE:
-      return `https://bio.tools/api/tool/?collectionID=${collection}&${QueryConst.SORT_BY}&${QueryConst.ORDER}&${QueryConst.DRUG_XD_QUERY}`
-
-    default:
-      return `https://bio.tools/api/tool/?collectionID=${collection}&${QueryConst.SORT_BY}&${QueryConst.ORDER}`
-  }
-}
+export const createQueryString = R.compose(
+  R.concat('?'),
+  R.join('&'),
+  R.map(R.join('=')),
+  R.toPairs,
+)
 
 export const getServiceInfo = (id) => {
   switch (id) {
@@ -159,10 +111,11 @@ export const getServiceInfo = (id) => {
         message: 'small "moleculeomics"',
       }
     case Type.ALL_SERVICES_ROUTE:
-    default:
       return {
         header: 'All Services',
         message: 'DNA, RNA, protein and drugs',
       }
+    default:
+      return {}
   }
 }

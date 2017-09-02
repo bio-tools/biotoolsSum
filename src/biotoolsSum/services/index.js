@@ -13,7 +13,7 @@ export const pickData = R.map(
 )
 
 export function getServices (query, page = '?page=1') {
-  const url = config.getUrl(`${page}&collectionID=elixir-cz&$sort=name&$ord=asc&${query}`)
+  const url = config.getUrl(`${page}&collectionID=ELIXIR CZ&sort=name&$ord=asc&${query}`)
   return fetch(url)
     .then(response => response.json())
     .then(data => {
