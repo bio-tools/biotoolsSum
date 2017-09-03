@@ -11,19 +11,25 @@ import {PAGE_SIZE} from '../../constants/toolsTable'
 function getPublicationLinks (publication) {
   let links = []
   if (publication.doi) {
-    links.push(<a href={`https://dx.doi.org/${publication.doi}`} target='_blank'>
-      <FontAwesome className='icons' name='question-circle' />
-    </a>)
+    links.push(<OverlayTooltip id='tooltip-windows' tooltipText='DOI'>
+      <a href={`https://dx.doi.org/${publication.doi}`} target='_blank'>
+        <FontAwesome className='icons' name='question-circle' />
+      </a>
+    </OverlayTooltip>)
   }
   if (publication.pmid) {
-    links.push(<a href={`https://www.ncbi.nlm.nih.gov/pubmed/${publication.pmid}`} target='_blank'>
-      <FontAwesome className='icons' name='question-circle' />
-    </a>)
+    links.push(<OverlayTooltip id='tooltip-windows' tooltipText='PUBMED'>
+      <a href={`https://www.ncbi.nlm.nih.gov/pubmed/${publication.pmid}`} target='_blank'>
+        <FontAwesome className='icons' name='question-circle' />
+      </a>
+    </OverlayTooltip>)
   }
   if (publication.pmcid) {
-    links.push(<a href={`https://www.ncbi.nlm.nih.gov/pmc/articles/${publication.pmcid}`} target='_blank'>
-      <FontAwesome className='icons' name='question-circle' />
-    </a>)
+    links.push(<OverlayTooltip id='tooltip-windows' tooltipText='PMC'>
+      <a href={`https://www.ncbi.nlm.nih.gov/pmc/articles/${publication.pmcid}`} target='_blank'>
+        <FontAwesome className='icons' name='question-circle' />
+      </a>
+    </OverlayTooltip>)
   }
 
   return links
