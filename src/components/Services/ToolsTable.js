@@ -8,6 +8,27 @@ import { OverlayTooltip } from '../common/OverlayTooltip'
 import ShowMore from '../common/ShowMore'
 import {PAGE_SIZE} from '../../constants/toolsTable'
 
+function getPublicationLinks (publication) {
+  let links = []
+  if (publication.doi) {
+    links.push(<a href={`https://dx.doi.org/${publication.doi}`} target='_blank'>
+      <FontAwesome className='icons' name='question-circle' />
+    </a>)
+  }
+  if (publication.pmid) {
+    links.push(<a href={`https://www.ncbi.nlm.nih.gov/pubmed/${publication.pmid}`} target='_blank'>
+      <FontAwesome className='icons' name='question-circle' />
+    </a>)
+  }
+  if (publication.pmcid) {
+    links.push(<a href={`https://www.ncbi.nlm.nih.gov/pmc/articles/${publication.pmcid}`} target='_blank'>
+      <FontAwesome className='icons' name='question-circle' />
+    </a>)
+  }
+
+  return links
+}
+
 const columns = [
   {
     Header: 'Name (Sortable A-Z or Z-A)',
@@ -18,10 +39,15 @@ const columns = [
       return a.toLowerCase() > b.toLowerCase() ? 1 : -1
     },
     Cell: data => {
-      const {id, version, name, toolType} = data.original
+      const {id, version, name, homepage, toolType} = data.original
       return <div>
-        <a href={`https://bio.tools/tool/${id}/version/${version || 'none'}`} target='_blank'>{name}</a>
+        <a href={homepage} target='_blank'>{name}</a>
         {version && <span> v.{version}</span>}
+        <OverlayTooltip id='tooltip-windows' tooltipText={`Bio.tools: ${name}`}>
+          <a href={`https://bio.tools/${id}`} target='_blank'>
+            <FontAwesome className='icons' name='question-circle' />
+          </a>
+        </OverlayTooltip>
         <hr className='table-delimiter' />
         <p>
           {toolType.map((value, index) =>
@@ -39,6 +65,7 @@ const columns = [
     id: 'description',
     sortable: false,
     accessor: data => <ReadMore chars={260} text={data.description} />,
+    minWidth: 150,
   }, {
     Header: 'Additional info (Sortable by citations)',
     id: 'additional-info',
@@ -69,13 +96,20 @@ const columns = [
           <FontAwesome className='icons' name='apple' />
         </OverlayTooltip>}
         <hr className='table-delimiter' />
-        <span className='citations'>
+        <strong>Publications:</strong>
+        {publication.length > 0
+          ? publication.map((publication, index) =>
+            <div>
+              <span>{publication.type}</span>
+              {getPublicationLinks(publication)}
+            </div>
+          )
+          : ' -'
+        }
+        <hr className='table-delimiter' />
+        <strong>
           Citations: {citations}
-        </span>
-        <br />
-        <span className='citations'>
-          Publications: {publication}
-        </span>
+        </strong>
       </div>
     },
     width: 240,

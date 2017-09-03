@@ -1,12 +1,12 @@
 import Rx from 'rxjs'
 import * as ActionTypes from '../constants/actionTypes'
 import { serverIsDown } from './configureEpics'
-import { getServices } from '../biotoolsSum/services/index'
+import { getCitations, getServices } from '../biotoolsSum/services/index'
 import buildActionWithName from '../helpers/buildActionWithName'
 import buildAction from '../helpers/buildAction'
 import * as R from 'ramda'
 
-const getCitations = uniquePublications => uniquePublications.map(pub => {
+const getCitationsFromPublications = uniquePublications => uniquePublications.map(pub => {
   let id = ''
   let idType = ''
   if (pub.doi !== null && !pub.doi.startsWith('doi')) {
@@ -22,22 +22,7 @@ const getCitations = uniquePublications => uniquePublications.map(pub => {
     return Rx.Observable.of(0)
   }
 
-  // Proxy needed because ncbi does not return 'Access-Control-Allow-Origin' header in response.
-  const proxyUrl = 'https://cors-anywhere.herokuapp.com/'
-  const converterUrl = 'https://www.ncbi.nlm.nih.gov/pmc/utils/idconv/v1.0/?tool=bio.toolsSum&email=dan.panda@gmail.com'
-  const citationsUrl = 'http://www.ebi.ac.uk/europepmc/webservices/rest/PMC/'
-
-  return Rx.Observable.fromPromise(fetch(proxyUrl + converterUrl + `&ids=${id}&idtype=${idType}&format=json`)
-    .then(response => response.json())
-    .then(idInfo => {
-      if (!idInfo.records) {
-        return 0
-      }
-      return fetch(citationsUrl + `${idInfo.records[0].pmcid}/citations/json`)
-        .then(response => response.json())
-        .then(citations => citations.hitCount)
-    })
-  )
+  return Rx.Observable.fromPromise(getCitations(id, idType))
 })
 
 const updatedData = tools => {
@@ -56,7 +41,7 @@ const updatedData = tools => {
     const uniquePublications = R.uniqBy(R.props(['doi', 'pmid', 'pmcid']), publication)
 
     return Rx.Observable
-      .combineLatest(getCitations(uniquePublications))
+      .combineLatest(getCitationsFromPublications(uniquePublications))
       .map(citations => R.assoc('citations', R.sum(citations), tool))
   })
 }
