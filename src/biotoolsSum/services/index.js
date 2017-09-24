@@ -1,5 +1,6 @@
 import config from '../common/config'
 import * as R from 'ramda'
+import * as Rx from 'rxjs'
 
 export const pickData = R.map(
   R.compose(
@@ -11,7 +12,7 @@ export const pickData = R.map(
   )
 )
 
-export function getCitations (id, idType) {
+function getCitations (id, idType) {
   return fetch(config.getProxyUrl() + config.getConverterApiUrl(`&ids=${id}&idtype=${idType}&format=json`))
     .then(response => response.json())
     .then(idInfo => {
@@ -25,8 +26,48 @@ export function getCitations (id, idType) {
     })
 }
 
+const getCitationsFromPublications = uniquePublications => uniquePublications.map(pub => {
+  let id = ''
+  let idType = ''
+  if (pub.pmid !== null) {
+    id = pub.pmid
+    idType = 'pmid'
+  } else if (pub.pmcid !== null) {
+    id = pub.pmcid
+    idType = 'pmcid'
+  } else if (pub.doi !== null) {
+    id = pub.doi
+    idType = 'doi'
+  } else {
+    return Rx.Observable.of(0)
+  }
+
+  return Rx.Observable.fromPromise(getCitations(id, idType))
+})
+
+export const updatedData = tools => {
+  if (tools.length === 0) {
+    return Rx.Observable.of([])
+  }
+
+  return tools.map(tool => {
+    const { publication } = tool
+
+    if (publication.length === 0) {
+      return Rx.Observable.of(tool)
+    }
+
+    // There were occasionally duplicates in the publications record
+    const uniquePublications = R.uniqBy(R.props(['doi', 'pmid', 'pmcid']), publication)
+
+    return Rx.Observable
+      .combineLatest(getCitationsFromPublications(uniquePublications))
+      .map(citations => R.assoc('citations', R.sum(citations), tool))
+  })
+}
+
 export function getServices (query, page = '?page=1') {
-  const url = config.getBioToolsApiUrl(`${page}&collectionID=ELIXIR CZ&sort=name&$ord=asc&${query}`)
+  const url = config.getBioToolsApiUrl(`${page}&collectionID="ELIXIR-CZ"&${query}`)
   return fetch(url)
     .then(response => response.json())
     .then(data => {

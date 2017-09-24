@@ -27,7 +27,7 @@ export default class ReadMore extends PureComponent {
 
     return (
       <div>
-        <span onClick={this.toggleLines}>{showText}</span>
+        <span>{showText}</span>
         {text.length > chars &&
           <span>
             {expanded ? ' ' : '... '}

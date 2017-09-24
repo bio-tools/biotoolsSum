@@ -6,7 +6,22 @@ import * as ServicesNames from '../constants/routeConstants'
 import * as QueryConst from '../constants/queryConstants'
 
 class FillStore extends PureComponent {
+  state = {
+    timer: null,
+  }
+
   componentDidMount () {
+    this.fetchData()
+    let timer = setInterval(this.fetchData, 1200000)
+    this.setState({ timer })
+  }
+
+  componentWillUnmount () {
+    this.clearInterval(this.state.timer)
+  }
+
+  fetchData = () => {
+    console.log(new Date())
     const { servicesFetch } = this.props
 
     servicesFetch({

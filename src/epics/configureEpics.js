@@ -2,9 +2,9 @@ import * as Rx from 'rxjs'
 import { combineEpics } from 'redux-observable'
 import buildAction from '../helpers/buildAction'
 import * as ActionTypes from '../constants/actionTypes'
-import {fetchServicesEpic} from './servicesEpics'
+import {fetchServicesEpic, fetchCitationsEpic} from './servicesEpics'
 
-const epics = [fetchServicesEpic]
+const epics = [fetchServicesEpic, fetchCitationsEpic]
 
 const configureEpics = (deps: Object, platformEpics: Array) => (action$, { getState }) =>
   combineEpics(...epics, ...platformEpics)(action$, { ...deps, getState })

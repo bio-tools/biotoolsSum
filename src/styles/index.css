@@ -97,8 +97,7 @@ img.center {
 }
 
 .responsive-img {
-  max-width: 100%;
-  height: auto;
+  width: 100%;
 }
 
 .grey {
@@ -136,4 +135,74 @@ img.center {
 
 .label-margin {
   margin-right: 15px;
+}
+
+
+@-webkit-keyframes sk-bouncedelay {
+  0%, 80%, 100% {
+    -webkit-transform: scale(0.6); }
+  40% {
+    -webkit-transform: scale(1); }
+}
+
+@-moz-keyframes sk-bouncedelay {
+  0%, 80%, 100% {
+    -moz-transform: scale(0.6); }
+  40% {
+    -moz-transform: scale(1); }
+}
+
+@keyframes sk-bouncedelay {
+  0%, 80%, 100% {
+    -webkit-transform: scale(0.6);
+    -moz-transform: scale(0.6);
+    -ms-transform: scale(0.6);
+    -o-transform: scale(0.6);
+    transform: scale(0.6); }
+  40% {
+    -webkit-transform: scale(1);
+    -moz-transform: scale(1);
+    -ms-transform: scale(1);
+    -o-transform: scale(1);
+    transform: scale(1); }
+}
+
+.loader {
+  font-size: 0;
+  margin: 0 auto 0;
+  padding: 2rem 0;
+  width: 70px;
+  text-align: center;
+}
+.loader .bounce1 {
+  -webkit-animation-delay: -0.32s;
+  -moz-animation-delay: -0.32s;
+  animation-delay: -0.32s;
+}
+.loader .bounce2 {
+  -webkit-animation-delay: -0.16s;
+  -moz-animation-delay: -0.16s;
+  animation-delay: -0.16s;
+}
+
+.loader > div {
+  width: 10px;
+  height: 10px;
+  margin-right: 3px;
+  margin-left: 3px;
+  background-color: #333;
+  border-radius: 100%;
+  display: inline-block;
+  -webkit-animation: sk-bouncedelay 0.8s infinite ease-in-out both;
+  -moz-animation: sk-bouncedelay 0.8s infinite ease-in-out both;
+  animation: sk-bouncedelay 0.8s infinite ease-in-out both;
+}
+
+.loader-text {
+  font-size: 12px;
+  text-align: center;
+}
+
+.ReactTable {
+  display: block;
 }

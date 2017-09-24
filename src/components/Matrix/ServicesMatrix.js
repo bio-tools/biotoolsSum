@@ -30,27 +30,6 @@ class ServicesMatrix extends PureComponent {
       protein1dServicesCount, protein2dServicesCount, protein3dServicesCount, proteinxdServicesCount,
       drug1dServicesCount, drug2dServicesCount, drug3dServicesCount, drugxdServicesCount} = this.props
 
-    let obj = [
-      {
-        rowText: 'Test1',
-        zituska: [
-          {},
-          {},
-          {},
-        ],
-      },
-      {
-        rowText: 'Test2',
-        zituska: [
-          {},
-          {},
-          {},
-        ],
-      },
-    ]
-
-    obj = obj.map(embeddedObj => R.evolve({ zituska: R.take(4) }, embeddedObj))
-
     return (
       <Grid>
         <div className='matrix'>
@@ -83,24 +62,6 @@ class ServicesMatrix extends PureComponent {
           <MatrixCellWithLink linkTo={`/services/${ServicesNames.DRUG_2D_SERVICES_ROUTE}`} image={drug2D} numberOfServices={drug2dServicesCount} />
           <MatrixCellWithLink linkTo={`/services/${ServicesNames.DRUG_3D_SERVICES_ROUTE}`} image={drug3D} numberOfServices={drug3dServicesCount} />
           <MatrixCellWithLink linkTo={`/services/${ServicesNames.DRUG_XD_SERVICES_ROUTE}`} image={drugxD} numberOfServices={drugxdServicesCount} />
-
-          {obj.map(embeddedObj =>
-            <div>
-              <MatrixCell text={embeddedObj.rowText} />
-              {embeddedObj.zituska.map(embObj => embObj === {}
-                ? <MatrixCellWithLink
-                  linkTo={`/services/${ServicesNames.DNA_1D_SERVICES_ROUTE}`}
-                  image={dna1D}
-                  numberOfServices={Math.floor(Math.random() * (100 - 1 + 1)) + 1}
-                />
-                : <MatrixCellWithLink
-                  linkTo={`/services/${ServicesNames.RNA_2D_SERVICES_ROUTE}`}
-                  image={rna2D}
-                  numberOfServices={Math.floor(Math.random() * (100 - 1 + 1)) + 1}
-                />
-              )}
-            </div>
-          )}
         </div>
       </Grid>
     )

@@ -1,3 +1,4 @@
+import 'babel-polyfill'
 import React from 'react'
 import R from 'ramda'
 import ReactTable from 'react-table'
@@ -6,33 +7,30 @@ import { Label } from 'react-bootstrap'
 import FontAwesome from 'react-fontawesome'
 import { OverlayTooltip } from '../common/OverlayTooltip'
 import ShowMore from '../common/ShowMore'
-import {PAGE_SIZE} from '../../constants/toolsTable'
+import { PAGE_SIZE } from '../../constants/toolsTable'
 
-function getPublicationLinks (publication) {
-  let links = []
+function getPublicationLink (publication, index) {
   if (publication.doi) {
-    links.push(<OverlayTooltip id='tooltip-windows' tooltipText='DOI'>
+    return <OverlayTooltip key={publication.doi} id='tooltip-doi' tooltipText='DOI'>
       <a href={`https://dx.doi.org/${publication.doi}`} target='_blank'>
-        <FontAwesome className='icons' name='question-circle' />
+        {index}
       </a>
-    </OverlayTooltip>)
+    </OverlayTooltip>
   }
   if (publication.pmid) {
-    links.push(<OverlayTooltip id='tooltip-windows' tooltipText='PUBMED'>
+    return <OverlayTooltip key={publication.pmid} id='tooltip-pubmed' tooltipText='PUBMED'>
       <a href={`https://www.ncbi.nlm.nih.gov/pubmed/${publication.pmid}`} target='_blank'>
-        <FontAwesome className='icons' name='question-circle' />
+        {index}
       </a>
-    </OverlayTooltip>)
+    </OverlayTooltip>
   }
   if (publication.pmcid) {
-    links.push(<OverlayTooltip id='tooltip-windows' tooltipText='PMC'>
+    return <OverlayTooltip key={publication.pmcid} id='tooltip-pmc' tooltipText='PMC'>
       <a href={`https://www.ncbi.nlm.nih.gov/pmc/articles/${publication.pmcid}`} target='_blank'>
-        <FontAwesome className='icons' name='question-circle' />
+        {index}
       </a>
-    </OverlayTooltip>)
+    </OverlayTooltip>
   }
-
-  return links
 }
 
 const columns = [
@@ -75,15 +73,15 @@ const columns = [
   }, {
     Header: 'Additional info (Sortable by citations)',
     id: 'additional-info',
-    accessor: data => R.isNil(data.citations) ? 'unknown' : data.citations,
+    accessor: data => R.isNil(data.citations) ? '-' : data.citations,
     sortable: true,
     sortMethod: (a, b) => {
-      if (a === 'unknown') return -1
-      if (b === 'unknown') return 1
+      if (a === '-') return -1
+      if (b === '-') return 1
       return a - b
     },
     Cell: data => {
-      const { maturity, operatingSystem, publication } = data.original
+      const { maturity, operatingSystem, publication: publications } = data.original
       const citations = data.value
       const labelStyle = maturity === 'Mature' ? 'success' : maturity === 'Emerging' ? 'info' : 'danger'
 
@@ -102,19 +100,20 @@ const columns = [
           <FontAwesome className='icons' name='apple' />
         </OverlayTooltip>}
         <hr className='table-delimiter' />
-        <strong>Publications:</strong>
-        {publication.length > 0
-          ? publication.map((publication, index) =>
-            <div>
-              <span>{publication.type}</span>
-              {getPublicationLinks(publication)}
-            </div>
+        <strong>{'Publications:'}</strong>
+        {publications.length > 0
+          ? publications.map((publication, index) =>
+            <span key={index}>
+              {' ['}
+              {getPublicationLink(publication, index + 1)}
+              {index + 1 < publications.length ? '], ' : ']'}
+            </span>
           )
-          : ' -'
+          : ' no'
         }
         <hr className='table-delimiter' />
         <strong>
-          Citations: {citations}
+          {`Citations: ${citations}`}
         </strong>
       </div>
     },
