@@ -19,7 +19,6 @@ import createHistory from 'history/createBrowserHistory'
 import configureEpics from './epics/configureEpics'
 import reducers from './reducers'
 import { autoRehydrate, persistStore } from 'redux-persist'
-import timeout from 'redux-effects-timeout'
 
 const composeEnhancers = (
   process.env.NODE_ENV !== 'production' &&
@@ -37,7 +36,6 @@ const history = createHistory()
 const enhancers = [
   epicMiddleware,
   routerMiddleware(history),
-  timeout(),
 ]
 
 function configureStore () {

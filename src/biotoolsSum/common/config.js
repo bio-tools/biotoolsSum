@@ -12,6 +12,6 @@ export default class BioToolsConfig {
   }
 
   static getCitationsApiUrl (path) {
-    return `http://www.ebi.ac.uk/europepmc/webservices/rest/PMC/${path}`
+    return `http://www.ebi.ac.uk/europepmc/webservices/rest/MED/${path}`
   }
 }

@@ -7,8 +7,9 @@ export const pickData = R.map(
     R.evolve(
       {
         function: R.compose(R.prop('operation'), R.head),
+        pmids: R.reject(R.isNil),
       }),
-    R.pick(['id', 'name', 'homepage', 'version', 'description', 'topic', 'maturity', 'operatingSystem', 'function', 'toolType', 'citations', 'publication'])
+    R.pick(['id', 'name', 'homepage', 'version', 'description', 'topic', 'maturity', 'operatingSystem', 'function', 'toolType', 'citations', 'publication', 'pmids'])
   )
 )
 
@@ -17,12 +18,14 @@ function getCitations (id, idType) {
     .then(response => response.json())
     .then(idInfo => {
       if (!idInfo.records) {
-        return 0
+        return { citationsCount: 0 }
       }
-      const pmcid = idInfo.records[0].pmcid
-      return fetch(config.getCitationsApiUrl(`${pmcid}/citations/json`))
+      const pmid = idInfo.records[0].pmid
+      return fetch(config.getCitationsApiUrl(`${pmid}/citations/json`))
         .then(response => response.json())
-        .then(citations => citations.hitCount)
+        .then(citations => {
+          return pmid ? { citationsCount: citations.hitCount, pmid } : { citationsCount: citations.hitCount }
+        })
     })
 }
 
@@ -39,7 +42,7 @@ const getCitationsFromPublications = uniquePublications => uniquePublications.ma
     id = pub.doi
     idType = 'doi'
   } else {
-    return Rx.Observable.of(0)
+    return Rx.Observable.of({ citationsCount: 0 })
   }
 
   return Rx.Observable.fromPromise(getCitations(id, idType))
@@ -62,7 +65,14 @@ export const updatedData = tools => {
 
     return Rx.Observable
       .combineLatest(getCitationsFromPublications(uniquePublications))
-      .map(citations => R.assoc('citations', R.sum(citations), tool))
+      .map(citationsInfo => {
+        const citations = R.sum(R.pluck('citationsCount', citationsInfo))
+        const pmids = R.pluck('pmid', citationsInfo)
+        return R.compose(
+          R.assoc('pmids', pmids),
+          R.assoc('citations', citations),
+        )(tool)
+      })
   })
 }
 

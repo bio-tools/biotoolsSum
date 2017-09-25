@@ -30,20 +30,6 @@ export const fetchCitationsEpic = (action$) =>
       .catch(() => Rx.Observable.of(buildAction(ActionTypes.CITATIONS_FETCH_FAILURE)))
     )
 
-// export const fetchServicesEpic = (action$) =>
-//   action$.ofType(ActionTypes.SERVICES_FETCH)
-//     .concatMap(({ payload: { name, query } }) => Rx.Observable
-//       .fromPromise(getServices(query))
-//       .switchMap(service => Rx.Observable
-//         .combineLatest(updatedData(service.list))
-//         .map(tools => {
-//           const updatedService = R.assoc('list', tools, service)
-//           return buildActionWithName(ActionTypes.SERVICES_FETCH_SUCCESS, updatedService, name)
-//         })
-//         .catch(serverIsDown)
-//         .catch(() => Rx.Observable.of(buildAction(ActionTypes.SERVICES_FETCH_FAILURE))))
-//     )
-
 export default [
   fetchCitationsEpic,
   fetchServicesEpic,

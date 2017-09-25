@@ -33,6 +33,14 @@ function getPublicationLink (publication, index) {
   }
 }
 
+function getCitationsSource (pmid, index) {
+  return <OverlayTooltip key={pmid} id='tooltip-pmid' tooltipText='Citations source'>
+    <a href={`http://europepmc.org/search?query=CITES%3A${pmid}_MED`} target='_blank'>
+      {index}
+    </a>
+  </OverlayTooltip>
+}
+
 const columns = [
   {
     Header: 'Name (Sortable A-Z or Z-A)',
@@ -81,7 +89,7 @@ const columns = [
       return a - b
     },
     Cell: data => {
-      const { maturity, operatingSystem, publication: publications } = data.original
+      const { maturity, operatingSystem, publication: publications, pmids } = data.original
       const citations = data.value
       const labelStyle = maturity === 'Mature' ? 'success' : maturity === 'Emerging' ? 'info' : 'danger'
 
@@ -115,6 +123,18 @@ const columns = [
         <strong>
           {`Citations: ${citations}`}
         </strong>
+        <br />
+        <strong>{`Source: `}</strong>
+        {pmids && pmids.length > 0
+          ? pmids.map((pmid, index) =>
+            <span key={index}>
+              {' ['}
+              {getCitationsSource(pmid, index + 1)}
+              {index + 1 < pmids.length ? '], ' : ']'}
+            </span>
+          )
+          : ' -'
+        }
       </div>
     },
     width: 240,
