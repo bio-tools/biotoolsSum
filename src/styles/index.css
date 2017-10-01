@@ -1,12 +1,12 @@
-body {
-  margin: 0;
-  padding: 0;
-  font-family: sans-serif;
-}
+/*body {*/
+  /*margin: 0;*/
+  /*padding: 0;*/
+  /*font-family: sans-serif;*/
+/*}*/
 
-ul li {
-  list-style-position: outside;
-}
+/*ul li {*/
+  /*list-style-position: outside;*/
+/*}*/
 
 ol li {
   list-style-position: outside;
@@ -62,7 +62,7 @@ img.center {
   width:100%;
 }
 
-@media all and (min-width: 992px) {
+@media all and (min-width: 971px) {
   .text-big{
     font-size: 20px;
   }
@@ -72,7 +72,7 @@ img.center {
   }
 }
 
-@media all and (max-width: 991px) and (min-width: 766px) {
+@media all and (max-width: 970px) and (min-width: 751px) {
   .text-big{
     font-size: 15px;
   }
@@ -82,7 +82,7 @@ img.center {
   }
 }
 
-@media all and (max-width: 766px) {
+@media all and (max-width: 750px) {
   .text-big{
     font-size: 1.9vw;
   }
@@ -119,24 +119,37 @@ img.center {
   padding-left: 5px;
 }
 
+.more-icon {
+  padding-top: 34px;
+  font-size: 20px;
+  color: grey;
+}
+
+.more-icon:hover {
+  color: black;
+}
+
 .table-delimiter {
   margin-top: 10px;
   margin-bottom: 10px;
+  border-right: 1px solid rgba(0,0,0,0.1);
 }
 
 .toolstable-showmore-button {
   padding-left: 40px;
 }
 
-/*for wrapping lines in react-table*/
-.rt-td {
-  white-space: normal !important;
+.table-filter-input {
+  width: 100%;
 }
 
 .label-margin {
   margin-right: 15px;
 }
 
+.sub-table {
+  margin: 10px;
+}
 
 @-webkit-keyframes sk-bouncedelay {
   0%, 80%, 100% {
@@ -203,6 +216,33 @@ img.center {
   text-align: center;
 }
 
+.table-expander {
+  cursor: pointer;
+  text-align: center;
+  user-select: none;
+}
+
+/* restyling react-table */
 .ReactTable {
   display: block;
+}
+
+.ReactTable .rt-tbody .rt-td {
+  white-space: normal;
+}
+
+.ReactTable .rt-tbody .rt-tr-group {
+  border-bottom: 1px solid rgba(0,0,0,0.1);
+}
+
+.ReactTable .rt-thead.-filters .rt-th {
+  border-right: 1px solid rgba(0,0,0,0.1)
+}
+
+.ReactTable .rt-thead .rt-th, .ReactTable .rt-thead .rt-td {
+  border-right: 1px solid rgba(0,0,0,0.1);
+}
+
+.ReactTable .rt-tbody .rt-td {
+  border-right: 1px solid rgba(0,0,0,0.1);
 }

@@ -77,7 +77,7 @@ export const updatedData = tools => {
 }
 
 export function getServices (query, page = '?page=1') {
-  const url = config.getBioToolsApiUrl(`${page}&collectionID="ELIXIR-CZ"&${query}`)
+  const url = config.getBioToolsApiUrl(`${page}&${query}`)
   return fetch(url)
     .then(response => response.json())
     .then(data => {

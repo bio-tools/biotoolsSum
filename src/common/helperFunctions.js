@@ -2,13 +2,18 @@ import * as Type from '../constants/routeConstants'
 import * as R from 'ramda'
 
 export const createQueryString = R.compose(
-  R.concat('?'),
   R.join('&'),
   R.map(R.join('=')),
   R.toPairs,
+  R.evolve({
+    q: q => `"${q}"`,
+    collectionID: collectionID => `"${collectionID}"`,
+  }),
 )
 
-export const getServiceInfo = (id) => {
+export const camelCased = string => string.replace(/-([a-z0-9])/g, match => match[1].toUpperCase())
+
+export const getServiceInfo = id => {
   switch (id) {
     case Type.DNA_SERVICES_ROUTE:
       return {

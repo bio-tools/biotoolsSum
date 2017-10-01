@@ -3,8 +3,10 @@ import { Alert } from 'react-bootstrap'
 import { connect } from 'react-redux'
 import { ToolsTable } from './ToolsTable'
 import { getServices } from '../../selectors/servicesSelector'
-import { getServiceInfo } from '../../common/helperFunctions'
+import { camelCased, getServiceInfo } from '../../common/helperFunctions'
+import { data } from '../../constants/servicesInfo'
 import Loader from '../common/Loader'
+import * as R from 'ramda'
 
 class BioToolsData extends PureComponent {
   render () {
@@ -62,6 +64,15 @@ class BioToolsData extends PureComponent {
 export default BioToolsData = connect(state => {
   const path = state.router.location.pathname
   const servicesName = path.slice('/services/'.length)
+
+  const servicesInfo = R.compose(
+    R.find(R.propEq('route', servicesName)),
+    R.map(R.evolve({ route: camelCased })),
+    R.tap(console.log),
+    R.flatten,
+    R.pluck('cells'),
+  )(data.rows)
+  console.log('servicesInfo', servicesInfo)
 
   return ({
     services: getServices(state, servicesName),

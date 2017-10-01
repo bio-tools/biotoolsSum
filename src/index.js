@@ -19,6 +19,7 @@ import createHistory from 'history/createBrowserHistory'
 import configureEpics from './epics/configureEpics'
 import reducers from './reducers'
 import { autoRehydrate, persistStore } from 'redux-persist'
+import { Grid } from 'react-bootstrap'
 
 const composeEnhancers = (
   process.env.NODE_ENV !== 'production' &&
@@ -62,13 +63,13 @@ async function init () {
   ReactDOM.render(
     <Provider store={store}>
       <ConnectedRouter history={history}>
-        <div className='container'>
+        <Grid>
           <Route path='/' component={FillStore} />
           <Route exact path='/' component={Home} />
           <Route exact path='/services' component={ServicesMatrix} />
           <Route path='/services/:id' component={ServicesNavbar} />
           <Route path='/services/:id' component={BioToolsData} />
-        </div>
+        </Grid>
       </ConnectedRouter>
     </Provider>,
     document.getElementById('root')

@@ -43,18 +43,20 @@ function getCitationsSource (pmid, index) {
 
 const columns = [
   {
-    Header: 'Name (Sortable A-Z or Z-A)',
+    Header: 'Name (Sortable, filterable)',
     id: 'name',
     accessor: data => data.name,
     sortable: true,
     sortMethod: (a, b) => {
       return a.toLowerCase() > b.toLowerCase() ? 1 : -1
     },
+    filterable: true,
+    filterMethod: (filter, row) => row[filter.id].toLowerCase().includes(filter.value.toLowerCase()),
     Cell: data => {
       const {id, version, name, homepage, toolType} = data.original
       return <div>
         <a href={homepage} target='_blank'>{name}</a>
-        {version && <span> v.{version}</span>}
+        {version && <span>{` v.${version}`}</span>}
         <OverlayTooltip id='tooltip-windows' tooltipText={`Bio.tools: ${name}`}>
           <a href={`https://bio.tools/${id}`} target='_blank'>
             <FontAwesome className='icons' name='question-circle' />
@@ -73,13 +75,15 @@ const columns = [
     },
     width: 220,
   }, {
-    Header: 'Description',
+    Header: 'Description (Filterable)',
     id: 'description',
-    sortable: false,
-    accessor: data => <ReadMore chars={260} text={data.description} />,
+    accessor: data => data.description,
+    filterable: true,
+    filterMethod: (filter, row) => row[filter.id].toLowerCase().includes(filter.value.toLowerCase()),
+    Cell: data => <ReadMore chars={350} text={data.value} />,
     minWidth: 150,
   }, {
-    Header: 'Additional info (Sortable by citations)',
+    Header: 'Publications (Sortable)',
     id: 'additional-info',
     accessor: data => R.isNil(data.citations) ? '-' : data.citations,
     sortable: true,
@@ -89,35 +93,24 @@ const columns = [
       return a - b
     },
     Cell: data => {
-      const { maturity, operatingSystem, publication: publications, pmids } = data.original
+      const { publication: publications, pmids } = data.original
       const citations = data.value
-      const labelStyle = maturity === 'Mature' ? 'success' : maturity === 'Emerging' ? 'info' : 'danger'
+      const filteredPublications = R.filter(
+        publication => publication.doi !== null || publication.pmid !== null || publication.pmcid !== null,
+        publications
+      )
 
       return <div>
-        <Label bsStyle={labelStyle} className='label-margin'>{maturity}</Label>
-        {R.contains('Windows', operatingSystem) &&
-        <OverlayTooltip id='tooltip-windows' tooltipText='Platform: Windows'>
-          <FontAwesome className='icons' name='windows' />
-        </OverlayTooltip>}
-        {R.contains('Linux', operatingSystem) &&
-        <OverlayTooltip id='tooltip-linux' tooltipText='Platform: Linux'>
-          <FontAwesome className='icons' name='linux' />
-        </OverlayTooltip>}
-        {R.contains('Mac', operatingSystem) &&
-        <OverlayTooltip id='tooltip-mac' tooltipText='Platform: Mac'>
-          <FontAwesome className='icons' name='apple' />
-        </OverlayTooltip>}
-        <hr className='table-delimiter' />
-        <strong>{'Publications:'}</strong>
-        {publications.length > 0
-          ? publications.map((publication, index) =>
+        <strong>{'Publications: '}</strong>
+        {filteredPublications.length > 0
+          ? filteredPublications.map((publication, index) =>
             <span key={index}>
-              {' ['}
+              {'['}
               {getPublicationLink(publication, index + 1)}
-              {index + 1 < publications.length ? '], ' : ']'}
+              {index + 1 < filteredPublications.length ? '], ' : ']'}
             </span>
           )
-          : ' no'
+          : 'no'
         }
         <hr className='table-delimiter' />
         <strong>
@@ -128,16 +121,30 @@ const columns = [
         {pmids && pmids.length > 0
           ? pmids.map((pmid, index) =>
             <span key={index}>
-              {' ['}
+              {'['}
               {getCitationsSource(pmid, index + 1)}
               {index + 1 < pmids.length ? '], ' : ']'}
             </span>
           )
-          : ' -'
+          : '-'
         }
       </div>
     },
-    width: 240,
+    width: 200,
+    className: '',
+  }, {
+    expander: true,
+    Header: 'More',
+    width: 55,
+    Expander: ({isExpanded, ...rest}) =>
+      isExpanded
+        ? <OverlayTooltip id='tooltip-show-less-info' tooltipText='Show less info'>
+          <FontAwesome className='more-icon' name='minus' />
+        </OverlayTooltip>
+        : <OverlayTooltip id='tooltip-show-more-info' tooltipText='Show more info'>
+          <FontAwesome className='more-icon' name='plus' />
+        </OverlayTooltip>,
+    className: 'table-expander',
   },
 ]
 
@@ -150,6 +157,56 @@ const subColumns = [
     Header: 'Function',
     id: 'function',
     accessor: data => <ShowMore lines={3} searchTermName='function' list={data.func} />,
+  }, {
+    Header: 'Additional info',
+    id: 'additional-info',
+    Cell: data => {
+      const { maturity, operatingSystem } = data.original
+      const labelStyle = maturity === 'Mature' ? 'success' : maturity === 'Emerging' ? 'info' : 'danger'
+
+      if (!maturity && operatingSystem.length === 0) {
+        return <span>{'No additional info available'}</span>
+      }
+
+      return <div>
+        {maturity &&
+          <div>
+            <strong>
+              {'Maturity: '}
+            </strong>
+            <Label bsStyle={labelStyle} className='label-margin'>
+              {maturity}
+            </Label>
+          </div>
+        }
+
+        {maturity && operatingSystem.length > 0 &&
+          <hr className='table-delimiter' />
+        }
+
+        {operatingSystem.length > 0 &&
+          <div>
+            <strong>{'Platforms: '}</strong>
+            {R.contains('Windows', operatingSystem) &&
+              <OverlayTooltip id='tooltip-windows' tooltipText='Platform: Windows'>
+                <FontAwesome className='icons' name='windows' />
+              </OverlayTooltip>
+            }
+            {R.contains('Linux', operatingSystem) &&
+              <OverlayTooltip id='tooltip-linux' tooltipText='Platform: Linux'>
+                <FontAwesome className='icons' name='linux' />
+              </OverlayTooltip>
+            }
+            {R.contains('Mac', operatingSystem) &&
+              <OverlayTooltip id='tooltip-mac' tooltipText='Platform: Mac'>
+                <FontAwesome className='icons' name='apple' />
+              </OverlayTooltip>
+            }
+          </div>
+        }
+      </div>
+    },
+    width: 180,
   },
 ]
 
@@ -164,16 +221,22 @@ export const ToolsTable = ({ list }) => {
       showPageSizeOptions={false}
       defaultPageSize={PAGE_SIZE}
       minRows={1}
-      className='-striped'
+      className='-highlight'
       SubComponent={row => {
-        const subList = [{ func: row.original.function, topic: row.original.topic }]
+        const subList = [{
+          func: row.original.function,
+          topic: row.original.topic,
+          maturity: row.original.maturity,
+          operatingSystem: row.original.operatingSystem,
+        }]
         return (
-          <div style={{padding: '20px'}}>
+          <div className='sub-table'>
             <ReactTable
               data={subList}
               columns={subColumns}
               defaultPageSize={1}
               showPagination={false}
+              sortable={false}
             />
           </div>
         )
