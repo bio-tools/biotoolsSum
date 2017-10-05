@@ -1,7 +1,6 @@
 import R from 'ramda'
 import * as Actions from '../constants/actionTypes'
 import { pickData } from '../biotoolsSum/services/index'
-import { REHYDRATE } from 'redux-persist'
 
 const initialState = {
   count: 0,

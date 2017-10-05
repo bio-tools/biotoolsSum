@@ -8,9 +8,9 @@
   /*list-style-position: outside;*/
 /*}*/
 
-ol li {
-  list-style-position: outside;
-}
+/*ol li {*/
+  /*list-style-position: outside;*/
+/*}*/
 
 img.center {
   display: block;
@@ -39,6 +39,10 @@ img.center {
 
 .dark-grey-background {
   background-color: #d6d6d6;
+}
+
+.white-background {
+  background-color: #ffffff;
 }
 
 .square-content {

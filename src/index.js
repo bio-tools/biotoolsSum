@@ -43,7 +43,7 @@ function configureStore () {
   return new Promise((resolve, reject) => {
     try {
       const store = createStore(
-        reducers,
+        reducers(),
         {},
         composeEnhancers(
           applyMiddleware(...enhancers),

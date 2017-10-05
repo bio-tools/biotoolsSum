@@ -2,9 +2,10 @@ import React, { PureComponent } from 'react'
 import {MenuItem, Nav, Navbar, NavDropdown, NavItem} from 'react-bootstrap'
 import { Link } from 'react-router-dom'
 import { LinkContainer } from 'react-router-bootstrap'
-import * as Type from '../../constants/routeConstants'
 import { data } from '../../constants/servicesInfo'
 import { camelCased } from '../../common/helperFunctions'
+import * as R from 'ramda'
+import { AbstractionCategory, ALL_SERVICES } from '../../constants/stringConstants'
 
 class ServicesNavbar extends PureComponent {
   constructor (props) {
@@ -30,17 +31,16 @@ class ServicesNavbar extends PureComponent {
         </Navbar.Header>
         <Navbar.Collapse>
           <Nav activeKey={this.state.activeMenuItem} onSelect={this.handleSelect}>
-            <LinkContainer to={`/services/allServices`}>
-              <NavItem eventKey={0}>
-                {'All Services'}
-              </NavItem>
+            <LinkContainer to={`/services/${ALL_SERVICES}`}>
+              <NavItem eventKey={-1}>{'All Services'}</NavItem>
             </LinkContainer>
             {data.rows.map((row, rowIndex) =>
-              <NavDropdown key={rowIndex} eventKey={rowIndex + 1} title={row.name} id={`${row.name}-nav-dropdown`}>
-                {row.cells.map((cell, cellIndex) =>
-                  <LinkContainer key={cellIndex} to={`/services/${camelCased(cell.route)}`}>
-                    <MenuItem eventKey={`${rowIndex + 1}.${cellIndex + 1}`}>
-                      {cell.name}
+              <NavDropdown key={rowIndex} eventKey={rowIndex} title={row.name} id={`${row.name}-nav-dropdown`}>
+                {R.take(4, row.cells).map((cell, cellIndex) => R.isEmpty(cell) || !cell.route
+                  ? null
+                  : <LinkContainer key={cellIndex} to={`/services/${cell.route}`}>
+                    <MenuItem eventKey={`${rowIndex}.${cellIndex}`}>
+                      {`${row.name} ${AbstractionCategory[cellIndex]}`}
                     </MenuItem>
                   </LinkContainer>
                 )}

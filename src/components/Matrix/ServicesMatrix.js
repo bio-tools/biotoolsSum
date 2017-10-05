@@ -2,31 +2,37 @@ import React, { PureComponent } from 'react'
 import { connect } from 'react-redux'
 import { MatrixCell } from './MatrixCell'
 import { MatrixCellWithLink } from './MatrixCellWithLink'
-import { getAllServicesCounts } from '../../selectors/servicesSelector'
-import * as ServicesNames from '../../constants/routeConstants'
+import { getServicesCounts } from '../../selectors/servicesSelector'
 import { data } from '../../constants/servicesInfo'
-import { camelCased } from '../../common/helperFunctions'
+import { camelCased, requireImage } from '../../common/helperFunctions'
+import * as R from 'ramda'
+import { AbstractionCategory, ALL_SERVICES } from '../../constants/stringConstants'
 
 class ServicesMatrix extends PureComponent {
   render () {
-    const { allServicesCounts } = this.props
+    const { servicesCounts } = this.props
 
     return (
       <div className='matrix'>
-        <MatrixCellWithLink linkTo={`/services/${ServicesNames.ALL_SERVICES_ROUTE}`} text='All services' numberOfServices={allServicesCounts['allServices']} />
-        <MatrixCell text='1D sequence' />
-        <MatrixCell text='2D topology' />
-        <MatrixCell text='3D structure' />
-        <MatrixCell text='xD omics' />
+        <MatrixCellWithLink
+          linkTo={`/services/${ALL_SERVICES}`}
+          text='All services'
+          numberOfServices={servicesCounts[camelCased(ALL_SERVICES)]}
+        />
+        <MatrixCell text={AbstractionCategory[0]} />
+        <MatrixCell text={AbstractionCategory[1]} />
+        <MatrixCell text={AbstractionCategory[2]} />
+        <MatrixCell text={AbstractionCategory[3]} />
         {data.rows.map(row =>
           <div key={row.name}>
             <MatrixCell text={row.name} />
-            {row.cells.map(cell =>
-              <MatrixCellWithLink
+            {R.take(4, row.cells).map((cell, cellIndex) => R.isEmpty(cell) || !cell.route
+              ? <MatrixCell key={cellIndex} />
+              : <MatrixCellWithLink
                 key={cell.route}
-                linkTo={`/services/${camelCased(cell.route)}`}
-                image={require(`../../images/${cell.route}.png`)}
-                numberOfServices={allServicesCounts[camelCased(cell.route)]}
+                linkTo={`/services/${cell.route}`}
+                image={requireImage(cell.route)}
+                numberOfServices={servicesCounts[camelCased(cell.route)]}
               />
             )}
           </div>
@@ -36,7 +42,4 @@ class ServicesMatrix extends PureComponent {
   }
 }
 
-export default ServicesMatrix = connect(state => ({
-  allServicesCounts: getAllServicesCounts(state),
-})
-)(ServicesMatrix)
+export default ServicesMatrix = connect(state => ({ servicesCounts: getServicesCounts(state) }))(ServicesMatrix)

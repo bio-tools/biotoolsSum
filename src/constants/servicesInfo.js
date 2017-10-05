@@ -6,29 +6,25 @@ export const data = {
       cells: [
         {
           route: 'dna-1d-services',
-          name: '1D DNA Services',
-          message: 'DNA sequences',
+          message: 'All Elixir CZ services for studies on DNA sequences',
           qsObject: {
             q: 'dna sequence',
           },
         }, {
           route: 'dna-2d-services',
-          name: '2D DNA Services',
-          message: 'secondary DNA structures',
+          message: 'All Elixir CZ services for studies on secondary DNA structures',
           qsObject: {
             q: 'dna secondary structure',
           },
         }, {
           route: 'dna-3d-services',
-          name: '3D DNA Services',
-          message: 'DNA structures',
+          message: 'All Elixir CZ services for studies on DNA structures',
           qsObject: {
             q: 'dna structure',
           },
         }, {
           route: 'dna-xd-services',
-          name: 'xD DNA Services',
-          message: 'DNA-omics',
+          message: 'All Elixir CZ services for studies on DNA-omics',
           qsObject: {
             q: 'genomics',
           },
@@ -40,29 +36,25 @@ export const data = {
       cells: [
         {
           route: 'rna-1d-services',
-          name: '1D RNA Services',
-          message: 'RNA sequences',
+          message: 'All Elixir CZ services for studies on RNA sequences',
           qsObject: {
             q: 'rna sequence',
           },
         }, {
           route: 'rna-2d-services',
-          name: '2D RNA Services',
-          message: 'secondary RNA structures',
+          message: 'All Elixir CZ services for studies on secondary RNA structures',
           qsObject: {
             q: 'rna secondary structure',
           },
         }, {
           route: 'rna-3d-services',
-          name: '3D RNA Services',
-          message: 'RNA structures',
+          message: 'All Elixir CZ services for studies on RNA structures',
           qsObject: {
             q: 'rna structure',
           },
         }, {
           route: 'rna-xd-services',
-          name: 'xD RNA Services',
-          message: 'RNA-omics',
+          message: 'All Elixir CZ services for studies on RNA-omics',
           qsObject: {
             q: 'rna omics',
           },
@@ -74,29 +66,25 @@ export const data = {
       cells: [
         {
           route: 'protein-1d-services',
-          name: '1D Protein Services',
-          message: 'protein sequences',
+          message: 'All Elixir CZ services for studies on protein sequences',
           qsObject: {
             q: 'protein sequence',
           },
         }, {
           route: 'protein-2d-services',
-          name: '2D Protein Services',
-          message: 'secondary protein structures',
+          message: 'All Elixir CZ services for studies on secondary protein structures',
           qsObject: {
             q: 'protein secondary structure',
           },
         }, {
           route: 'protein-3d-services',
-          name: '3D Protein Services',
-          message: 'protein structures',
+          message: 'All Elixir CZ services for studies on protein structures',
           qsObject: {
             q: 'protein structure',
           },
         }, {
           route: 'protein-xd-services',
-          name: 'xD Protein Services',
-          message: 'proteomics',
+          message: 'All Elixir CZ services for studies on proteomics',
           qsObject: {
             q: 'protein omics',
           },
@@ -108,29 +96,25 @@ export const data = {
       cells: [
         {
           route: 'drug-1d-services',
-          name: '1D Drug Services',
-          message: 'primary structures for small molecules',
+          message: 'All Elixir CZ services for studies on primary structures for small molecules',
           qsObject: {
             q: 'small molecule primary sequence',
           },
         }, {
           route: 'drug-2d-services',
-          name: '2D Drug Services',
-          message: 'secondary structures for small molecules',
+          message: 'All Elixir CZ services for studies on secondary structures for small molecules',
           qsObject: {
             q: 'small molecule secondary structure',
           },
         }, {
           route: 'drug-3d-services',
-          name: '3D Drug Services',
-          message: 'structures for small molecules',
+          message: 'All Elixir CZ services for studies on structures for small molecules',
           qsObject: {
             q: 'small molecule structure',
           },
         }, {
           route: 'drug-xd-services',
-          name: 'xD Drug Services',
-          message: 'small "moleculeomics"',
+          message: 'All Elixir CZ services for studies on small "moleculeomics"',
           qsObject: {
             q: 'small molecule omics',
           },

@@ -3,7 +3,7 @@ import { Image } from 'react-bootstrap'
 
 export const MatrixCell = ({ image, text }) => {
   return (
-    <div className='square dark-grey-background'>
+    <div className={`square ${image || text ? 'dark-grey-background' : 'white-background'}`}>
       <div className='square-content'>
         <div className='table'>
           <div className='table-cell text-big'>

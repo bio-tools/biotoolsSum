@@ -1,33 +1,44 @@
-import React, { PureComponent } from 'react'
+import React from 'react'
 import { Alert } from 'react-bootstrap'
 import { connect } from 'react-redux'
 import { ToolsTable } from './ToolsTable'
 import { getServices } from '../../selectors/servicesSelector'
-import { camelCased, getServiceInfo } from '../../common/helperFunctions'
+import { camelCased } from '../../common/helperFunctions'
 import { data } from '../../constants/servicesInfo'
 import Loader from '../common/Loader'
 import * as R from 'ramda'
+import { ALL_SERVICES } from '../../constants/stringConstants'
 
-class BioToolsData extends PureComponent {
+class BioToolsData extends React.PureComponent {
+  shouldComponentUpdate (nextProps) {
+    return !!nextProps.services
+  }
+
   render () {
-    const { services, servicesInfo } = this.props
+    const { services, message } = this.props
     const { count, list, serviceLoading, citationsLoading } = services
 
     return (
       <div>
-        <Alert bsStyle='warning'>
-          <h4>{servicesInfo.header}</h4> <small>{`All Elixir CZ services for studies on ${servicesInfo.message}.`}</small>
-        </Alert>
+        {message &&
+          <Alert bsStyle='warning'>
+            {message}
+          </Alert>
+        }
         {count
           ? <div>
             <Alert bsStyle='warning'>
-              {'There is a total number of '}<strong>{count}</strong> {'tools available.'}
+              {'There is a total number of '}<strong>{count}</strong>{' tools available.'}
               {serviceLoading &&
                 <div>
                   <div className='loader-text'>
-                    <span>{'Reloading tools...'}</span>
+                    <span>
+                      {'Reloading tools...'}
+                    </span>
                     <br />
-                    <span>{'This happens whenever you refresh page'}</span>
+                    <span>
+                      {'This happens whenever you refresh page'}
+                    </span>
                   </div>
                   <Loader />
                 </div>
@@ -65,17 +76,23 @@ export default BioToolsData = connect(state => {
   const path = state.router.location.pathname
   const servicesName = path.slice('/services/'.length)
 
-  const servicesInfo = R.compose(
-    R.find(R.propEq('route', servicesName)),
-    R.map(R.evolve({ route: camelCased })),
+  if (path === '/services') {
+    return null
+  }
+
+  const message = servicesName === ALL_SERVICES
+    ? `All ${data.collectionID} Services`
+    : R.compose(
+      R.tap(console.log),
+    R.prop('message'),
     R.tap(console.log),
+    R.find(R.propEq('route', servicesName)),
     R.flatten,
     R.pluck('cells'),
   )(data.rows)
-  console.log('servicesInfo', servicesInfo)
 
   return ({
-    services: getServices(state, servicesName),
-    servicesInfo: getServiceInfo(servicesName),
+    services: getServices(state, camelCased(servicesName)),
+    message,
   })
 })(BioToolsData)
