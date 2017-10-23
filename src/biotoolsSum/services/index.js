@@ -8,28 +8,43 @@ export const pickData = R.map(
       {
         function: R.compose(R.prop('operation'), R.head),
         pmids: R.reject(R.isNil),
+        credit: R.filter(R.propEq('typeEntity', 'Institute')),
       }),
-    R.pick(['id', 'name', 'homepage', 'version', 'description', 'topic', 'maturity', 'operatingSystem', 'function', 'toolType', 'citations', 'publication', 'pmids'])
+    R.pick([
+      'id',
+      'name',
+      'homepage',
+      'version',
+      'description',
+      'topic',
+      'maturity',
+      'operatingSystem',
+      'function',
+      'toolType',
+      'citations',
+      'publication',
+      'pmids',
+      'credit',
+      'publicationStrings',
+    ])
   )
 )
 
-function getCitations (id, idType) {
+function getPublicationInfo (id, idType) {
   return fetch(config.getProxyUrl() + config.getConverterApiUrl(`&ids=${id}&idtype=${idType}&format=json`))
     .then(response => response.json())
     .then(idInfo => {
       if (!idInfo.records) {
-        return { citationsCount: 0 }
+        return null
       }
       const pmid = idInfo.records[0].pmid
-      return fetch(config.getCitationsApiUrl(`${pmid}/citations/json`))
+      return fetch(config.getPublicationInfoApiUrl(pmid, 'med'))
         .then(response => response.json())
-        .then(citations => {
-          return pmid ? { citationsCount: citations.hitCount, pmid } : { citationsCount: citations.hitCount }
-        })
+        .then(publicationInfo => publicationInfo)
     })
 }
 
-const getCitationsFromPublications = uniquePublications => uniquePublications.map(pub => {
+const getPublicationsInfo = uniquePublications => uniquePublications.map(pub => {
   let id = ''
   let idType = ''
   if (pub.pmid !== null) {
@@ -39,13 +54,13 @@ const getCitationsFromPublications = uniquePublications => uniquePublications.ma
     id = pub.pmcid
     idType = 'pmcid'
   } else if (pub.doi !== null) {
-    id = pub.doi
+    id = pub.doi.startsWith('doi:') ? pub.doi.replace('doi:', '') : pub.doi
     idType = 'doi'
   } else {
-    return Rx.Observable.of({ citationsCount: 0 })
+    return Rx.Observable.of(null)
   }
 
-  return Rx.Observable.fromPromise(getCitations(id, idType))
+  return Rx.Observable.fromPromise(getPublicationInfo(id, idType))
 })
 
 export const updatedData = tools => {
@@ -57,18 +72,44 @@ export const updatedData = tools => {
     const { publication } = tool
 
     if (publication.length === 0) {
-      return Rx.Observable.of(tool)
+      return Rx.Observable.of(R.assoc('citations', 0, tool))
     }
 
     // There were occasionally duplicates in the publications record
     const uniquePublications = R.uniqBy(R.props(['doi', 'pmid', 'pmcid']), publication)
 
     return Rx.Observable
-      .combineLatest(getCitationsFromPublications(uniquePublications))
-      .map(citationsInfo => {
-        const citations = R.sum(R.pluck('citationsCount', citationsInfo))
-        const pmids = R.pluck('pmid', citationsInfo)
+      .combineLatest(getPublicationsInfo(uniquePublications))
+      .map(publicationsInfo => {
+        const pickedPublicationsInfo = publicationsInfo[0] === null
+          ? null
+          : R.compose(
+            R.map(R.props(['authorString', 'title', 'journalTitle', 'pubYear', 'pageInfo', 'pmid', 'citedByCount'])),
+            R.filter(info => info !== undefined),
+            R.pluck(0),
+            R.pluck('result'),
+            R.pluck('resultList'),
+          )(publicationsInfo)
+
+        let citations = 0
+        let publicationStrings = []
+        let pmids = []
+        if (pickedPublicationsInfo) {
+          publicationStrings = R.compose(
+            R.map(R.join(', ')),
+            R.map(R.props([0, 1, 2, 3, 4])),
+          )(pickedPublicationsInfo)
+
+          pmids = R.pluck(5, pickedPublicationsInfo)
+
+          citations = R.compose(
+            R.sum,
+            R.pluck(6),
+          )(pickedPublicationsInfo)
+        }
+
         return R.compose(
+          R.assoc('publicationStrings', publicationStrings),
           R.assoc('pmids', pmids),
           R.assoc('citations', citations),
         )(tool)

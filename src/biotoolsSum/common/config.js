@@ -14,4 +14,9 @@ export default class BioToolsConfig {
   static getCitationsApiUrl (path) {
     return `http://www.ebi.ac.uk/europepmc/webservices/rest/MED/${path}`
   }
+
+  static getPublicationInfoApiUrl (id, src) {
+    return `https://www.ebi.ac.uk/europepmc/webservices/rest/search?query=ext_id:${id} src:${src}&format=json`
+    // return 'https://www.ebi.ac.uk/europepmc/webservices/rest/search?query=ext_id:27174934%20src:med&format=json'
+  }
 }

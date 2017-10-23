@@ -5,7 +5,6 @@ export const createQueryString = R.compose(
   R.map(R.join('=')),
   R.toPairs,
   R.evolve({
-    q: q => `"${q}"`,
     collectionID: collectionID => `"${collectionID}"`,
   }),
 )

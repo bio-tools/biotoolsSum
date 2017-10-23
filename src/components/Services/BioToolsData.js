@@ -8,6 +8,7 @@ import { data } from '../../constants/servicesInfo'
 import Loader from '../common/Loader'
 import * as R from 'ramda'
 import { ALL_SERVICES } from '../../constants/stringConstants'
+import DocxGeneration from './FileGenerationForm'
 
 class BioToolsData extends React.PureComponent {
   shouldComponentUpdate (nextProps) {
@@ -27,6 +28,7 @@ class BioToolsData extends React.PureComponent {
         }
         {count
           ? <div>
+            <DocxGeneration list={list} />
             <Alert bsStyle='warning'>
               {'There is a total number of '}<strong>{count}</strong>{' tools available.'}
               {serviceLoading &&
@@ -74,18 +76,16 @@ class BioToolsData extends React.PureComponent {
 
 export default BioToolsData = connect(state => {
   const path = state.router.location.pathname
-  const servicesName = path.slice('/services/'.length)
+  const servicesName = path.slice('/'.length)
 
-  if (path === '/services') {
+  if (path === '/') {
     return null
   }
 
   const message = servicesName === ALL_SERVICES
     ? `All ${data.collectionID} Services`
     : R.compose(
-      R.tap(console.log),
     R.prop('message'),
-    R.tap(console.log),
     R.find(R.propEq('route', servicesName)),
     R.flatten,
     R.pluck('cells'),

@@ -5,8 +5,8 @@ import { MatrixCellWithLink } from './MatrixCellWithLink'
 import { getServicesCounts } from '../../selectors/servicesSelector'
 import { data } from '../../constants/servicesInfo'
 import { camelCased, requireImage } from '../../common/helperFunctions'
-import * as R from 'ramda'
 import { AbstractionCategory, ALL_SERVICES } from '../../constants/stringConstants'
+import * as R from 'ramda'
 
 class ServicesMatrix extends PureComponent {
   render () {
@@ -15,7 +15,7 @@ class ServicesMatrix extends PureComponent {
     return (
       <div className='matrix'>
         <MatrixCellWithLink
-          linkTo={`/services/${ALL_SERVICES}`}
+          linkTo={`/${ALL_SERVICES}`}
           text='All services'
           numberOfServices={servicesCounts[camelCased(ALL_SERVICES)]}
         />
@@ -30,7 +30,7 @@ class ServicesMatrix extends PureComponent {
               ? <MatrixCell key={cellIndex} />
               : <MatrixCellWithLink
                 key={cell.route}
-                linkTo={`/services/${cell.route}`}
+                linkTo={`/${cell.route}`}
                 image={requireImage(cell.route)}
                 numberOfServices={servicesCounts[camelCased(cell.route)]}
               />

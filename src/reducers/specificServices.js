@@ -1,4 +1,4 @@
-import R from 'ramda'
+import * as R from 'ramda'
 import * as Actions from '../constants/actionTypes'
 import { pickData } from '../biotoolsSum/services/index'
 

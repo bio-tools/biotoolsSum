@@ -1,6 +1,6 @@
 import 'babel-polyfill'
 import React from 'react'
-import R from 'ramda'
+import * as R from 'ramda'
 import ReactTable from 'react-table'
 import ReadMore from '../common/ReadMore'
 import { Label } from 'react-bootstrap'
@@ -114,10 +114,10 @@ const columns = [
         }
         <hr className='table-delimiter' />
         <strong>
-          {`Citations: ${citations}`}
+          {`Total Citations: ${citations}`}
         </strong>
         <br />
-        <strong>{`Source: `}</strong>
+        <strong>{`Citations source: `}</strong>
         {pmids && pmids.length > 0
           ? pmids.map((pmid, index) =>
             <span key={index}>

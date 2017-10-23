@@ -8,7 +8,6 @@ import 'react-table/react-table.css'
 import 'bootstrap/dist/css/bootstrap.min.css'
 import 'font-awesome/css/font-awesome.min.css'
 import './styles/index.css'
-import { Home } from './components/Home'
 import ServicesMatrix from './components/Matrix/ServicesMatrix'
 import ServicesNavbar from './components/Services/ServicesNavbar'
 import BioToolsData from './components/Services/BioToolsData'
@@ -65,10 +64,9 @@ async function init () {
       <ConnectedRouter history={history}>
         <Grid>
           <Route path='/' component={FillStore} />
-          <Route exact path='/' component={Home} />
-          <Route exact path='/services' component={ServicesMatrix} />
-          <Route path='/services/:id' component={ServicesNavbar} />
-          <Route path='/services/:id' component={BioToolsData} />
+          <Route exact path='/' component={ServicesMatrix} />
+          <Route path='/:id' component={ServicesNavbar} />
+          <Route path='/:id' component={BioToolsData} />
         </Grid>
       </ConnectedRouter>
     </Provider>,

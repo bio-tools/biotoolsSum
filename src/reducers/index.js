@@ -1,5 +1,6 @@
 import { combineReducers } from 'redux'
 import { routerReducer } from 'react-router-redux'
+import { reducer as reduxFormReducer } from 'redux-form'
 import { specificServicesWithName } from './specificServices'
 import * as R from 'ramda'
 import { data } from '../constants/servicesInfo'
@@ -22,6 +23,7 @@ const portalApp = () => {
 
   return combineReducers(R.merge(servicesReducers, {
     router: routerReducer,
+    form: reduxFormReducer,
   }))
 }
 
