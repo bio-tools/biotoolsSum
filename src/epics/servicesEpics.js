@@ -1,14 +1,14 @@
+import 'babel-polyfill'
 import Rx from 'rxjs'
+import * as R from 'ramda'
+import * as XLSX from 'xlsx'
 import { saveAs } from 'file-saver'
 import jsdocx from 'jsdocx'
-
 import * as ActionTypes from '../constants/actionTypes'
 import { serverIsDown } from './configureEpics'
 import { getServices, updatedData } from '../biotoolsSum/services/index'
 import buildActionWithName from '../helpers/buildActionWithName'
 import buildAction from '../helpers/buildAction'
-import * as R from 'ramda'
-import * as XLSX from 'xlsx'
 import { fileType } from '../constants/generateFile'
 
 export const fetchServicesEpic = (action$, { getState }) =>
@@ -33,7 +33,7 @@ export const fetchCitationsEpic = (action$) =>
       .catch(() => Rx.Observable.of(buildAction(ActionTypes.CITATIONS_FETCH_FAILURE)))
     )
 
-function generateDocx (doc, data, title) {
+function generateDocx (doc, data, includeProps, title) {
   let titleRun = doc.addParagraph().addRun()
   titleRun.addText(title)
   let titleFormat = titleRun.addFormat()
@@ -51,41 +51,45 @@ function generateDocx (doc, data, title) {
     nameFormat.addBold()
 
     // Institute BEGIN
-    let instituteParagraph = doc.addParagraph()
-    // Institute title
-    let instituteTitleRun = instituteParagraph.addRun()
-    instituteTitleRun.addText('Institute: ')
-    let instituteTitleFormat = instituteTitleRun.addFormat()
-    instituteTitleFormat.addFonts().setAscii('Calibri')
-    instituteTitleFormat.addBold()
-    // Institute text
-    let instituteTextRun = instituteParagraph.addRun()
-    item.credit.forEach((instituteItem, index) =>
-      index + 1 < item.credit.length
-        ? instituteTextRun.addText(`${instituteItem.name}; `)
-        : instituteTextRun.addText(`${instituteItem.name}.`)
-    )
-    let instituteTextFormat = instituteTextRun.addFormat()
-    instituteTextFormat.addFonts().setAscii('Calibri')
+    if (includeProps.includes('institute')) {
+      let instituteParagraph = doc.addParagraph()
+      // Institute title
+      let instituteTitleRun = instituteParagraph.addRun()
+      instituteTitleRun.addText('Institute: ')
+      let instituteTitleFormat = instituteTitleRun.addFormat()
+      instituteTitleFormat.addFonts().setAscii('Calibri')
+      instituteTitleFormat.addBold()
+      // Institute text
+      let instituteTextRun = instituteParagraph.addRun()
+      item.credit.forEach((instituteItem, index) =>
+        index + 1 < item.credit.length
+          ? instituteTextRun.addText(`${instituteItem.name}; `)
+          : instituteTextRun.addText(`${instituteItem.name}.`)
+      )
+      let instituteTextFormat = instituteTextRun.addFormat()
+      instituteTextFormat.addFonts().setAscii('Calibri')
+    }
     // Institute END
 
     // Description BEGIN
-    let descriptionParagraph = doc.addParagraph()
-    // Description title
-    let descriptionTitleRun = descriptionParagraph.addRun()
-    descriptionTitleRun.addText('Description: ')
-    let descriptionTitleFormat = descriptionTitleRun.addFormat()
-    descriptionTitleFormat.addFonts().setAscii('Calibri')
-    descriptionTitleFormat.addBold()
-    // Description text
-    let descriptionTextRun = descriptionParagraph.addRun()
-    descriptionTextRun.addText(item.description)
-    let descriptionTextFormat = descriptionTextRun.addFormat()
-    descriptionTextFormat.addFonts().setAscii('Calibri')
+    if (includeProps.includes('description')) {
+      let descriptionParagraph = doc.addParagraph()
+      // Description title
+      let descriptionTitleRun = descriptionParagraph.addRun()
+      descriptionTitleRun.addText('Description: ')
+      let descriptionTitleFormat = descriptionTitleRun.addFormat()
+      descriptionTitleFormat.addFonts().setAscii('Calibri')
+      descriptionTitleFormat.addBold()
+      // Description text
+      let descriptionTextRun = descriptionParagraph.addRun()
+      descriptionTextRun.addText(item.description)
+      let descriptionTextFormat = descriptionTextRun.addFormat()
+      descriptionTextFormat.addFonts().setAscii('Calibri')
+    }
     // Description END
 
     // Publications BEGIN
-    if (item.publicationStrings && item.publicationStrings.length > 0) {
+    if (includeProps.includes('publication') && item.publicationStrings && item.publicationStrings.length > 0) {
       let publicationParagraph = doc.addParagraph()
       // Publications title
       let publicationTitleRun = publicationParagraph.addRun()
@@ -103,7 +107,7 @@ function generateDocx (doc, data, title) {
     // Publication END
 
     // Citations BEGIN
-    if (item.citations) {
+    if (includeProps.includes('citations') && item.citations) {
       let citationsParagraph = doc.addParagraph()
       // Citations title
       let citationsTitleRun = citationsParagraph.addRun()
@@ -152,20 +156,18 @@ const byAttribute = (attribute, order) => order && order === 'ascend'
 export const generateFile = (action$, {getState}) => {
   return action$.ofType(ActionTypes.GENERATE_FILE)
     .switchMap(({payload: {list}}) => {
-      const {form: {fileGenerationForm: {values}}} = getState()
-      console.log('document form', values)
-
+      const { form: { fileGenerationForm: { values } } } = getState()
       if (values.fileType === fileType.JPG) {
-
+        // for now nothing here
       } else {
-        const restructuredListOfTools = R.compose(
+        const sortedAndOrderedListOfTools = R.compose(
           R.take(values.takeFirstX),
           R.sort(byAttribute(values.sortBy, values.order), R.__),
         )(list)
 
         if (values.fileType === fileType.DOCX) {
           let doc = new jsdocx.Document()
-          let listOfTools = restructuredListOfTools
+          let listOfTools = R.map(R.pick(['name', 'credit', 'description', 'publicationStrings', 'citations']), sortedAndOrderedListOfTools)
 
           if (values.database) {
             listOfTools = R.compose(
@@ -174,46 +176,63 @@ export const generateFile = (action$, {getState}) => {
                 R.contains('Database portal'),
                 R.prop('toolType'),
               )),
-            )(restructuredListOfTools)
+            )(sortedAndOrderedListOfTools)
 
             const listOfDatabases = R.compose(
               R.filter(R.compose(
                 R.contains('Database portal'),
                 R.prop('toolType'),
               )),
-            )(restructuredListOfTools)
+            )(sortedAndOrderedListOfTools)
 
-            generateDocx(doc, listOfDatabases, 'Databases')
+            generateDocx(doc, listOfDatabases, values.includeProps, 'Databases')
           }
 
-          generateDocx(doc, listOfTools, 'Tools')
+          generateDocx(doc, listOfTools, values.includeProps, 'Tools')
 
           doc.generate().then((content) => {
             saveAs(content, 'generated.docx')
           })
         } else if (values.fileType === fileType.XLSX) {
-          let includedProps = R.map(R.pick(['name', 'citations', 'credit', 'description']), restructuredListOfTools)
-          if (!values.includeProps.includes('includeDescription')) {
-            includedProps = R.map(R.omit(['description']), includedProps)
-          }
-          if (!values.includeProps.includes('includeCitations')) {
-            includedProps = R.map(R.omit(['citations']), includedProps)
-          }
-          if (!values.includeProps.includes('includeInstitute')) {
-            includedProps = R.map(R.omit(['credit']), includedProps)
+          let pickedListOfTools = R.map(R.pick(['name', 'credit', 'description', 'publicationStrings', 'citations']), sortedAndOrderedListOfTools)
+
+          if (!values.includeProps.includes('institute')) {
+            pickedListOfTools = R.map(R.omit(['credit']), pickedListOfTools)
           } else {
-            console.log('include props', includedProps)
-            includedProps = R.map(R.evolve({
-              credit: R.compose(
-                R.join('\n'),
-                R.pluck('name'),
-              ),
-            }), includedProps)
+            pickedListOfTools = R.map(tool => R.compose(
+              R.dissoc('credit'),
+              R.assoc('Institute', R.join('\n ', R.pluck('name', tool.credit))),
+            )(tool), pickedListOfTools)
           }
 
-          console.log('wot', includedProps)
+          if (!values.includeProps.includes('description')) {
+            pickedListOfTools = R.map(R.omit(['description']), pickedListOfTools)
+          } else {
+            pickedListOfTools = R.map(tool => R.compose(
+              R.dissoc('description'),
+              R.assoc('Description', tool.description),
+            )(tool), pickedListOfTools)
+          }
 
-          generateXlsx(includedProps)
+          if (!values.includeProps.includes('publication')) {
+            pickedListOfTools = R.map(R.omit(['publicationStrings']), pickedListOfTools)
+          } else {
+            pickedListOfTools = R.map(tool => R.compose(
+              R.dissoc('publicationStrings'),
+              R.assoc('Publications', R.join('\n ', tool.publicationStrings || [])),
+            )(tool), pickedListOfTools)
+          }
+
+          if (!values.includeProps.includes('citations')) {
+            pickedListOfTools = R.map(R.omit(['citations']), pickedListOfTools)
+          } else {
+            pickedListOfTools = R.map(tool => R.compose(
+              R.dissoc('citations'),
+              R.assoc('Citations', tool.citations),
+            )(tool), pickedListOfTools)
+          }
+
+          generateXlsx(pickedListOfTools)
         }
       }
 

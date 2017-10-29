@@ -6,7 +6,7 @@ import { connect } from 'react-redux'
 import { fileType } from '../../constants/generateFile'
 import SelectField from '../common/SelectField'
 import Checkbox from '../common/Checkbox'
-import { Button, Col, Form, FormGroup, ToggleButton } from 'react-bootstrap'
+import { Button, Col, Form, FormGroup, Row, ToggleButton } from 'react-bootstrap'
 import ToggleRadioButtonGroup from '../common/ToggleRadioButtonGroup'
 import TextField from '../common/TextField'
 import ToggleCheckboxButtonGroup from '../common/ToggleCheckboxButtonGroup'
@@ -19,7 +19,7 @@ class FileGenerationForm extends React.PureComponent {
   }
 
   render () {
-    const { reset, submitting, fileTypeChosen } = this.props
+    const { reset, submitting, fileTypeChosen, sortByChosen, orderChosen, includePropsChosen } = this.props
 
     return (
       <Form horizontal onSubmit={this.generateFile}>
@@ -27,24 +27,28 @@ class FileGenerationForm extends React.PureComponent {
           <option value={fileType.DOCX}>{'DOCX'}</option>
           <option value={fileType.XLSX}>{'XLSX'}</option>
         </Field>
-        <Field name='sortBy' component={SelectField} label='Sort by' >
-          <option value='citations'>{'Citations'}</option>
-          <option value='name'>{'Name'}</option>
+        <Field name='sortBy' component={ToggleRadioButtonGroup} valueChosen={sortByChosen} label='Sort by' >
+          <ToggleButton value='citations'>{'Citations'}</ToggleButton>
+          <ToggleButton value='name'>{'Name'}</ToggleButton>
         </Field>
-        <Field name='order' component={ToggleRadioButtonGroup} label='Order' >
+        <Field name='order' component={ToggleRadioButtonGroup} valueChosen={orderChosen} label='Order' >
           <ToggleButton value='descend'>{'Descending'}</ToggleButton>
           <ToggleButton value='ascend'>{'Ascending'}</ToggleButton>
         </Field>
         <Field name='takeFirstX' component={TextField} label='Number of tools' />
+        <Field name='includeProps' component={ToggleCheckboxButtonGroup} valueChosen={includePropsChosen} label='Include'>
+          <ToggleButton value='toolType'>{'Tool type'}</ToggleButton>
+          <ToggleButton value='institute'>{'Institute'}</ToggleButton>
+          <ToggleButton value='description'>{'Description'}</ToggleButton>
+          <ToggleButton value='publication'>{'Publications'}</ToggleButton>
+          <ToggleButton value='citations'>{'Citations'}</ToggleButton>
+          <ToggleButton value='topic'>{'Topic'}</ToggleButton>
+          <ToggleButton value='function'>{'Function'}</ToggleButton>
+          <ToggleButton value='maturity'>{'Maturity'}</ToggleButton>
+          <ToggleButton value='platform'>{'Platform'}</ToggleButton>
+        </Field>
         {fileTypeChosen === fileType.DOCX &&
-          <Field name='database' component={Checkbox} label='Split databases and other tools' />
-        }
-        {fileTypeChosen === fileType.XLSX &&
-          <Field name='includeProps' component={ToggleCheckboxButtonGroup} label='Include'>
-            <ToggleButton value='includeCitations'>{'Citations'}</ToggleButton>
-            <ToggleButton value='includeDescription'>{'Description'}</ToggleButton>
-            <ToggleButton value='includeInstitute'>{'Institute'}</ToggleButton>
-          </Field>
+        <Field name='database' component={Checkbox} label='Split databases and other tools' />
         }
         <FormGroup>
           <Col smOffset={2} sm={10}>
@@ -70,7 +74,10 @@ export default connect(state => {
 
   return {
     fileTypeChosen: selector(state, 'fileType'),
-    initialValues: { sortBy: 'citations', fileType: 'docx', includeProps: [] },
+    sortByChosen: selector(state, 'sortBy'),
+    orderChosen: selector(state, 'order'),
+    includePropsChosen: selector(state, 'includeProps'),
+    initialValues: { fileType: 'docx', sortBy: 'citations', order: 'descend', includeProps: [] },
   }
 }, buildActionCreators({
   generateFile: ActionTypes.GENERATE_FILE,

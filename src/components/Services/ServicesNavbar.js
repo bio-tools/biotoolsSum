@@ -1,10 +1,14 @@
 import React, { PureComponent } from 'react'
-import {MenuItem, Nav, Navbar, NavDropdown, NavItem} from 'react-bootstrap'
+import { Image, MenuItem, Nav, Navbar, NavDropdown, NavItem } from 'react-bootstrap'
 import { Link } from 'react-router-dom'
 import { LinkContainer } from 'react-router-bootstrap'
 import { data } from '../../constants/servicesInfo'
 import * as R from 'ramda'
 import { AbstractionCategory, ALL_SERVICES } from '../../constants/stringConstants'
+import { connect } from 'react-redux'
+import * as ActionTypes from '../../constants/actionTypes'
+import buildActionCreators from '../../helpers/buildActionCreators'
+import elixirLogo from '../../images/elixir-logo.png'
 
 class ServicesNavbar extends PureComponent {
   constructor (props) {
@@ -20,18 +24,26 @@ class ServicesNavbar extends PureComponent {
   }
 
   render () {
+    const { changeReportPageVisibility, showReportPage } = this.props
+    const { activeMenuItem } = this.state
+
     return (
-      <Navbar collapseOnSelect staticTop>
+      <Navbar collapseOnSelect bsStyle='default'>
         <Navbar.Header>
+          <Navbar.Brand>
+            <Image src={elixirLogo} responsive style={{ width: '97px', height: '73px', marginTop: '-10px', marginBottom: '-15px' }} />
+          </Navbar.Brand>
           <Navbar.Brand>
             <Link to='/'>{'Services Matrix'}</Link>
           </Navbar.Brand>
           <Navbar.Toggle />
         </Navbar.Header>
         <Navbar.Collapse>
-          <Nav activeKey={this.state.activeMenuItem} onSelect={this.handleSelect}>
+          <Nav activeKey={activeMenuItem} onSelect={this.handleSelect}>
             <LinkContainer to={`/${ALL_SERVICES}`}>
-              <NavItem eventKey={-1}>{'All Services'}</NavItem>
+              <NavItem eventKey={-1}>
+                {'All Services'}
+              </NavItem>
             </LinkContainer>
             {data.rows.map((row, rowIndex) =>
               <NavDropdown key={rowIndex} eventKey={rowIndex} title={row.name} id={`${row.name}-nav-dropdown`}>
@@ -46,10 +58,19 @@ class ServicesNavbar extends PureComponent {
               </NavDropdown>
             )}
           </Nav>
+          <Nav pullRight>
+            <NavItem onClick={changeReportPageVisibility}>
+              {showReportPage ? 'Info mode' : 'Report mode'}
+            </NavItem>
+          </Nav>
         </Navbar.Collapse>
       </Navbar>
     )
   }
 }
 
-export default ServicesNavbar
+export default ServicesNavbar = connect(state => ({
+  showReportPage: state.ui.showReportPage,
+}), buildActionCreators({
+  changeReportPageVisibility: ActionTypes.REPORT_PAGE_CHANGE_VISIBILITY,
+}))(ServicesNavbar)

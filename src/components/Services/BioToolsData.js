@@ -9,6 +9,7 @@ import Loader from '../common/Loader'
 import * as R from 'ramda'
 import { ALL_SERVICES } from '../../constants/stringConstants'
 import DocxGeneration from './FileGenerationForm'
+import { formValueSelector } from 'redux-form'
 
 class BioToolsData extends React.PureComponent {
   shouldComponentUpdate (nextProps) {
@@ -16,7 +17,7 @@ class BioToolsData extends React.PureComponent {
   }
 
   render () {
-    const { services, message } = this.props
+    const { services, message, showReportPage, includePropsChosen } = this.props
     const { count, list, serviceLoading, citationsLoading } = services
 
     return (
@@ -28,7 +29,6 @@ class BioToolsData extends React.PureComponent {
         }
         {count
           ? <div>
-            <DocxGeneration list={list} />
             <Alert bsStyle='warning'>
               {'There is a total number of '}<strong>{count}</strong>{' tools available.'}
               {serviceLoading &&
@@ -56,7 +56,8 @@ class BioToolsData extends React.PureComponent {
               </div>
               }
             </Alert>
-            <ToolsTable list={list} />
+            {showReportPage && <DocxGeneration list={list} />}
+            <ToolsTable list={list} includePropsChosen={includePropsChosen} />
           </div>
           : serviceLoading
             ? <Alert bsStyle='warning'>
@@ -91,8 +92,12 @@ export default BioToolsData = connect(state => {
     R.pluck('cells'),
   )(data.rows)
 
+  const selector = formValueSelector('fileGenerationForm')
+
   return ({
+    showReportPage: state.ui.showReportPage,
     services: getServices(state, camelCased(servicesName)),
     message,
+    includePropsChosen: selector(state, 'includeProps'),
   })
 })(BioToolsData)

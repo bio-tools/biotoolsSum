@@ -41,8 +41,8 @@ function getCitationsSource (pmid, index) {
   </OverlayTooltip>
 }
 
-const columns = [
-  {
+const getColumns = (includePropsChosen) => {
+  let columns = [{
     Header: 'Name (Sortable, filterable)',
     id: 'name',
     accessor: data => data.name,
@@ -62,77 +62,123 @@ const columns = [
             <FontAwesome className='icons' name='question-circle' />
           </a>
         </OverlayTooltip>
-        <hr className='table-delimiter' />
-        <p>
-          {toolType.map((value, index) =>
-            <span key={index}>
-              <Label bsStyle='warning'>{value}</Label>
-              <br />
-            </span>
-          )}
-        </p>
+        {(includePropsChosen === undefined || includePropsChosen.includes('toolType')) &&
+          <div>
+            <hr className='table-delimiter' />
+            <p>
+              {toolType.map((value, index) =>
+                <span key={index}>
+                  <Label bsStyle='warning'>{value}</Label>
+                  <br />
+                </span>
+              )}
+            </p>
+          </div>
+        }
       </div>
     },
-    width: 220,
-  }, {
-    Header: 'Description (Filterable)',
-    id: 'description',
-    accessor: data => data.description,
-    filterable: true,
-    filterMethod: (filter, row) => row[filter.id].toLowerCase().includes(filter.value.toLowerCase()),
-    Cell: data => <ReadMore chars={350} text={data.value} />,
-    minWidth: 150,
-  }, {
-    Header: 'Publications (Sortable)',
-    id: 'additional-info',
-    accessor: data => R.isNil(data.citations) ? '-' : data.citations,
-    sortable: true,
-    sortMethod: (a, b) => {
-      if (a === '-') return -1
-      if (b === '-') return 1
-      return a - b
-    },
-    Cell: data => {
-      const { publication: publications, pmids } = data.original
-      const citations = data.value
-      const filteredPublications = R.filter(
-        publication => publication.doi !== null || publication.pmid !== null || publication.pmcid !== null,
-        publications
-      )
+    minWidth: 220,
+  }]
 
-      return <div>
-        <strong>{'Publications: '}</strong>
-        {filteredPublications.length > 0
-          ? filteredPublications.map((publication, index) =>
-            <span key={index}>
-              {'['}
-              {getPublicationLink(publication, index + 1)}
-              {index + 1 < filteredPublications.length ? '], ' : ']'}
-            </span>
+  if (includePropsChosen === undefined || includePropsChosen.includes('institute')) {
+    columns.push(
+      {
+        Header: 'Institute',
+        id: 'institute',
+        accessor: data => data.credit,
+        Cell: data => data.value.length > 0
+          ? <ul className='table-list-item'>
+            {data.value.map((institute, index) =>
+              <li key={index}>{institute.name}</li>
+            )}
+          </ul>
+          : <div />,
+        minWidth: 150,
+      }
+    )
+  }
+
+  if (includePropsChosen === undefined || includePropsChosen.includes('description')) {
+    columns.push(
+      {
+        Header: 'Description (Filterable)',
+        id: 'description',
+        accessor: data => data.description,
+        filterable: true,
+        filterMethod: (filter, row) => row[filter.id].toLowerCase().includes(filter.value.toLowerCase()),
+        Cell: data => <ReadMore chars={350} text={data.value} />,
+        minWidth: 150,
+      }
+    )
+  }
+
+  const includePublications = includePropsChosen !== undefined && includePropsChosen.includes('publication')
+  const includeCitations = includePropsChosen !== undefined && includePropsChosen.includes('citations')
+  if (includePropsChosen === undefined || includePublications || includeCitations) {
+    columns.push(
+      {
+        Header: 'Publications info (Sortable)',
+        id: 'additional-info',
+        accessor: data => R.isNil(data.citations) ? '-' : data.citations,
+        sortable: true,
+        sortMethod: (a, b) => {
+          if (a === '-') return -1
+          if (b === '-') return 1
+          return a - b
+        },
+        Cell: data => {
+          const {publication: publications, pmids} = data.original
+          const citations = data.value
+          const filteredPublications = R.filter(
+            publication => publication.doi !== null || publication.pmid !== null || publication.pmcid !== null,
+            publications
           )
-          : 'no'
-        }
-        <hr className='table-delimiter' />
-        <strong>
-          {`Total Citations: ${citations}`}
-        </strong>
-        <br />
-        <strong>{`Citations source: `}</strong>
-        {pmids && pmids.length > 0
-          ? pmids.map((pmid, index) =>
-            <span key={index}>
-              {'['}
-              {getCitationsSource(pmid, index + 1)}
-              {index + 1 < pmids.length ? '], ' : ']'}
-            </span>
-          )
-          : '-'
-        }
-      </div>
-    },
-    width: 200,
-    className: '',
-  }, {
+
+          return <div>
+            {(includePropsChosen === undefined || includePublications) &&
+              <div>
+                <strong>{'Publications: '}</strong>
+                {filteredPublications.length > 0
+                  ? filteredPublications.map((publication, index) =>
+                    <span key={index}>
+                      {'['}
+                      {getPublicationLink(publication, index + 1)}
+                      {index + 1 < filteredPublications.length ? '], ' : ']'}
+                    </span>
+                  )
+                  : 'no'
+                }
+              </div>
+            }
+            {(includePropsChosen === undefined || (includePublications && includeCitations)) && <hr className='table-delimiter' />}
+            {(includePropsChosen === undefined || includeCitations) &&
+              <div>
+                <strong>
+                  {`Total Citations: ${citations}`}
+                </strong>
+                <br />
+                <strong>{`Citations source: `}</strong>
+                {pmids && pmids.length > 0
+                  ? pmids.map((pmid, index) =>
+                    <span key={index}>
+                      {'['}
+                      {getCitationsSource(pmid, index + 1)}
+                      {index + 1 < pmids.length ? '], ' : ']'}
+                    </span>
+                  )
+                  : '-'
+                }
+              </div>
+            }
+          </div>
+        },
+        minWidth: 80,
+        className: '',
+      }
+    )
+  }
+
+  columns.push({
     expander: true,
     Header: 'More',
     width: 55,
@@ -145,72 +191,99 @@ const columns = [
           <FontAwesome className='more-icon' name='plus' />
         </OverlayTooltip>,
     className: 'table-expander',
-  },
-]
+  })
 
-const subColumns = [
-  {
-    Header: 'Topic',
-    id: 'topic',
-    accessor: data => <ShowMore lines={3} searchTermName='topic' list={data.topic} />,
-  }, {
-    Header: 'Function',
-    id: 'function',
-    accessor: data => <ShowMore lines={3} searchTermName='function' list={data.func} />,
-  }, {
-    Header: 'Additional info',
-    id: 'additional-info',
-    Cell: data => {
-      const { maturity, operatingSystem } = data.original
-      const labelStyle = maturity === 'Mature' ? 'success' : maturity === 'Emerging' ? 'info' : 'danger'
+  return columns
+}
 
-      if (!maturity && operatingSystem.length === 0) {
-        return <span>{'No additional info available'}</span>
+const getSubColumns = (includePropsChosen) => {
+  let subColumns = []
+
+  if (includePropsChosen === undefined || includePropsChosen.includes('topic')) {
+    subColumns.push(
+      {
+        Header: 'Topic',
+        id: 'topic',
+        accessor: data => <ShowMore lines={3} searchTermName='topic' list={data.topic} ulClassName='table-list-item' />,
       }
+    )
+  }
 
-      return <div>
-        {maturity &&
-          <div>
-            <strong>
-              {'Maturity: '}
-            </strong>
-            <Label bsStyle={labelStyle} className='label-margin'>
-              {maturity}
-            </Label>
+  if (includePropsChosen === undefined || includePropsChosen.includes('function')) {
+    subColumns.push(
+      {
+        Header: 'Function',
+        id: 'function',
+        accessor: data => <ShowMore lines={3} searchTermName='function' list={data.func} ulClassName='table-list-item' />,
+      }
+    )
+  }
+
+  const includeMaturity = includePropsChosen.includes('maturity')
+  const includePlatform = includePropsChosen.includes('platform')
+  if (includePropsChosen === undefined || includeMaturity || includePlatform) {
+    subColumns.push(
+      {
+        Header: 'Additional info',
+        id: 'additional-info',
+        Cell: data => {
+          const { maturity, operatingSystem } = data.original
+          const labelStyle = maturity === 'Mature' ? 'success' : maturity === 'Emerging' ? 'info' : 'danger'
+
+          if (!maturity && operatingSystem.length === 0) {
+            return <span>{'No additional info available'}</span>
+          }
+
+          return <div>
+            {includeMaturity && maturity &&
+              <div>
+                <strong>
+                  {'Maturity: '}
+                </strong>
+                <Label bsStyle={labelStyle} className='label-margin'>
+                  {maturity}
+                </Label>
+              </div>
+            }
+
+            {includeMaturity && includePlatform && maturity && operatingSystem.length > 0 &&
+              <hr className='table-delimiter' />
+            }
+
+            {includePlatform && operatingSystem.length > 0 &&
+              <div>
+                <strong>{'Platforms: '}</strong>
+                {R.contains('Windows', operatingSystem) &&
+                  <OverlayTooltip id='tooltip-windows' tooltipText='Platform: Windows'>
+                    <FontAwesome className='icons' name='windows' />
+                  </OverlayTooltip>
+                }
+                {R.contains('Linux', operatingSystem) &&
+                  <OverlayTooltip id='tooltip-linux' tooltipText='Platform: Linux'>
+                    <FontAwesome className='icons' name='linux' />
+                  </OverlayTooltip>
+                }
+                {R.contains('Mac', operatingSystem) &&
+                  <OverlayTooltip id='tooltip-mac' tooltipText='Platform: Mac'>
+                    <FontAwesome className='icons' name='apple' />
+                  </OverlayTooltip>
+                }
+              </div>
+            }
           </div>
-        }
+        },
+        minWidth: 80,
+      }
+    )
+  }
 
-        {maturity && operatingSystem.length > 0 &&
-          <hr className='table-delimiter' />
-        }
+  return subColumns
+}
 
-        {operatingSystem.length > 0 &&
-          <div>
-            <strong>{'Platforms: '}</strong>
-            {R.contains('Windows', operatingSystem) &&
-              <OverlayTooltip id='tooltip-windows' tooltipText='Platform: Windows'>
-                <FontAwesome className='icons' name='windows' />
-              </OverlayTooltip>
-            }
-            {R.contains('Linux', operatingSystem) &&
-              <OverlayTooltip id='tooltip-linux' tooltipText='Platform: Linux'>
-                <FontAwesome className='icons' name='linux' />
-              </OverlayTooltip>
-            }
-            {R.contains('Mac', operatingSystem) &&
-              <OverlayTooltip id='tooltip-mac' tooltipText='Platform: Mac'>
-                <FontAwesome className='icons' name='apple' />
-              </OverlayTooltip>
-            }
-          </div>
-        }
-      </div>
-    },
-    width: 180,
-  },
-]
+export const ToolsTable = ({ list, includePropsChosen }) => {
+  const columns = getColumns(includePropsChosen)
+  const subColumns = getSubColumns(includePropsChosen)
 
-export const ToolsTable = ({ list }) => {
   return (
     <ReactTable
       data={list}

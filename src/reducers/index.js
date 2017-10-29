@@ -6,6 +6,7 @@ import * as R from 'ramda'
 import { data } from '../constants/servicesInfo'
 import { camelCased } from '../common/helperFunctions'
 import { ALL_SERVICES } from '../constants/stringConstants'
+import { ui } from './ui'
 
 const getReducerNames = R.compose(
   R.append(camelCased(ALL_SERVICES)),
@@ -16,15 +17,16 @@ const getReducerNames = R.compose(
   R.pluck('cells'),
 )
 
-const portalApp = () => {
+const biotoolsSumApp = () => {
   const services = getReducerNames(data.rows)
   const reducers = R.map(specificServicesWithName, services)
   const servicesReducers = R.zipObj(services, reducers)
 
   return combineReducers(R.merge(servicesReducers, {
+    ui,
     router: routerReducer,
     form: reduxFormReducer,
   }))
 }
 
-export default portalApp
+export default biotoolsSumApp

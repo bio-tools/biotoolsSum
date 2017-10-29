@@ -23,14 +23,14 @@ export default class ReadMore extends PureComponent {
   }
 
   render () {
-    const { list, more, less, lines, searchTermName } = this.props
+    const { list, more, less, lines, searchTermName, ulClassName } = this.props
     const { expanded } = this.state
 
     const showList = expanded ? list : R.take(lines, list)
 
     return (
       <div>
-        <ul>
+        <ul className={ulClassName}>
           {showList.map((item, index) => {
             return <li key={index}>
               <a href={`https://bio.tools/?${searchTermName}=${item.term}`} target='_blank'>
@@ -45,7 +45,7 @@ export default class ReadMore extends PureComponent {
           })}
         </ul>
         {list.length > lines &&
-          <span className='toolstable-showmore-button'>
+          <span className='table-showmore-button'>
             <a href='#' onClick={this.toggleLines}>{expanded ? less : more}</a>
           </span>
         }
