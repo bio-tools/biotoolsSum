@@ -7,7 +7,8 @@ import { Label } from 'react-bootstrap'
 import FontAwesome from 'react-fontawesome'
 import { OverlayTooltip } from '../common/OverlayTooltip'
 import ShowMore from '../common/ShowMore'
-import { PAGE_SIZE } from '../../constants/toolsTable'
+import { MAIN_ROW_CELLS_COUNT, PAGE_SIZE } from '../../constants/toolsTable'
+import { getCellsCount } from '../../biotoolsSum/services/index'
 
 function getPublicationLink (publication, index) {
   if (publication.doi) {
@@ -42,6 +43,7 @@ function getCitationsSource (pmid, index) {
 }
 
 const getColumns = (includePropsChosen) => {
+  const includeAll = includePropsChosen === undefined
   let columns = [{
     Header: 'Name (Sortable, filterable)',
     id: 'name',
@@ -62,7 +64,7 @@ const getColumns = (includePropsChosen) => {
             <FontAwesome className='icons' name='question-circle' />
           </a>
         </OverlayTooltip>
-        {(includePropsChosen === undefined || includePropsChosen.includes('toolType')) &&
+        {(includeAll || includePropsChosen.includes('toolType')) &&
           <div>
             <hr className='table-delimiter' />
             <p>
@@ -77,10 +79,10 @@ const getColumns = (includePropsChosen) => {
         }
       </div>
     },
-    minWidth: 220,
+    minWidth: 120,
   }]
 
-  if (includePropsChosen === undefined || includePropsChosen.includes('institute')) {
+  if (includeAll || includePropsChosen.includes('institute')) {
     columns.push(
       {
         Header: 'Institute',
@@ -98,7 +100,7 @@ const getColumns = (includePropsChosen) => {
     )
   }
 
-  if (includePropsChosen === undefined || includePropsChosen.includes('description')) {
+  if (includeAll || includePropsChosen.includes('description')) {
     columns.push(
       {
         Header: 'Description (Filterable)',
@@ -112,9 +114,9 @@ const getColumns = (includePropsChosen) => {
     )
   }
 
-  const includePublications = includePropsChosen !== undefined && includePropsChosen.includes('publication')
-  const includeCitations = includePropsChosen !== undefined && includePropsChosen.includes('citations')
-  if (includePropsChosen === undefined || includePublications || includeCitations) {
+  const includePublications = !includeAll && includePropsChosen.includes('publication')
+  const includeCitations = !includeAll && includePropsChosen.includes('citations')
+  if (includeAll || includePublications || includeCitations) {
     columns.push(
       {
         Header: 'Publications info (Sortable)',
@@ -135,7 +137,7 @@ const getColumns = (includePropsChosen) => {
           )
 
           return <div>
-            {(includePropsChosen === undefined || includePublications) &&
+            {(includeAll || includePublications) &&
               <div>
                 <strong>{'Publications: '}</strong>
                 {filteredPublications.length > 0
@@ -150,8 +152,10 @@ const getColumns = (includePropsChosen) => {
                 }
               </div>
             }
-            {(includePropsChosen === undefined || (includePublications && includeCitations)) && <hr className='table-delimiter' />}
-            {(includePropsChosen === undefined || includeCitations) &&
+            {(includeAll || (includePublications && includeCitations)) &&
+              <hr className='table-delimiter' />
+            }
+            {(includeAll || includeCitations) &&
               <div>
                 <strong>
                   {`Total Citations: ${citations}`}
@@ -172,56 +176,44 @@ const getColumns = (includePropsChosen) => {
             }
           </div>
         },
-        minWidth: 80,
+        minWidth: 90,
         className: '',
       }
     )
   }
-
-  columns.push({
-    expander: true,
-    Header: 'More',
-    width: 55,
-    Expander: ({isExpanded, ...rest}) =>
-      isExpanded
-        ? <OverlayTooltip id='tooltip-show-less-info' tooltipText='Show less info'>
-          <FontAwesome className='more-icon' name='minus' />
-        </OverlayTooltip>
-        : <OverlayTooltip id='tooltip-show-more-info' tooltipText='Show more info'>
-          <FontAwesome className='more-icon' name='plus' />
-        </OverlayTooltip>,
-    className: 'table-expander',
-  })
 
   return columns
 }
 
 const getSubColumns = (includePropsChosen) => {
   let subColumns = []
+  const includeAll = includePropsChosen === undefined
 
-  if (includePropsChosen === undefined || includePropsChosen.includes('topic')) {
+  if (includeAll || includePropsChosen.includes('topic')) {
     subColumns.push(
       {
         Header: 'Topic',
         id: 'topic',
         accessor: data => <ShowMore lines={3} searchTermName='topic' list={data.topic} ulClassName='table-list-item' />,
+        minWidth: 120,
       }
     )
   }
 
-  if (includePropsChosen === undefined || includePropsChosen.includes('function')) {
+  if (includeAll || includePropsChosen.includes('function')) {
     subColumns.push(
       {
         Header: 'Function',
         id: 'function',
-        accessor: data => <ShowMore lines={3} searchTermName='function' list={data.func} ulClassName='table-list-item' />,
+        accessor: data => <ShowMore lines={3} searchTermName='function' list={data.func || data.function} ulClassName='table-list-item' />,
+        minWidth: 120,
       }
     )
   }
 
-  const includeMaturity = includePropsChosen.includes('maturity')
-  const includePlatform = includePropsChosen.includes('platform')
-  if (includePropsChosen === undefined || includeMaturity || includePlatform) {
+  const includeMaturity = !includeAll && includePropsChosen.includes('maturity')
+  const includePlatform = !includeAll && includePropsChosen.includes('platform')
+  if (includeAll || includeMaturity || includePlatform) {
     subColumns.push(
       {
         Header: 'Additional info',
@@ -235,7 +227,7 @@ const getSubColumns = (includePropsChosen) => {
           }
 
           return <div>
-            {includeMaturity && maturity &&
+            {(includeAll || (includeMaturity && maturity)) &&
               <div>
                 <strong>
                   {'Maturity: '}
@@ -246,11 +238,11 @@ const getSubColumns = (includePropsChosen) => {
               </div>
             }
 
-            {includeMaturity && includePlatform && maturity && operatingSystem.length > 0 &&
+            {(includeAll || (includeMaturity && includePlatform && maturity && operatingSystem.length > 0)) &&
               <hr className='table-delimiter' />
             }
 
-            {includePlatform && operatingSystem.length > 0 &&
+            {(includeAll || (includePlatform && operatingSystem.length > 0)) &&
               <div>
                 <strong>{'Platforms: '}</strong>
                 {R.contains('Windows', operatingSystem) &&
@@ -280,9 +272,31 @@ const getSubColumns = (includePropsChosen) => {
   return subColumns
 }
 
+const expander = {
+  expander: true,
+  Header: 'More',
+  width: 55,
+  Expander: ({isExpanded, ...rest}) =>
+    isExpanded
+      ? <OverlayTooltip id='tooltip-show-less-info' tooltipText='Show less info'>
+        <FontAwesome className='more-icon' name='minus' />
+      </OverlayTooltip>
+      : <OverlayTooltip id='tooltip-show-more-info' tooltipText='Show more info'>
+        <FontAwesome className='more-icon' name='plus' />
+      </OverlayTooltip>,
+  className: 'table-expander',
+}
+
 export const ToolsTable = ({ list, includePropsChosen }) => {
-  const columns = getColumns(includePropsChosen)
+  let columns = getColumns(includePropsChosen)
   const subColumns = getSubColumns(includePropsChosen)
+
+  const cellsPerRowCount = getCellsCount(includePropsChosen)
+  if (cellsPerRowCount <= MAIN_ROW_CELLS_COUNT) {
+    columns = R.concat(columns, subColumns)
+  } else {
+    columns.push(expander)
+  }
 
   return (
     <ReactTable
@@ -295,7 +309,7 @@ export const ToolsTable = ({ list, includePropsChosen }) => {
       defaultPageSize={PAGE_SIZE}
       minRows={1}
       className='-highlight'
-      SubComponent={row => {
+      SubComponent={cellsPerRowCount <= MAIN_ROW_CELLS_COUNT ? null : row => {
         const subList = [{
           func: row.original.function,
           topic: row.original.topic,

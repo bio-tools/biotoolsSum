@@ -50,6 +50,27 @@ function generateDocx (doc, data, includeProps, title) {
     nameFormat.addFonts().setAscii('Calibri')
     nameFormat.addBold()
 
+    // Tool type BEGIN
+    if (includeProps.includes('toolType') && item.toolType && item.toolType.length > 0) {
+      let toolTypeParagraph = doc.addParagraph()
+      // Tool type title
+      let toolTypeTitleRun = toolTypeParagraph.addRun()
+      toolTypeTitleRun.addText('Tool type: ')
+      let toolTypeTitleFormat = toolTypeTitleRun.addFormat()
+      toolTypeTitleFormat.addFonts().setAscii('Calibri')
+      toolTypeTitleFormat.addBold()
+      // Tool type text
+      let toolTypeTextRun = toolTypeParagraph.addRun()
+      item.toolType.forEach((toolTypeItem, index) =>
+        index + 1 < item.toolType.length
+          ? toolTypeTextRun.addText(`${toolTypeItem}, `)
+          : toolTypeTextRun.addText(`${toolTypeItem}.`)
+      )
+      let toolTypeTextFormat = toolTypeTextRun.addFormat()
+      toolTypeTextFormat.addFonts().setAscii('Calibri')
+    }
+    // Tool type END
+
     // Institute BEGIN
     if (includeProps.includes('institute')) {
       let instituteParagraph = doc.addParagraph()
@@ -101,7 +122,7 @@ function generateDocx (doc, data, includeProps, title) {
       item.publicationStrings.forEach((publicationString) => {
         const publicationsTextRun = doc.addParagraph().addRun()
         publicationsTextRun.addFormat().addFonts().setAscii('Calibri')
-        return publicationsTextRun.addText(`${publicationString} `)
+        return publicationsTextRun.addText(publicationString)
       })
     }
     // Publication END
@@ -117,11 +138,91 @@ function generateDocx (doc, data, includeProps, title) {
       citationsTitleFormat.addBold()
       // Citations text
       let citationsTextRun = citationsParagraph.addRun()
-      citationsTextRun.addText(item.citations)
+      citationsTextRun.addText(`${item.citations}.`)
       let citationsTextFormat = citationsTextRun.addFormat()
       citationsTextFormat.addFonts().setAscii('Calibri')
     }
     // Citations END
+
+    // Topic BEGIN
+    if (includeProps.includes('topic') && item.topic && item.topic.length > 0) {
+      let topicParagraph = doc.addParagraph()
+      // Topic title
+      let topicTitleRun = topicParagraph.addRun()
+      topicTitleRun.addText('Topic: ')
+      let topicTitleFormat = topicTitleRun.addFormat()
+      topicTitleFormat.addFonts().setAscii('Calibri')
+      topicTitleFormat.addBold()
+      // Topic text
+      let topicTextRun = topicParagraph.addRun()
+      item.topic.forEach((topicItem, index) =>
+        index + 1 < item.topic.length
+          ? topicTextRun.addText(`${topicItem.term}, `)
+          : topicTextRun.addText(`${topicItem.term}.`)
+      )
+      let topicTextFormat = topicTextRun.addFormat()
+      topicTextFormat.addFonts().setAscii('Calibri')
+    }
+    // Topic END
+
+    // Topic BEGIN
+    if (includeProps.includes('function') && item.function && item.function.length > 0) {
+      let functionParagraph = doc.addParagraph()
+      // Topic title
+      let functionTitleRun = functionParagraph.addRun()
+      functionTitleRun.addText('Function: ')
+      let functionTitleFormat = functionTitleRun.addFormat()
+      functionTitleFormat.addFonts().setAscii('Calibri')
+      functionTitleFormat.addBold()
+      // Topic text
+      let functionTextRun = functionParagraph.addRun()
+      item.function.forEach((functionItem, index) =>
+        index + 1 < item.function.length
+          ? functionTextRun.addText(`${functionItem.term}, `)
+          : functionTextRun.addText(`${functionItem.term}.`)
+      )
+      let functionTextFormat = functionTextRun.addFormat()
+      functionTextFormat.addFonts().setAscii('Calibri')
+    }
+    // Topic END
+
+    // Maturity BEGIN
+    if (includeProps.includes('maturity') && item.maturity) {
+      let maturityParagraph = doc.addParagraph()
+      // Maturity title
+      let maturityTitleRun = maturityParagraph.addRun()
+      maturityTitleRun.addText('Maturity: ')
+      let maturityTitleFormat = maturityTitleRun.addFormat()
+      maturityTitleFormat.addFonts().setAscii('Calibri')
+      maturityTitleFormat.addBold()
+      // Maturity text
+      let maturityTextRun = maturityParagraph.addRun()
+      maturityTextRun.addText(`${item.maturity}.`)
+      let maturityTextFormat = maturityTextRun.addFormat()
+      maturityTextFormat.addFonts().setAscii('Calibri')
+    }
+    // Maturity END
+
+    // Platform BEGIN
+    if (includeProps.includes('platform') && item.operatingSystem && item.operatingSystem.length > 0) {
+      let platformParagraph = doc.addParagraph()
+      // Platform title
+      let platformTitleRun = platformParagraph.addRun()
+      platformTitleRun.addText('Platform: ')
+      let platformTitleFormat = platformTitleRun.addFormat()
+      platformTitleFormat.addFonts().setAscii('Calibri')
+      platformTitleFormat.addBold()
+      // Platform text
+      let platformTextRun = platformParagraph.addRun()
+      item.operatingSystem.forEach((osItem, index) =>
+        index + 1 < item.operatingSystem.length
+          ? platformTextRun.addText(`${osItem}, `)
+          : platformTextRun.addText(`${osItem}.`)
+      )
+      let platformTextFormat = platformTextRun.addFormat()
+      platformTextFormat.addFonts().setAscii('Calibri')
+    }
+    // Platform END
 
     // Empty line
     doc.addParagraph().addRun().addBreak()
@@ -167,7 +268,11 @@ export const generateFile = (action$, {getState}) => {
 
         if (values.fileType === fileType.DOCX) {
           let doc = new jsdocx.Document()
-          let listOfTools = R.map(R.pick(['name', 'credit', 'description', 'publicationStrings', 'citations']), sortedAndOrderedListOfTools)
+          let listOfTools = R.map(
+            R.pick(
+              ['name', 'credit', 'description', 'publicationStrings', 'citations',
+                'toolType', 'topic', 'function', 'maturity', 'operatingSystem']
+            ), sortedAndOrderedListOfTools)
 
           if (values.database) {
             listOfTools = R.compose(
@@ -194,7 +299,25 @@ export const generateFile = (action$, {getState}) => {
             saveAs(content, 'generated.docx')
           })
         } else if (values.fileType === fileType.XLSX) {
-          let pickedListOfTools = R.map(R.pick(['name', 'credit', 'description', 'publicationStrings', 'citations']), sortedAndOrderedListOfTools)
+          let pickedListOfTools = R.map(
+            R.pick(
+              ['name', 'credit', 'description', 'publicationStrings', 'citations',
+                'toolType', 'topic', 'function', 'maturity', 'operatingSystem']
+            ), sortedAndOrderedListOfTools)
+
+          pickedListOfTools = R.map(tool => R.compose(
+            R.dissoc('name'),
+            R.assoc('Name', tool.name),
+          )(tool), pickedListOfTools)
+
+          if (!values.includeProps.includes('toolType')) {
+            pickedListOfTools = R.map(R.omit(['toolType']), pickedListOfTools)
+          } else {
+            pickedListOfTools = R.map(tool => R.compose(
+              R.dissoc('toolType'),
+              R.assoc('Tool type', R.join(', ', tool.toolType)),
+            )(tool), pickedListOfTools)
+          }
 
           if (!values.includeProps.includes('institute')) {
             pickedListOfTools = R.map(R.omit(['credit']), pickedListOfTools)
@@ -229,6 +352,42 @@ export const generateFile = (action$, {getState}) => {
             pickedListOfTools = R.map(tool => R.compose(
               R.dissoc('citations'),
               R.assoc('Citations', tool.citations),
+            )(tool), pickedListOfTools)
+          }
+
+          if (!values.includeProps.includes('topic')) {
+            pickedListOfTools = R.map(R.omit(['topic']), pickedListOfTools)
+          } else {
+            pickedListOfTools = R.map(tool => R.compose(
+              R.dissoc('topic'),
+              R.assoc('Topic', R.join(', ', R.pluck('term', tool.topic))),
+            )(tool), pickedListOfTools)
+          }
+
+          if (!values.includeProps.includes('function')) {
+            pickedListOfTools = R.map(R.omit(['function']), pickedListOfTools)
+          } else {
+            pickedListOfTools = R.map(tool => R.compose(
+              R.dissoc('function'),
+              R.assoc('Function', R.join(', ', R.pluck('term', tool.function))),
+            )(tool), pickedListOfTools)
+          }
+
+          if (!values.includeProps.includes('maturity')) {
+            pickedListOfTools = R.map(R.omit(['maturity']), pickedListOfTools)
+          } else {
+            pickedListOfTools = R.map(tool => R.compose(
+              R.dissoc('maturity'),
+              R.assoc('Maturity', tool.maturity),
+            )(tool), pickedListOfTools)
+          }
+
+          if (!values.includeProps.includes('platform')) {
+            pickedListOfTools = R.map(R.omit(['platform']), pickedListOfTools)
+          } else {
+            pickedListOfTools = R.map(tool => R.compose(
+              R.dissoc('operatingSystem'),
+              R.assoc('Platform', R.join(', ', tool.operatingSystem)),
             )(tool), pickedListOfTools)
           }
 

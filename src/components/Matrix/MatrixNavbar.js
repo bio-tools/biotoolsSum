@@ -5,9 +5,9 @@ import * as ActionTypes from '../../constants/actionTypes'
 import buildActionCreators from '../../helpers/buildActionCreators'
 import elixirLogo from '../../images/elixir-logo.png'
 
-class ServicesNavbar extends PureComponent {
+export default class ServicesNavbar extends PureComponent {
   render () {
-    const { changeReportPageVisibility, showReportPage } = this.props
+    // const { changeReportPageVisibility, showReportPage } = this.props
 
     return (
       <Navbar collapseOnSelect bsStyle='default'>
@@ -17,20 +17,13 @@ class ServicesNavbar extends PureComponent {
           </Navbar.Brand>
           <Navbar.Toggle />
         </Navbar.Header>
-        <Navbar.Collapse>
-          <Nav pullRight>
-            <NavItem onClick={changeReportPageVisibility}>
-              {showReportPage ? 'Info mode' : 'Report mode'}
-            </NavItem>
-          </Nav>
-        </Navbar.Collapse>
       </Navbar>
     )
   }
 }
 
-export default ServicesNavbar = connect(state => ({
-  showReportPage: state.ui.showReportPage,
-}), buildActionCreators({
-  changeReportPageVisibility: ActionTypes.REPORT_PAGE_CHANGE_VISIBILITY,
-}))(ServicesNavbar)
+// export default ServicesNavbar = connect(state => ({
+//   showReportPage: state.ui.showReportPage,
+// }), buildActionCreators({
+//   changeReportPageVisibility: ActionTypes.REPORT_PAGE_CHANGE_VISIBILITY,
+// }))(ServicesNavbar)

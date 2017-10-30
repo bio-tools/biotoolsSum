@@ -1,6 +1,7 @@
 import config from '../common/config'
 import * as R from 'ramda'
 import * as Rx from 'rxjs'
+import { MAX_ROW_CELLS_COUNT } from '../../constants/toolsTable'
 
 export const pickData = R.map(
   R.compose(
@@ -132,4 +133,30 @@ export function getServices (query, page = '?page=1') {
       }
       return data
     })
+}
+
+export function getCellsCount (includePropsChosen) {
+  if (includePropsChosen === undefined) {
+    return MAX_ROW_CELLS_COUNT
+  }
+
+  let count = 1
+  let checked = []
+
+  includePropsChosen.forEach(prop => {
+    if (prop !== 'toolType') {
+      if (prop === 'publication' || prop === 'citations') {
+        !R.contains('publication', checked) && !R.contains('citations', checked) && count++
+        checked.push(prop)
+      } else if (prop === 'maturity' || prop === 'platform') {
+        !R.contains('maturity', checked) && !R.contains('platform', checked) && count++
+        checked.push(prop)
+      } else {
+        count++
+        checked.push(prop)
+      }
+    }
+  })
+
+  return count
 }
