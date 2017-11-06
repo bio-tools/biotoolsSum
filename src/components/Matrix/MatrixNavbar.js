@@ -1,29 +1,18 @@
-import React, { PureComponent } from 'react'
-import { Image, Nav, Navbar, NavItem } from 'react-bootstrap'
-import { connect } from 'react-redux'
-import * as ActionTypes from '../../constants/actionTypes'
-import buildActionCreators from '../../helpers/buildActionCreators'
+import React from 'react'
+import { Image, Navbar } from 'react-bootstrap'
 import elixirLogo from '../../images/elixir-logo.png'
 
-export default class ServicesNavbar extends PureComponent {
-  render () {
-    // const { changeReportPageVisibility, showReportPage } = this.props
+const ServicesNavbar = () => (
+  <Navbar collapseOnSelect bsStyle='default'>
+    <Navbar.Header>
+      <Navbar.Brand>
+        <Image src={elixirLogo} responsive style={{ width: '112px', height: '73px', marginTop: '-10px', marginBottom: '-15px' }} />
+      </Navbar.Brand>
+      <Navbar.Toggle />
+    </Navbar.Header>
+  </Navbar>
+)
 
-    return (
-      <Navbar collapseOnSelect bsStyle='default'>
-        <Navbar.Header>
-          <Navbar.Brand>
-            <Image src={elixirLogo} responsive style={{ width: '112px', height: '73px', marginTop: '-10px', marginBottom: '-15px' }} />
-          </Navbar.Brand>
-          <Navbar.Toggle />
-        </Navbar.Header>
-      </Navbar>
-    )
-  }
-}
+export default ServicesNavbar
 
-// export default ServicesNavbar = connect(state => ({
-//   showReportPage: state.ui.showReportPage,
-// }), buildActionCreators({
-//   changeReportPageVisibility: ActionTypes.REPORT_PAGE_CHANGE_VISIBILITY,
-// }))(ServicesNavbar)
+

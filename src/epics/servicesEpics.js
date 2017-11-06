@@ -6,7 +6,7 @@ import { saveAs } from 'file-saver'
 import jsdocx from 'jsdocx'
 import * as ActionTypes from '../constants/actionTypes'
 import { serverIsDown } from './configureEpics'
-import { getServices, updatedData } from '../biotoolsSum/services/index'
+import { getServices, orderByAttributeAndTakeFirstX, updatedData } from '../biotoolsSum/services/index'
 import buildActionWithName from '../helpers/buildActionWithName'
 import buildAction from '../helpers/buildAction'
 import { fileType } from '../constants/generateFile'
@@ -110,20 +110,26 @@ function generateDocx (doc, data, includeProps, title) {
     // Description END
 
     // Publications BEGIN
-    if (includeProps.includes('publication') && item.publicationStrings && item.publicationStrings.length > 0) {
-      let publicationParagraph = doc.addParagraph()
+    if (includeProps.includes('publication')) {
+      const publicationParagraph = doc.addParagraph()
       // Publications title
-      let publicationTitleRun = publicationParagraph.addRun()
+      const publicationTitleRun = publicationParagraph.addRun()
       publicationTitleRun.addText('Publications: ')
-      let publicationsTitleFormat = publicationTitleRun.addFormat()
+      const publicationsTitleFormat = publicationTitleRun.addFormat()
       publicationsTitleFormat.addFonts().setAscii('Calibri')
       publicationsTitleFormat.addBold()
       // Publications text
-      item.publicationStrings.forEach((publicationString) => {
-        const publicationsTextRun = doc.addParagraph().addRun()
+      if (item.publicationsStrings && item.publicationsStrings.length > 0) {
+        item.publicationsStrings.forEach((publicationString) => {
+          const publicationsTextRun = doc.addParagraph().addRun()
+          publicationsTextRun.addFormat().addFonts().setAscii('Calibri')
+          return publicationsTextRun.addText(publicationString)
+        })
+      } else {
+        const publicationsTextRun = publicationParagraph.addRun()
         publicationsTextRun.addFormat().addFonts().setAscii('Calibri')
-        return publicationsTextRun.addText(publicationString)
-      })
+        publicationsTextRun.addText('No publications')
+      }
     }
     // Publication END
 
@@ -250,149 +256,138 @@ function generateXlsx (data) {
   saveAs(new Blob([s2ab(wbout)], { type: 'application/octet-stream' }), 'generated.xlsx')
 }
 
-const byAttribute = (attribute, order) => order && order === 'ascend'
-  ? R.ascend(R.prop(attribute))
-  : R.descend(R.prop(attribute))
-
-export const generateFile = (action$, {getState}) => {
+export const generateFile = (action$, { getState }) => {
   return action$.ofType(ActionTypes.GENERATE_FILE)
-    .switchMap(({payload: {list}}) => {
+    .switchMap(({ payload: { list } }) => {
       const { form: { fileGenerationForm: { values } } } = getState()
       if (values.fileType === fileType.JPG) {
         // for now nothing here
-      } else {
-        const sortedAndOrderedListOfTools = R.compose(
-          R.take(values.takeFirstX),
-          R.sort(byAttribute(values.sortBy, values.order), R.__),
-        )(list)
+      } else if (values.fileType === fileType.DOCX) {
+        let doc = new jsdocx.Document()
+        let listOfTools = R.map(
+          R.pick(
+            ['name', 'credit', 'description', 'publicationsStrings', 'citations',
+              'toolType', 'topic', 'function', 'maturity', 'operatingSystem']
+          ), list)
 
-        if (values.fileType === fileType.DOCX) {
-          let doc = new jsdocx.Document()
-          let listOfTools = R.map(
-            R.pick(
-              ['name', 'credit', 'description', 'publicationStrings', 'citations',
-                'toolType', 'topic', 'function', 'maturity', 'operatingSystem']
-            ), sortedAndOrderedListOfTools)
+        if (values.database) {
+          listOfTools = R.compose(
+            R.filter(R.compose(
+              R.not,
+              R.contains('Database portal'),
+              R.prop('toolType'),
+            )),
+          )(list)
 
-          if (values.database) {
-            listOfTools = R.compose(
-              R.filter(R.compose(
-                R.not,
-                R.contains('Database portal'),
-                R.prop('toolType'),
-              )),
-            )(sortedAndOrderedListOfTools)
+          const listOfDatabases = R.compose(
+            R.filter(R.compose(
+              R.contains('Database portal'),
+              R.prop('toolType'),
+            )),
+          )(list)
 
-            const listOfDatabases = R.compose(
-              R.filter(R.compose(
-                R.contains('Database portal'),
-                R.prop('toolType'),
-              )),
-            )(sortedAndOrderedListOfTools)
-
-            generateDocx(doc, listOfDatabases, values.includeProps, 'Databases')
-          }
-
-          generateDocx(doc, listOfTools, values.includeProps, 'Tools')
-
-          doc.generate().then((content) => {
-            saveAs(content, 'generated.docx')
-          })
-        } else if (values.fileType === fileType.XLSX) {
-          let pickedListOfTools = R.map(
-            R.pick(
-              ['name', 'credit', 'description', 'publicationStrings', 'citations',
-                'toolType', 'topic', 'function', 'maturity', 'operatingSystem']
-            ), sortedAndOrderedListOfTools)
-
-          pickedListOfTools = R.map(tool => R.compose(
-            R.dissoc('name'),
-            R.assoc('Name', tool.name),
-          )(tool), pickedListOfTools)
-
-          if (!values.includeProps.includes('toolType')) {
-            pickedListOfTools = R.map(R.omit(['toolType']), pickedListOfTools)
-          } else {
-            pickedListOfTools = R.map(tool => R.compose(
-              R.dissoc('toolType'),
-              R.assoc('Tool type', R.join(', ', tool.toolType)),
-            )(tool), pickedListOfTools)
-          }
-
-          if (!values.includeProps.includes('institute')) {
-            pickedListOfTools = R.map(R.omit(['credit']), pickedListOfTools)
-          } else {
-            pickedListOfTools = R.map(tool => R.compose(
-              R.dissoc('credit'),
-              R.assoc('Institute', R.join('\n ', R.pluck('name', tool.credit))),
-            )(tool), pickedListOfTools)
-          }
-
-          if (!values.includeProps.includes('description')) {
-            pickedListOfTools = R.map(R.omit(['description']), pickedListOfTools)
-          } else {
-            pickedListOfTools = R.map(tool => R.compose(
-              R.dissoc('description'),
-              R.assoc('Description', tool.description),
-            )(tool), pickedListOfTools)
-          }
-
-          if (!values.includeProps.includes('publication')) {
-            pickedListOfTools = R.map(R.omit(['publicationStrings']), pickedListOfTools)
-          } else {
-            pickedListOfTools = R.map(tool => R.compose(
-              R.dissoc('publicationStrings'),
-              R.assoc('Publications', R.join('\n ', tool.publicationStrings || [])),
-            )(tool), pickedListOfTools)
-          }
-
-          if (!values.includeProps.includes('citations')) {
-            pickedListOfTools = R.map(R.omit(['citations']), pickedListOfTools)
-          } else {
-            pickedListOfTools = R.map(tool => R.compose(
-              R.dissoc('citations'),
-              R.assoc('Citations', tool.citations),
-            )(tool), pickedListOfTools)
-          }
-
-          if (!values.includeProps.includes('topic')) {
-            pickedListOfTools = R.map(R.omit(['topic']), pickedListOfTools)
-          } else {
-            pickedListOfTools = R.map(tool => R.compose(
-              R.dissoc('topic'),
-              R.assoc('Topic', R.join(', ', R.pluck('term', tool.topic))),
-            )(tool), pickedListOfTools)
-          }
-
-          if (!values.includeProps.includes('function')) {
-            pickedListOfTools = R.map(R.omit(['function']), pickedListOfTools)
-          } else {
-            pickedListOfTools = R.map(tool => R.compose(
-              R.dissoc('function'),
-              R.assoc('Function', R.join(', ', R.pluck('term', tool.function))),
-            )(tool), pickedListOfTools)
-          }
-
-          if (!values.includeProps.includes('maturity')) {
-            pickedListOfTools = R.map(R.omit(['maturity']), pickedListOfTools)
-          } else {
-            pickedListOfTools = R.map(tool => R.compose(
-              R.dissoc('maturity'),
-              R.assoc('Maturity', tool.maturity),
-            )(tool), pickedListOfTools)
-          }
-
-          if (!values.includeProps.includes('platform')) {
-            pickedListOfTools = R.map(R.omit(['platform']), pickedListOfTools)
-          } else {
-            pickedListOfTools = R.map(tool => R.compose(
-              R.dissoc('operatingSystem'),
-              R.assoc('Platform', R.join(', ', tool.operatingSystem)),
-            )(tool), pickedListOfTools)
-          }
-
-          generateXlsx(pickedListOfTools)
+          generateDocx(doc, listOfDatabases, values.includeProps, 'Databases')
         }
+
+        generateDocx(doc, listOfTools, values.includeProps, 'Tools')
+
+        doc.generate().then((content) => {
+          saveAs(content, 'generated.docx')
+        })
+      } else if (values.fileType === fileType.XLSX) {
+        let pickedListOfTools = R.map(
+          R.pick(
+            ['name', 'credit', 'description', 'publicationsStrings', 'citations',
+              'toolType', 'topic', 'function', 'maturity', 'operatingSystem']
+          ), list)
+
+        pickedListOfTools = R.map(tool => R.compose(
+          R.dissoc('name'),
+          R.assoc('Name', tool.name),
+        )(tool), pickedListOfTools)
+
+        if (!values.includeProps.includes('toolType')) {
+          pickedListOfTools = R.map(R.omit(['toolType']), pickedListOfTools)
+        } else {
+          pickedListOfTools = R.map(tool => R.compose(
+            R.dissoc('toolType'),
+            R.assoc('Tool type', R.join(', ', tool.toolType)),
+          )(tool), pickedListOfTools)
+        }
+
+        if (!values.includeProps.includes('institute')) {
+          pickedListOfTools = R.map(R.omit(['credit']), pickedListOfTools)
+        } else {
+          pickedListOfTools = R.map(tool => R.compose(
+            R.dissoc('credit'),
+            R.assoc('Institute', R.join('\n ', R.pluck('name', tool.credit))),
+          )(tool), pickedListOfTools)
+        }
+
+        if (!values.includeProps.includes('description')) {
+          pickedListOfTools = R.map(R.omit(['description']), pickedListOfTools)
+        } else {
+          pickedListOfTools = R.map(tool => R.compose(
+            R.dissoc('description'),
+            R.assoc('Description', tool.description),
+          )(tool), pickedListOfTools)
+        }
+
+        if (!values.includeProps.includes('publication')) {
+          pickedListOfTools = R.map(R.omit(['publicationsStrings']), pickedListOfTools)
+        } else {
+          pickedListOfTools = R.map(tool => R.compose(
+            R.dissoc('publicationsStrings'),
+            R.assoc('Publications', R.join('\n ', tool.publicationsStrings || [])),
+          )(tool), pickedListOfTools)
+        }
+
+        if (!values.includeProps.includes('citations')) {
+          pickedListOfTools = R.map(R.omit(['citations']), pickedListOfTools)
+        } else {
+          pickedListOfTools = R.map(tool => R.compose(
+            R.dissoc('citations'),
+            R.assoc('Citations', tool.citations),
+          )(tool), pickedListOfTools)
+        }
+
+        if (!values.includeProps.includes('topic')) {
+          pickedListOfTools = R.map(R.omit(['topic']), pickedListOfTools)
+        } else {
+          pickedListOfTools = R.map(tool => R.compose(
+            R.dissoc('topic'),
+            R.assoc('Topic', R.join(', ', R.pluck('term', tool.topic))),
+          )(tool), pickedListOfTools)
+        }
+
+        if (!values.includeProps.includes('function')) {
+          pickedListOfTools = R.map(R.omit(['function']), pickedListOfTools)
+        } else {
+          pickedListOfTools = R.map(tool => R.compose(
+            R.dissoc('function'),
+            R.assoc('Function', R.join(', ', R.pluck('term', tool.function))),
+          )(tool), pickedListOfTools)
+        }
+
+        if (!values.includeProps.includes('maturity')) {
+          pickedListOfTools = R.map(R.omit(['maturity']), pickedListOfTools)
+        } else {
+          pickedListOfTools = R.map(tool => R.compose(
+            R.dissoc('maturity'),
+            R.assoc('Maturity', tool.maturity),
+          )(tool), pickedListOfTools)
+        }
+
+        if (!values.includeProps.includes('platform')) {
+          pickedListOfTools = R.map(R.omit(['platform']), pickedListOfTools)
+        } else {
+          pickedListOfTools = R.map(tool => R.compose(
+            R.dissoc('operatingSystem'),
+            R.assoc('Platform', R.join(', ', tool.operatingSystem)),
+          )(tool), pickedListOfTools)
+        }
+
+        generateXlsx(pickedListOfTools)
       }
 
       return Rx.Observable.of()

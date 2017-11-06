@@ -10,6 +10,7 @@ import * as R from 'ramda'
 import { ALL_SERVICES } from '../../constants/stringConstants'
 import DocxGeneration from './FileGenerationForm'
 import { formValueSelector } from 'redux-form'
+import { orderByAttributeAndTakeFirstX } from '../../biotoolsSum/services/index'
 
 class BioToolsData extends React.PureComponent {
   shouldComponentUpdate (nextProps) {
@@ -17,8 +18,14 @@ class BioToolsData extends React.PureComponent {
   }
 
   render () {
-    const { services, message, showReportPage, includePropsChosen } = this.props
+    const { services, message, showReportPage, includePropsChosen, sortBy, order, takeFirstX } = this.props
     const { count, list, serviceLoading, citationsLoading } = services
+
+    let toolsList = list
+    if (sortBy && order) {
+      console.log('list', list)
+      toolsList = orderByAttributeAndTakeFirstX(list, sortBy, order, takeFirstX)
+    }
 
     return (
       <div>
@@ -56,8 +63,8 @@ class BioToolsData extends React.PureComponent {
               </div>
               }
             </Alert>
-            {showReportPage && <DocxGeneration list={list} />}
-            <ToolsTable list={list} includePropsChosen={includePropsChosen} />
+            {showReportPage && <DocxGeneration list={toolsList} />}
+            <ToolsTable list={toolsList} includePropsChosen={includePropsChosen} sortBy={sortBy} order={order} />
           </div>
           : serviceLoading
             ? <Alert bsStyle='warning'>
@@ -99,5 +106,8 @@ export default BioToolsData = connect(state => {
     services: getServices(state, camelCased(servicesName)),
     message,
     includePropsChosen: selector(state, 'includeProps'),
+    sortBy: selector(state, 'sortBy'),
+    order: selector(state, 'order'),
+    takeFirstX: selector(state, 'takeFirstX')
   })
 })(BioToolsData)

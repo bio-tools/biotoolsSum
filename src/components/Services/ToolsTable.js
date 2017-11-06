@@ -34,25 +34,26 @@ function getPublicationLink (publication, index) {
   }
 }
 
-function getCitationsSource (pmid, index) {
-  return <OverlayTooltip key={pmid} id='tooltip-pmid' tooltipText='Citations source'>
-    <a href={`http://europepmc.org/search?query=CITES%3A${pmid}_MED`} target='_blank'>
+function getCitationsSource (idSourcePair, index) {
+  return <OverlayTooltip key={idSourcePair[0]} id='tooltip-pmid' tooltipText='Citations source'>
+    <a href={`http://europepmc.org/search?query=CITES%3A${idSourcePair[0]}_${idSourcePair[1]}`} target='_blank'>
       {index}
     </a>
   </OverlayTooltip>
 }
 
 const getColumns = (includePropsChosen) => {
-  const includeAll = includePropsChosen === undefined
+  const isInfoMode = includePropsChosen === undefined
+
   let columns = [{
-    Header: 'Name (Sortable, filterable)',
+    Header: `Name ${isInfoMode ? '(Sortable, filterable)' : ''}`,
     id: 'name',
     accessor: data => data.name,
-    sortable: true,
+    sortable: isInfoMode,
     sortMethod: (a, b) => {
       return a.toLowerCase() > b.toLowerCase() ? 1 : -1
     },
-    filterable: true,
+    filterable: isInfoMode,
     filterMethod: (filter, row) => row[filter.id].toLowerCase().includes(filter.value.toLowerCase()),
     Cell: data => {
       const {id, version, name, homepage, toolType} = data.original
@@ -64,7 +65,7 @@ const getColumns = (includePropsChosen) => {
             <FontAwesome className='icons' name='question-circle' />
           </a>
         </OverlayTooltip>
-        {(includeAll || includePropsChosen.includes('toolType')) &&
+        {(isInfoMode || includePropsChosen.includes('toolType')) &&
           <div>
             <hr className='table-delimiter' />
             <p>
@@ -82,7 +83,7 @@ const getColumns = (includePropsChosen) => {
     minWidth: 120,
   }]
 
-  if (includeAll || includePropsChosen.includes('institute')) {
+  if (isInfoMode || includePropsChosen.includes('institute')) {
     columns.push(
       {
         Header: 'Institute',
@@ -100,13 +101,13 @@ const getColumns = (includePropsChosen) => {
     )
   }
 
-  if (includeAll || includePropsChosen.includes('description')) {
+  if (isInfoMode || includePropsChosen.includes('description')) {
     columns.push(
       {
-        Header: 'Description (Filterable)',
+        Header: `Description ${isInfoMode ? '(Filterable)' : ''}`,
         id: 'description',
         accessor: data => data.description,
-        filterable: true,
+        filterable: isInfoMode,
         filterMethod: (filter, row) => row[filter.id].toLowerCase().includes(filter.value.toLowerCase()),
         Cell: data => <ReadMore chars={350} text={data.value} />,
         minWidth: 150,
@@ -114,22 +115,22 @@ const getColumns = (includePropsChosen) => {
     )
   }
 
-  const includePublications = !includeAll && includePropsChosen.includes('publication')
-  const includeCitations = !includeAll && includePropsChosen.includes('citations')
-  if (includeAll || includePublications || includeCitations) {
+  const includePublications = !isInfoMode && includePropsChosen.includes('publication')
+  const includeCitations = !isInfoMode && includePropsChosen.includes('citations')
+  if (isInfoMode || includePublications || includeCitations) {
     columns.push(
       {
-        Header: 'Publications info (Sortable)',
+        Header: `Publications info ${isInfoMode ? '(Sortable)' : ''}`,
         id: 'additional-info',
         accessor: data => R.isNil(data.citations) ? '-' : data.citations,
-        sortable: true,
+        sortable: isInfoMode,
         sortMethod: (a, b) => {
           if (a === '-') return -1
           if (b === '-') return 1
           return a - b
         },
         Cell: data => {
-          const {publication: publications, pmids} = data.original
+          const { publication: publications, publicationsIdSourcePairs } = data.original
           const citations = data.value
           const filteredPublications = R.filter(
             publication => publication.doi !== null || publication.pmid !== null || publication.pmcid !== null,
@@ -137,7 +138,7 @@ const getColumns = (includePropsChosen) => {
           )
 
           return <div>
-            {(includeAll || includePublications) &&
+            {(isInfoMode || includePublications) &&
               <div>
                 <strong>{'Publications: '}</strong>
                 {filteredPublications.length > 0
@@ -152,22 +153,22 @@ const getColumns = (includePropsChosen) => {
                 }
               </div>
             }
-            {(includeAll || (includePublications && includeCitations)) &&
+            {(isInfoMode || (includePublications && includeCitations)) &&
               <hr className='table-delimiter' />
             }
-            {(includeAll || includeCitations) &&
+            {(isInfoMode || includeCitations) &&
               <div>
                 <strong>
                   {`Total Citations: ${citations}`}
                 </strong>
                 <br />
                 <strong>{`Citations source: `}</strong>
-                {pmids && pmids.length > 0
-                  ? pmids.map((pmid, index) =>
+                {publicationsIdSourcePairs && publicationsIdSourcePairs.length > 0 && citations > 0
+                  ? publicationsIdSourcePairs.map((idSourcePair, index) =>
                     <span key={index}>
                       {'['}
-                      {getCitationsSource(pmid, index + 1)}
-                      {index + 1 < pmids.length ? '], ' : ']'}
+                      {getCitationsSource(idSourcePair, index + 1)}
+                      {index + 1 < publicationsIdSourcePairs.length ? '], ' : ']'}
                     </span>
                   )
                   : '-'
@@ -187,9 +188,9 @@ const getColumns = (includePropsChosen) => {
 
 const getSubColumns = (includePropsChosen) => {
   let subColumns = []
-  const includeAll = includePropsChosen === undefined
+  const isInfoMode = includePropsChosen === undefined
 
-  if (includeAll || includePropsChosen.includes('topic')) {
+  if (isInfoMode || includePropsChosen.includes('topic')) {
     subColumns.push(
       {
         Header: 'Topic',
@@ -200,7 +201,7 @@ const getSubColumns = (includePropsChosen) => {
     )
   }
 
-  if (includeAll || includePropsChosen.includes('function')) {
+  if (isInfoMode || includePropsChosen.includes('function')) {
     subColumns.push(
       {
         Header: 'Function',
@@ -211,9 +212,9 @@ const getSubColumns = (includePropsChosen) => {
     )
   }
 
-  const includeMaturity = !includeAll && includePropsChosen.includes('maturity')
-  const includePlatform = !includeAll && includePropsChosen.includes('platform')
-  if (includeAll || includeMaturity || includePlatform) {
+  const includeMaturity = !isInfoMode && includePropsChosen.includes('maturity')
+  const includePlatform = !isInfoMode && includePropsChosen.includes('platform')
+  if (isInfoMode || includeMaturity || includePlatform) {
     subColumns.push(
       {
         Header: 'Additional info',
@@ -227,7 +228,7 @@ const getSubColumns = (includePropsChosen) => {
           }
 
           return <div>
-            {(includeAll || (includeMaturity && maturity)) &&
+            {(isInfoMode || (includeMaturity && maturity)) &&
               <div>
                 <strong>
                   {'Maturity: '}
@@ -238,11 +239,11 @@ const getSubColumns = (includePropsChosen) => {
               </div>
             }
 
-            {(includeAll || (includeMaturity && includePlatform && maturity && operatingSystem.length > 0)) &&
+            {(isInfoMode || (includeMaturity && includePlatform && maturity && operatingSystem.length > 0)) &&
               <hr className='table-delimiter' />
             }
 
-            {(includeAll || (includePlatform && operatingSystem.length > 0)) &&
+            {(isInfoMode || (includePlatform && operatingSystem.length > 0)) &&
               <div>
                 <strong>{'Platforms: '}</strong>
                 {R.contains('Windows', operatingSystem) &&
@@ -290,8 +291,8 @@ const expander = {
 export const ToolsTable = ({ list, includePropsChosen }) => {
   let columns = getColumns(includePropsChosen)
   const subColumns = getSubColumns(includePropsChosen)
-
   const cellsPerRowCount = getCellsCount(includePropsChosen)
+
   if (cellsPerRowCount <= MAIN_ROW_CELLS_COUNT) {
     columns = R.concat(columns, subColumns)
   } else {

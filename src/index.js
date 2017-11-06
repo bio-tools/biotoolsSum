@@ -21,6 +21,9 @@ import { autoRehydrate, persistStore } from 'redux-persist'
 import { Grid, Row } from 'react-bootstrap'
 import MatrixNavbar from './components/Matrix/MatrixNavbar'
 
+import Alert from 'react-s-alert'
+import 'react-s-alert/dist/s-alert-default.css'
+
 const composeEnhancers = (
   process.env.NODE_ENV !== 'production' &&
   window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__
@@ -75,6 +78,13 @@ async function init () {
       </ConnectedRouter>
     </Provider>,
     document.getElementById('root')
+  )
+
+  ReactDOM.render(
+    <div style={{ zIndex: 9999, position: 'relative' }}>
+      <Alert stack={{ limit: 1 }} timeout={3000} />
+    </div>,
+    document.getElementById('alert')
   )
 }
 

@@ -1,4 +1,5 @@
 import * as R from 'ramda'
+import Alert from 'react-s-alert'
 import * as Actions from '../constants/actionTypes'
 import { pickData } from '../biotoolsSum/services/index'
 

@@ -26,42 +26,28 @@ export const pickData = R.map(
       'publication',
       'pmids',
       'credit',
-      'publicationStrings',
+      'publicationsStrings',
+      'publicationsIdSourcePairs',
     ])
   )
 )
 
-function getPublicationInfo (id, idType) {
-  return fetch(config.getProxyUrl() + config.getConverterApiUrl(`&ids=${id}&idtype=${idType}&format=json`))
-    .then(response => response.json())
-    .then(idInfo => {
-      if (!idInfo.records) {
-        return null
-      }
-      const pmid = idInfo.records[0].pmid
-      return fetch(config.getPublicationInfoApiUrl(pmid, 'med'))
-        .then(response => response.json())
-        .then(publicationInfo => publicationInfo)
-    })
-}
-
 const getPublicationsInfo = uniquePublications => uniquePublications.map(pub => {
   let id = ''
-  let idType = ''
-  if (pub.pmid !== null) {
+  if (pub.doi !== null) {
+    id = pub.doi
+  } else if (pub.pmid !== null) {
     id = pub.pmid
-    idType = 'pmid'
   } else if (pub.pmcid !== null) {
     id = pub.pmcid
-    idType = 'pmcid'
-  } else if (pub.doi !== null) {
-    id = pub.doi.startsWith('doi:') ? pub.doi.replace('doi:', '') : pub.doi
-    idType = 'doi'
   } else {
     return Rx.Observable.of(null)
   }
 
-  return Rx.Observable.fromPromise(getPublicationInfo(id, idType))
+  return Rx.Observable.fromPromise(fetch(config.getPublicationInfoApiUrl(id))
+    .then(response => response.json())
+    .then(publicationInfo => publicationInfo)
+  )
 })
 
 export const updatedData = tools => {
@@ -85,7 +71,7 @@ export const updatedData = tools => {
         const pickedPublicationsInfo = publicationsInfo[0] === null
           ? null
           : R.compose(
-            R.map(R.props(['authorString', 'title', 'journalTitle', 'pubYear', 'pageInfo', 'pmid', 'citedByCount'])),
+            R.map(R.props(['authorString', 'title', 'journalTitle', 'pubYear', 'pageInfo', 'id', 'source', 'citedByCount'])),
             R.filter(info => info !== undefined),
             R.pluck(0),
             R.pluck('result'),
@@ -93,25 +79,26 @@ export const updatedData = tools => {
           )(publicationsInfo)
 
         let citations = 0
-        let publicationStrings = []
-        let pmids = []
+        let publicationsStrings = []
+        let publicationsIdSourcePairs = []
+
         if (pickedPublicationsInfo) {
-          publicationStrings = R.compose(
+          publicationsStrings = R.compose(
             R.map(R.join(', ')),
             R.map(R.props([0, 1, 2, 3, 4])),
           )(pickedPublicationsInfo)
 
-          pmids = R.pluck(5, pickedPublicationsInfo)
+          publicationsIdSourcePairs = R.map(R.props([5, 6]), pickedPublicationsInfo)
 
           citations = R.compose(
             R.sum,
-            R.pluck(6),
+            R.pluck(7),
           )(pickedPublicationsInfo)
         }
 
         return R.compose(
-          R.assoc('publicationStrings', publicationStrings),
-          R.assoc('pmids', pmids),
+          R.assoc('publicationsStrings', publicationsStrings),
+          R.assoc('publicationsIdSourcePairs', publicationsIdSourcePairs),
           R.assoc('citations', citations),
         )(tool)
       })
@@ -159,4 +146,15 @@ export function getCellsCount (includePropsChosen) {
   })
 
   return count
+}
+
+export function orderByAttributeAndTakeFirstX (list, sortBy, order, takeFirstX) {
+  return R.compose(
+    R.take(takeFirstX),
+    R.tap(console.log),
+    R.sort(order === 'ascend'
+        ? R.ascend(R.prop(sortBy))
+        : R.descend(R.prop(sortBy)),
+      R.__),
+  )(list)
 }
