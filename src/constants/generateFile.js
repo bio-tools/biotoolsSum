@@ -1,5 +1,5 @@
-export const fileType = {
+export const reportType = {
   DOCX: 'docx',
   XLSX: 'xlsx',
-  JPG: 'jpg',
+  CHART: 'chart',
 }

@@ -1,5 +1,5 @@
 export const data = {
-  collectionID: 'ELIXIR-CZ',
+  collectionID: 'Elixir-cz',
   rows: [
     {
       name: 'DNA',

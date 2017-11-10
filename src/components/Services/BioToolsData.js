@@ -1,16 +1,18 @@
 import React from 'react'
 import { Alert } from 'react-bootstrap'
 import { connect } from 'react-redux'
-import { ToolsTable } from './ToolsTable'
+import ToolsTable from './ToolsTable'
 import { getServices } from '../../selectors/servicesSelector'
 import { camelCased } from '../../common/helperFunctions'
 import { data } from '../../constants/servicesInfo'
 import Loader from '../common/Loader'
 import * as R from 'ramda'
 import { ALL_SERVICES } from '../../constants/stringConstants'
-import DocxGeneration from './FileGenerationForm'
+import FileGenerationForm from './FileGenerationForm'
 import { formValueSelector } from 'redux-form'
 import { orderByAttributeAndTakeFirstX } from '../../biotoolsSum/services/index'
+import ToolsTableWithChart from './ToolsTableWithChart'
+import { reportType } from '../../constants/generateFile'
 
 class BioToolsData extends React.PureComponent {
   shouldComponentUpdate (nextProps) {
@@ -18,12 +20,21 @@ class BioToolsData extends React.PureComponent {
   }
 
   render () {
-    const { services, message, showReportPage, includePropsChosen, sortBy, order, takeFirstX } = this.props
+    const {
+      services,
+      message,
+      showReportPage,
+      reportTypeChosen,
+      createGraph,
+      includePropsChosen,
+      sortBy,
+      order,
+      takeFirstX,
+    } = this.props
     const { count, list, serviceLoading, citationsLoading } = services
 
     let toolsList = list
-    if (sortBy && order) {
-      console.log('list', list)
+    if (reportTypeChosen !== reportType.CHART && sortBy && order) {
       toolsList = orderByAttributeAndTakeFirstX(list, sortBy, order, takeFirstX)
     }
 
@@ -63,8 +74,11 @@ class BioToolsData extends React.PureComponent {
               </div>
               }
             </Alert>
-            {showReportPage && <DocxGeneration list={toolsList} />}
-            <ToolsTable list={toolsList} includePropsChosen={includePropsChosen} sortBy={sortBy} order={order} />
+            {showReportPage && <FileGenerationForm list={toolsList} />}
+            {reportTypeChosen === reportType.CHART
+              ? <ToolsTableWithChart list={toolsList} createGraph={createGraph} />
+              : <ToolsTable list={toolsList} includePropsChosen={includePropsChosen} sortBy={sortBy} order={order} />
+            }
           </div>
           : serviceLoading
             ? <Alert bsStyle='warning'>
@@ -91,7 +105,7 @@ export default BioToolsData = connect(state => {
   }
 
   const message = servicesName === ALL_SERVICES
-    ? `All ${data.collectionID} Services`
+    ? `All ${data.collectionID} services`
     : R.compose(
     R.prop('message'),
     R.find(R.propEq('route', servicesName)),
@@ -105,9 +119,14 @@ export default BioToolsData = connect(state => {
     showReportPage: state.ui.showReportPage,
     services: getServices(state, camelCased(servicesName)),
     message,
+
+    reportTypeChosen: selector(state, 'reportType'),
+
+    createGraph: selector(state, 'createGraph'),
+
     includePropsChosen: selector(state, 'includeProps'),
     sortBy: selector(state, 'sortBy'),
     order: selector(state, 'order'),
-    takeFirstX: selector(state, 'takeFirstX')
+    takeFirstX: selector(state, 'takeFirstX'),
   })
 })(BioToolsData)

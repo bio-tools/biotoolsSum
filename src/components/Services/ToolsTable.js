@@ -8,39 +8,11 @@ import FontAwesome from 'react-fontawesome'
 import { OverlayTooltip } from '../common/OverlayTooltip'
 import ShowMore from '../common/ShowMore'
 import { MAIN_ROW_CELLS_COUNT, PAGE_SIZE } from '../../constants/toolsTable'
-import { getCellsCount } from '../../biotoolsSum/services/index'
-
-function getPublicationLink (publication, index) {
-  if (publication.doi) {
-    return <OverlayTooltip key={publication.doi} id='tooltip-doi' tooltipText='DOI'>
-      <a href={`https://dx.doi.org/${publication.doi}`} target='_blank'>
-        {index}
-      </a>
-    </OverlayTooltip>
-  }
-  if (publication.pmid) {
-    return <OverlayTooltip key={publication.pmid} id='tooltip-pubmed' tooltipText='PUBMED'>
-      <a href={`https://www.ncbi.nlm.nih.gov/pubmed/${publication.pmid}`} target='_blank'>
-        {index}
-      </a>
-    </OverlayTooltip>
-  }
-  if (publication.pmcid) {
-    return <OverlayTooltip key={publication.pmcid} id='tooltip-pmc' tooltipText='PMC'>
-      <a href={`https://www.ncbi.nlm.nih.gov/pmc/articles/${publication.pmcid}`} target='_blank'>
-        {index}
-      </a>
-    </OverlayTooltip>
-  }
-}
-
-function getCitationsSource (idSourcePair, index) {
-  return <OverlayTooltip key={idSourcePair[0]} id='tooltip-pmid' tooltipText='Citations source'>
-    <a href={`http://europepmc.org/search?query=CITES%3A${idSourcePair[0]}_${idSourcePair[1]}`} target='_blank'>
-      {index}
-    </a>
-  </OverlayTooltip>
-}
+import { getCellsCount, getChartConfig } from '../../biotoolsSum/services/index'
+import ReactHighcharts from 'react-highcharts'
+import HighChartsExporting from 'highcharts-exporting'
+import { getCitationsSource, getPublicationLink } from '../../biotoolsSum/table/index'
+HighChartsExporting(ReactHighcharts.Highcharts)
 
 const getColumns = (includePropsChosen) => {
   const isInfoMode = includePropsChosen === undefined
@@ -288,7 +260,7 @@ const expander = {
   className: 'table-expander',
 }
 
-export const ToolsTable = ({ list, includePropsChosen }) => {
+const ToolsTable = ({ list, includePropsChosen }) => {
   let columns = getColumns(includePropsChosen)
   const subColumns = getSubColumns(includePropsChosen)
   const cellsPerRowCount = getCellsCount(includePropsChosen)
@@ -311,12 +283,16 @@ export const ToolsTable = ({ list, includePropsChosen }) => {
       minRows={1}
       className='-highlight'
       SubComponent={cellsPerRowCount <= MAIN_ROW_CELLS_COUNT ? null : row => {
+        const { original } = row
         const subList = [{
-          func: row.original.function,
-          topic: row.original.topic,
-          maturity: row.original.maturity,
-          operatingSystem: row.original.operatingSystem,
+          func: original.function,
+          topic: original.topic,
+          maturity: original.maturity,
+          operatingSystem: original.operatingSystem,
         }]
+
+        const citationsYears = original.citationsYears
+
         return (
           <div className='sub-table'>
             <ReactTable
@@ -326,9 +302,14 @@ export const ToolsTable = ({ list, includePropsChosen }) => {
               showPagination={false}
               sortable={false}
             />
+            {citationsYears && !R.isEmpty(citationsYears) &&
+              <ReactHighcharts config={getChartConfig(citationsYears, original.name)} />
+            }
           </div>
         )
       }}
     />
   )
 }
+
+export default ToolsTable

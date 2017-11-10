@@ -195,11 +195,13 @@ img.center {
   width: 70px;
   text-align: center;
 }
+
 .loader .bounce1 {
   -webkit-animation-delay: -0.32s;
   -moz-animation-delay: -0.32s;
   animation-delay: -0.32s;
 }
+
 .loader .bounce2 {
   -webkit-animation-delay: -0.16s;
   -moz-animation-delay: -0.16s;
@@ -228,6 +230,16 @@ img.center {
   cursor: pointer;
   text-align: center;
   user-select: none;
+}
+
+.horizontal-vertical-center {
+  display: -webkit-box;
+  display: -moz-box;
+  display: -ms-flexbox;
+  display: -webkit-flex;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
 /* restyling react-table */

@@ -23,6 +23,7 @@ export const pickData = R.map(
       'function',
       'toolType',
       'citations',
+      'citationsYears',
       'publication',
       'pmids',
       'credit',
@@ -35,7 +36,7 @@ export const pickData = R.map(
 const getPublicationsInfo = uniquePublications => uniquePublications.map(pub => {
   let id = ''
   if (pub.doi !== null) {
-    id = pub.doi
+    id = pub.doi.startsWith('doi') ? pub.doi : `doi:${pub.doi}`
   } else if (pub.pmid !== null) {
     id = pub.pmid
   } else if (pub.pmcid !== null) {
@@ -46,7 +47,39 @@ const getPublicationsInfo = uniquePublications => uniquePublications.map(pub => 
 
   return Rx.Observable.fromPromise(fetch(config.getPublicationInfoApiUrl(id))
     .then(response => response.json())
-    .then(publicationInfo => publicationInfo)
+    .then(publicationInfo => {
+      const result = publicationInfo.resultList.result[0]
+      if (!result) {
+        return null
+      }
+      const { source, id: resultId, citedByCount } = result
+
+      const pages = Math.ceil(citedByCount / 25)
+
+      let apiPromises = []
+      for (let i = 1; i <= pages; i++) {
+        apiPromises.push(
+          fetch(config.getCitationsApiUrl(source, resultId, i))
+            .then(response => response.json())
+        )
+      }
+
+      return Promise.all(apiPromises)
+        .then(citationsInfo => {
+          const citationsYears = citationsInfo.length > 0
+            ? R.compose(
+              R.map(R.length),
+              R.groupBy(R.identity),
+              R.pluck('pubYear'),
+              R.flatten,
+              R.pluck('citation'),
+              R.pluck('citationList'),
+            )(citationsInfo)
+            : {}
+
+          return ({ publicationInfo, citationsYears })
+        })
+    })
   )
 })
 
@@ -68,7 +101,7 @@ export const updatedData = tools => {
     return Rx.Observable
       .combineLatest(getPublicationsInfo(uniquePublications))
       .map(publicationsInfo => {
-        const pickedPublicationsInfo = publicationsInfo[0] === null
+        const pickedPublicationsInfo = publicationsInfo === null
           ? null
           : R.compose(
             R.map(R.props(['authorString', 'title', 'journalTitle', 'pubYear', 'pageInfo', 'id', 'source', 'citedByCount'])),
@@ -76,8 +109,10 @@ export const updatedData = tools => {
             R.pluck(0),
             R.pluck('result'),
             R.pluck('resultList'),
+            R.pluck('publicationInfo')
           )(publicationsInfo)
 
+        let citationsYears = {}
         let citations = 0
         let publicationsStrings = []
         let publicationsIdSourcePairs = []
@@ -94,12 +129,17 @@ export const updatedData = tools => {
             R.sum,
             R.pluck(7),
           )(pickedPublicationsInfo)
+
+          citationsYears = R.compose(
+            R.pluck('citationsYears'),
+          )(publicationsInfo)
         }
 
         return R.compose(
+          R.assoc('citations', citations),
+          R.assoc('citationsYears', citationsYears),
           R.assoc('publicationsStrings', publicationsStrings),
           R.assoc('publicationsIdSourcePairs', publicationsIdSourcePairs),
-          R.assoc('citations', citations),
         )(tool)
       })
   })
@@ -151,10 +191,67 @@ export function getCellsCount (includePropsChosen) {
 export function orderByAttributeAndTakeFirstX (list, sortBy, order, takeFirstX) {
   return R.compose(
     R.take(takeFirstX),
-    R.tap(console.log),
     R.sort(order === 'ascend'
         ? R.ascend(R.prop(sortBy))
         : R.descend(R.prop(sortBy)),
       R.__),
   )(list)
+}
+
+export function getChartConfig (citationsYears, seriesNames, toolName) {
+  const allCitationsYears = R.reduce(R.mergeWith(R.add), 0, citationsYears)
+
+  const years = R.keys(allCitationsYears)
+  const totalNumberOfCitations = R.values(allCitationsYears)
+
+  let data = []
+  if (citationsYears.length > 1) {
+    data = R.compose(
+      R.map(R.objOf('data')),
+      R.map(R.values),
+      R.map(obj => {
+        let newObj = obj
+        R.forEach(year => { if (!R.has(year, obj)) newObj[year] = 0 }, years)
+        return newObj
+      }),
+    )(citationsYears)
+  }
+
+  return {
+    title: {
+      text: `Citations for ${toolName}`,
+    },
+    exporting: {
+      showTable: true,
+      filename: `chart_${toolName}`,
+      chartOptions: {
+        plotOptions: {
+          series: {
+            dataLabels: {
+              enabled: true,
+            },
+          },
+        },
+      },
+    },
+    chart: {
+      type: 'column',
+    },
+    tooltip: {
+      shared: true,
+    },
+    xAxis: {
+      categories: years,
+    },
+    yAxis: {
+      title: {
+        text: 'Citations',
+      },
+      allowDecimals: false,
+    },
+    series: R.concat(data, [{
+      name: `Total number of citations`,
+      data: totalNumberOfCitations,
+    }]),
+  }
 }
