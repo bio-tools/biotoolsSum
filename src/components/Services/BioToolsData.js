@@ -40,14 +40,11 @@ class BioToolsData extends React.PureComponent {
 
     return (
       <div>
-        {message &&
-          <Alert bsStyle='warning'>
-            {message}
-          </Alert>
-        }
         {count
           ? <div>
             <Alert bsStyle='warning'>
+              {message + '.'}
+              <br />
               {'There is a total number of '}<strong>{count}</strong>{' tools available.'}
               {serviceLoading &&
                 <div>

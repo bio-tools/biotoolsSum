@@ -198,7 +198,7 @@ export function orderByAttributeAndTakeFirstX (list, sortBy, order, takeFirstX) 
   )(list)
 }
 
-export function getChartConfig (citationsYears, seriesNames, toolName) {
+export function getChartConfig (citationsYears, toolName, seriesNames) {
   const allCitationsYears = R.reduce(R.mergeWith(R.add), 0, citationsYears)
 
   const years = R.keys(allCitationsYears)
@@ -215,6 +215,14 @@ export function getChartConfig (citationsYears, seriesNames, toolName) {
         return newObj
       }),
     )(citationsYears)
+
+    if (seriesNames) {
+      for (let i = 0; i < data.length; i++) {
+        console.log('data', data)
+        console.log('seriesNames', seriesNames)
+        data[i].name = seriesNames[i]
+      }
+    }
   }
 
   return {
@@ -253,5 +261,10 @@ export function getChartConfig (citationsYears, seriesNames, toolName) {
       name: `Total number of citations`,
       data: totalNumberOfCitations,
     }]),
+    noData: {
+      style: {
+        fontSize: '30px',
+      },
+    },
   }
 }

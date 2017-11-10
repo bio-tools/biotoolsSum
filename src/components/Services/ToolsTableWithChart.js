@@ -125,8 +125,8 @@ class ToolsTableWithChart extends React.PureComponent {
       )(selected)
 
       const seriesNames = R.keys(selected)
-
-      chartConfig = getChartConfig(citationsYears, seriesNames, 'tools')
+      console.log(seriesNames)
+      chartConfig = getChartConfig(citationsYears, 'tools', seriesNames)
 
       columns = R.prepend(
         {

@@ -11,8 +11,10 @@ import { MAIN_ROW_CELLS_COUNT, PAGE_SIZE } from '../../constants/toolsTable'
 import { getCellsCount, getChartConfig } from '../../biotoolsSum/services/index'
 import ReactHighcharts from 'react-highcharts'
 import HighChartsExporting from 'highcharts-exporting'
+import HighChartsNoData from 'highcharts-no-data-to-display'
 import { getCitationsSource, getPublicationLink } from '../../biotoolsSum/table/index'
 HighChartsExporting(ReactHighcharts.Highcharts)
+HighChartsNoData(ReactHighcharts.Highcharts)
 
 const getColumns = (includePropsChosen) => {
   const isInfoMode = includePropsChosen === undefined
