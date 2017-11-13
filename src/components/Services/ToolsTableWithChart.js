@@ -8,6 +8,7 @@ import { PAGE_SIZE } from '../../constants/toolsTable'
 import { getChartConfig } from '../../biotoolsSum/services/index'
 import ReactHighcharts from 'react-highcharts'
 import { getCitationsSource, getPublicationLink } from '../../biotoolsSum/table/index'
+import { Button } from 'react-bootstrap'
 
 const getColumns = () => [
   {
@@ -96,8 +97,7 @@ const getColumns = () => [
 class ToolsTableWithChart extends React.PureComponent {
   constructor (props) {
     super(props)
-
-    this.state = { selected: {}, selectAll: 0 }
+    this.state = { selected: {} }
   }
 
   toggleRow = (name, citationsYears) => {
@@ -106,7 +106,12 @@ class ToolsTableWithChart extends React.PureComponent {
 
     this.setState({
       selected: newSelected,
-      selectAll: 2,
+    })
+  }
+
+  deselectAll = () => {
+    this.setState({
+      selected: {},
     })
   }
 
@@ -125,12 +130,19 @@ class ToolsTableWithChart extends React.PureComponent {
       )(selected)
 
       const seriesNames = R.keys(selected)
-      console.log(seriesNames)
       chartConfig = getChartConfig(citationsYears, 'tools', seriesNames)
 
       columns = R.prepend(
         {
-          Header: 'Selected',
+          Header: <div>
+            <span>{'Selected'}</span>
+            <br />
+            {!R.isEmpty(selected) &&
+              <Button bsStyle='warning' bsSize='xsmall' onClick={this.deselectAll}>
+                {'Deselect all'}
+              </Button>
+            }
+          </div>,
           id: 'include-tool',
           accessor: '',
           Cell: ({ original: { name, citationsYears, citations } }) => citations === 0
@@ -141,13 +153,13 @@ class ToolsTableWithChart extends React.PureComponent {
                 checked={!!this.state.selected[name]}
                 onChange={() => this.toggleRow(name, citationsYears)}
               />
-              <div className='state p-warning'>
+              <div className='state p-success'>
                 <i className='icon fa fa-check' aria-hidden='true' />
                 <label />
               </div>
             </div>,
           style: { textAlign: 'center' },
-          width: 70,
+          width: 90,
         },
         columns,
       )

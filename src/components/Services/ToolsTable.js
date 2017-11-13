@@ -262,56 +262,62 @@ const expander = {
   className: 'table-expander',
 }
 
-const ToolsTable = ({ list, includePropsChosen }) => {
-  let columns = getColumns(includePropsChosen)
-  const subColumns = getSubColumns(includePropsChosen)
-  const cellsPerRowCount = getCellsCount(includePropsChosen)
+class ToolsTable extends React.PureComponent {
 
-  if (cellsPerRowCount <= MAIN_ROW_CELLS_COUNT) {
-    columns = R.concat(columns, subColumns)
-  } else {
-    columns.push(expander)
-  }
+  render () {
+    const { list, includePropsChosen } = this.props
 
-  return (
-    <ReactTable
-      data={list}
-      columns={columns}
-      resizable={false}
-      sortable={false}
-      showPaginationTop
-      showPageSizeOptions={false}
-      defaultPageSize={PAGE_SIZE}
-      minRows={1}
-      className='-highlight'
-      SubComponent={cellsPerRowCount <= MAIN_ROW_CELLS_COUNT ? null : row => {
-        const { original } = row
-        const subList = [{
-          func: original.function,
-          topic: original.topic,
-          maturity: original.maturity,
-          operatingSystem: original.operatingSystem,
-        }]
+    let columns = getColumns(includePropsChosen)
+    const subColumns = getSubColumns(includePropsChosen)
+    const cellsPerRowCount = getCellsCount(includePropsChosen)
 
-        const citationsYears = original.citationsYears
+    if (cellsPerRowCount <= MAIN_ROW_CELLS_COUNT) {
+      columns = R.concat(columns, subColumns)
+    } else {
+      columns.push(expander)
+    }
 
-        return (
-          <div className='sub-table'>
-            <ReactTable
-              data={subList}
-              columns={subColumns}
-              defaultPageSize={1}
-              showPagination={false}
-              sortable={false}
-            />
-            {citationsYears && !R.isEmpty(citationsYears) &&
+    return (
+      <ReactTable
+        data={list}
+        columns={columns}
+        resizable={false}
+        sortable={false}
+        onExpandedChange={this.onExpandedChange}
+        showPaginationTop
+        showPageSizeOptions={false}
+        defaultPageSize={PAGE_SIZE}
+        minRows={1}
+        className='-highlight'
+        SubComponent={cellsPerRowCount <= MAIN_ROW_CELLS_COUNT ? null : row => {
+          const {original} = row
+          const subList = [{
+            func: original.function,
+            topic: original.topic,
+            maturity: original.maturity,
+            operatingSystem: original.operatingSystem,
+          }]
+
+          const citationsYears = original.citationsYears
+
+          return (
+            <div className='sub-table'>
+              <ReactTable
+                data={subList}
+                columns={subColumns}
+                defaultPageSize={1}
+                showPagination={false}
+                sortable={false}
+              />
+              {citationsYears && !R.isEmpty(citationsYears) &&
               <ReactHighcharts config={getChartConfig(citationsYears, original.name)} />
-            }
-          </div>
-        )
-      }}
-    />
-  )
+              }
+            </div>
+          )
+        }}
+      />
+    )
+  }
 }
 
 export default ToolsTable

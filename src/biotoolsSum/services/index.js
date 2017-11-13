@@ -230,8 +230,13 @@ export function getChartConfig (citationsYears, toolName, seriesNames) {
       text: `Citations for ${toolName}`,
     },
     exporting: {
-      showTable: true,
       filename: `chart_${toolName}`,
+      buttons: {
+        contextButton: {
+          text: 'Generate',
+          symbolY: 15,
+        },
+      },
       chartOptions: {
         plotOptions: {
           series: {
