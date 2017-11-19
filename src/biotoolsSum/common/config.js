@@ -1,4 +1,4 @@
-export default class BioToolsConfig {
+export default class config {
   static getBioToolsApiUrl (path) {
     return `https://bio.tools/api/tool/${path}`
   }

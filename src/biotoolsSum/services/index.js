@@ -218,12 +218,18 @@ export function getChartConfig (citationsYears, toolName, seriesNames) {
 
     if (seriesNames) {
       for (let i = 0; i < data.length; i++) {
-        console.log('data', data)
-        console.log('seriesNames', seriesNames)
         data[i].name = seriesNames[i]
       }
     }
   }
+
+  const series = R.compose(
+    R.map(R.assoc('maxPointWidth', 40), R.__),
+    R.concat(R.__, [{
+      name: `Total number of citations`,
+      data: totalNumberOfCitations,
+    }]),
+  )(data)
 
   return {
     title: {
@@ -262,10 +268,7 @@ export function getChartConfig (citationsYears, toolName, seriesNames) {
       },
       allowDecimals: false,
     },
-    series: R.concat(data, [{
-      name: `Total number of citations`,
-      data: totalNumberOfCitations,
-    }]),
+    series,
     noData: {
       style: {
         fontSize: '30px',

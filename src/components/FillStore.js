@@ -2,8 +2,7 @@ import React from 'react'
 import { connect } from 'react-redux'
 import buildActionCreators from '../helpers/buildActionCreators'
 import * as ActionTypes from '../constants/actionTypes'
-import { data } from '../constants/servicesInfo'
-import { camelCased, createQueryString } from '../common/helperFunctions'
+import { camelCased, createQueryString, config } from '../common/helperFunctions'
 import * as R from 'ramda'
 import { ALL_SERVICES } from '../constants/stringConstants'
 
@@ -27,15 +26,15 @@ class FillStore extends React.PureComponent {
 
     servicesFetch({
       name: camelCased(ALL_SERVICES),
-      query: `collectionID="${data.collectionID}"`,
+      query: `collectionID="${config.collectionID}"`,
     })
 
-    data.rows.forEach(row =>
+    config.rows.forEach(row =>
       R.take(4, row.cells).forEach(cell => R.isEmpty(cell) || !cell.route
         ? null
         : servicesFetch({
           name: camelCased(cell.route),
-          query: createQueryString(R.assoc('collectionID', data.collectionID, cell.qsObject)),
+          query: createQueryString(R.assoc('collectionID', config.collectionID, cell.qsObject)),
         })
       )
     )

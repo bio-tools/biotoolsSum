@@ -3,8 +3,7 @@ import { connect } from 'react-redux'
 import { MatrixCell } from './MatrixCell'
 import { MatrixCellWithLink } from './MatrixCellWithLink'
 import { getServicesCounts } from '../../selectors/servicesSelector'
-import { data } from '../../constants/servicesInfo'
-import { camelCased, requireImage } from '../../common/helperFunctions'
+import { camelCased, requireImage, config } from '../../common/helperFunctions'
 import { AbstractionCategory, ALL_SERVICES } from '../../constants/stringConstants'
 import * as R from 'ramda'
 
@@ -23,7 +22,7 @@ class ServicesMatrix extends PureComponent {
         <MatrixCell text={AbstractionCategory[1]} />
         <MatrixCell text={AbstractionCategory[2]} />
         <MatrixCell text={AbstractionCategory[3]} />
-        {data.rows.map(row =>
+        {config.rows.map(row =>
           <div key={row.name}>
             <MatrixCell text={row.name} />
             {R.take(4, row.cells).map((cell, cellIndex) => R.isEmpty(cell) || !cell.route

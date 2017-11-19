@@ -2,13 +2,13 @@ import React, { PureComponent } from 'react'
 import { Image, MenuItem, Nav, Navbar, NavDropdown, NavItem } from 'react-bootstrap'
 import { Link } from 'react-router-dom'
 import { LinkContainer } from 'react-router-bootstrap'
-import { data } from '../../constants/servicesInfo'
 import * as R from 'ramda'
 import { AbstractionCategory, ALL_SERVICES } from '../../constants/stringConstants'
 import { connect } from 'react-redux'
 import * as ActionTypes from '../../constants/actionTypes'
 import buildActionCreators from '../../helpers/buildActionCreators'
 import elixirLogo from '../../images/elixir-logo.png'
+import { config } from '../../common/helperFunctions'
 
 class ServicesNavbar extends PureComponent {
   constructor (props) {
@@ -45,7 +45,7 @@ class ServicesNavbar extends PureComponent {
                 {'All Services'}
               </NavItem>
             </LinkContainer>
-            {data.rows.map((row, rowIndex) =>
+            {config.rows.map((row, rowIndex) =>
               <NavDropdown key={rowIndex} eventKey={rowIndex} title={row.name} id={`${row.name}-nav-dropdown`}>
                 {R.take(4, row.cells).map((cell, cellIndex) => R.isEmpty(cell) || !cell.route
                   ? null

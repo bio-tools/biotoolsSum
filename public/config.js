@@ -1,5 +1,5 @@
-export const config = {
-  basename: '/~xpolans1/build',
+var config = {
+  basename: '',
   collectionID: 'Elixir-cz',
   rows: [
     {
@@ -124,3 +124,5 @@ export const config = {
     },
   ],
 }
+
+exports.config = config

@@ -30,3 +30,5 @@ export const requireImage = imageName => {
 
   return image
 }
+
+export const config = window.config || require('../../public/config.js').config

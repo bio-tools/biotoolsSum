@@ -3,8 +3,7 @@ import { Alert } from 'react-bootstrap'
 import { connect } from 'react-redux'
 import ToolsTable from './ToolsTable'
 import { getServices } from '../../selectors/servicesSelector'
-import { camelCased } from '../../common/helperFunctions'
-import { data } from '../../constants/servicesInfo'
+import { camelCased, config } from '../../common/helperFunctions'
 import Loader from '../common/Loader'
 import * as R from 'ramda'
 import { ALL_SERVICES } from '../../constants/stringConstants'
@@ -95,20 +94,20 @@ class BioToolsData extends React.PureComponent {
 
 export default BioToolsData = connect(state => {
   const path = state.router.location.pathname
-  const servicesName = path.slice('/'.length)
+  const servicesName = path.substr(path.lastIndexOf('/') + 1)
 
   if (path === '/') {
     return null
   }
 
   const message = servicesName === ALL_SERVICES
-    ? `All ${data.collectionID} services`
+    ? `All ${config.collectionID} services`
     : R.compose(
     R.prop('message'),
     R.find(R.propEq('route', servicesName)),
     R.flatten,
     R.pluck('cells'),
-  )(data.rows)
+  )(config.rows)
 
   const selector = formValueSelector('fileGenerationForm')
 

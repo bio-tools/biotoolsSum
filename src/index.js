@@ -21,9 +21,9 @@ import reducers from './reducers'
 import { autoRehydrate, persistStore } from 'redux-persist'
 import { Grid, Row } from 'react-bootstrap'
 import MatrixNavbar from './components/Matrix/MatrixNavbar'
-
 import Alert from 'react-s-alert'
 import 'react-s-alert/dist/s-alert-default.css'
+import { config } from './common/helperFunctions'
 
 const composeEnhancers = (
   process.env.NODE_ENV !== 'production' &&
@@ -36,7 +36,9 @@ const rootEpic = configureEpics({}, webEpics)
 
 const epicMiddleware = createEpicMiddleware(rootEpic)
 
-const history = createHistory()
+const history = createHistory({
+  basename: config.basename,
+})
 
 const enhancers = [
   epicMiddleware,

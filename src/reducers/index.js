@@ -3,8 +3,7 @@ import { routerReducer } from 'react-router-redux'
 import { reducer as reduxFormReducer } from 'redux-form'
 import { specificServicesWithName } from './specificServices'
 import * as R from 'ramda'
-import { data } from '../constants/servicesInfo'
-import { camelCased } from '../common/helperFunctions'
+import { camelCased, config } from '../common/helperFunctions'
 import { ALL_SERVICES } from '../constants/stringConstants'
 import { ui } from './ui'
 
@@ -18,7 +17,7 @@ const getReducerNames = R.compose(
 )
 
 const biotoolsSumApp = () => {
-  const services = getReducerNames(data.rows)
+  const services = getReducerNames(config.rows)
   const reducers = R.map(specificServicesWithName, services)
   const servicesReducers = R.zipObj(services, reducers)
 
