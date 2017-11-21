@@ -5,8 +5,11 @@ import { pickData } from '../biotoolsSum/services/index'
 const initialState = {
   count: 0,
   list: [],
+  persistExpiresAt: '',
   serviceLoading: false,
+  serviceLoaded: false,
   citationsLoading: false,
+  citationsLoaded: false,
 }
 
 export const specificServicesWithName = (servicesName = '') =>
@@ -24,26 +27,24 @@ export const specificServicesWithName = (servicesName = '') =>
 
       case Actions.SERVICES_FETCH_SUCCESS: {
         const { count, list } = payload.service
-
-        if (count === state.count) {
-          return R.evolve({
-            serviceLoading: R.F,
-            citationsLoading: R.T,
-          })(state)
-        }
-
         const pickedData = pickData(list)
 
         return R.evolve({
           count: R.always(count),
           list: R.always(pickedData),
           serviceLoading: R.F,
+          serviceLoaded: R.T,
           citationsLoading: R.T,
+          persistExpiresAt: R.always(Date.now() + 600000), // 86400000 ms == 24 hours
         })(state)
       }
 
-      case Actions.SERVICES_FETCH_FAILURE:
-        return R.assoc('serviceLoading', false, state)
+      case Actions.SERVICES_FETCH_FAILURE: {
+        return R.evolve({
+          serviceLoading: R.F,
+          serviceLoaded: R.F,
+        })(state)
+      }
 
       case Actions.CITATIONS_FETCH_SUCCESS: {
         const { count, list } = payload.updatedService
@@ -53,11 +54,15 @@ export const specificServicesWithName = (servicesName = '') =>
           count: R.always(count),
           list: R.always(pickedData),
           citationsLoading: R.F,
+          citationsLoaded: R.T,
         })(state)
       }
 
       case Actions.CITATIONS_FETCH_FAILURE:
-        return R.assoc('citationsLoading', false, state)
+        return R.evolve({
+          citationsLoading: R.F,
+          citationsLoaded: R.F,
+        })(state)
 
       default:
         return state

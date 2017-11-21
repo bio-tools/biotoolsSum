@@ -54,7 +54,7 @@ const getPublicationsInfo = uniquePublications => uniquePublications.map(pub => 
       }
       const { source, id: resultId, citedByCount } = result
 
-      const pages = Math.ceil(citedByCount / 25)
+      const pages = Math.ceil(citedByCount / 1000)
 
       let apiPromises = []
       for (let i = 1; i <= pages; i++) {
@@ -201,7 +201,14 @@ export function orderByAttributeAndTakeFirstX (list, sortBy, order, takeFirstX) 
 export function getChartConfig (citationsYears, toolName, seriesNames) {
   const allCitationsYears = R.reduce(R.mergeWith(R.add), 0, citationsYears)
 
-  const years = R.keys(allCitationsYears)
+  let years = R.keys(allCitationsYears)
+
+  for (let i = 1; i < years.length; i++) {
+    if (years[i] - years[i - 1] !== 1) {
+      years = R.insert(i, Number(years[i - 1]) + 1, years)
+    }
+  }
+
   const totalNumberOfCitations = R.values(allCitationsYears)
 
   let data = []

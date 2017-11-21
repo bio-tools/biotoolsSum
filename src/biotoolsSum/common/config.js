@@ -4,7 +4,7 @@ export default class config {
   }
 
   static getCitationsApiUrl (src, id, page) {
-    return `https://www.ebi.ac.uk/europepmc/webservices/rest/${src}/${id}/citations/${page}/25/json`
+    return `https://www.ebi.ac.uk/europepmc/webservices/rest/${src}/${id}/citations/${page}/1000/json`
     // https://www.ebi.ac.uk/europepmc/webservices/rest/MED/20972220/citations/1/1000/json
   }
 

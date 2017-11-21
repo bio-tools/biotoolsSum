@@ -1,4 +1,5 @@
 import * as R from 'ramda'
+import { ALL_SERVICES } from '../constants/stringConstants'
 
 export const createQueryString = R.compose(
   R.join('&'),
@@ -32,3 +33,18 @@ export const requireImage = imageName => {
 }
 
 export const config = window.config || require('../../public/config.js').config
+
+export const servicesNames = R.compose(
+  R.map(camelCased),
+  R.prepend(ALL_SERVICES),
+  R.pluck('route'),
+  R.unnest,
+  R.pluck('cells'),
+  R.prop('rows'),
+)(config)
+
+export const configCollection = config.collectionID
+
+export const allowReportMode = config.allowReportMode
+
+export const allowCollectionChange = config.allowCollectionChange

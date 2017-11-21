@@ -9,6 +9,7 @@ import { getChartConfig } from '../../biotoolsSum/services/index'
 import ReactHighcharts from 'react-highcharts'
 import { getCitationsSource, getPublicationLink } from '../../biotoolsSum/table/index'
 import { Button } from 'react-bootstrap'
+import ChartWithSlider from './ChartWithSlider'
 
 const getColumns = () => [
   {
@@ -97,7 +98,9 @@ const getColumns = () => [
 class ToolsTableWithChart extends React.PureComponent {
   constructor (props) {
     super(props)
-    this.state = { selected: {} }
+    this.state = {
+      selected: {},
+    }
   }
 
   toggleRow = (name, citationsYears) => {
@@ -117,11 +120,11 @@ class ToolsTableWithChart extends React.PureComponent {
 
   render () {
     const { list, createGraph } = this.props
-    const { selected } = this.state
     let columns = getColumns()
     let chartConfig = {}
 
     if (createGraph) {
+      const { selected } = this.state
       const citationsYears = R.compose(
         R.map(
           R.reduce(R.mergeWith(R.add), 0)
@@ -145,12 +148,12 @@ class ToolsTableWithChart extends React.PureComponent {
           </div>,
           id: 'include-tool',
           accessor: '',
-          Cell: ({ original: { name, citationsYears, citations } }) => citations === 0
+          Cell: ({ original: { name, citationsYears, citations } }) => !citations || citations === 0
             ? <div />
             : <div style={{ marginRight: 0 }} className='pretty p-icon p-smooth p-round p-bigger'>
               <input
                 type='checkbox'
-                checked={!!this.state.selected[name]}
+                checked={!!selected[name]}
                 onChange={() => this.toggleRow(name, citationsYears)}
               />
               <div className='state p-success'>
@@ -167,7 +170,7 @@ class ToolsTableWithChart extends React.PureComponent {
 
     return (
       <div>
-        {createGraph && <ReactHighcharts config={chartConfig} />}
+        {createGraph && <ChartWithSlider chartConfig={chartConfig} />}
         <ReactTable
           data={list}
           columns={columns}

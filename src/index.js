@@ -9,6 +9,8 @@ import 'bootstrap/dist/css/bootstrap.min.css'
 import 'font-awesome/css/font-awesome.min.css'
 import 'pretty-checkbox/dist/pretty-checkbox.min.css'
 import './styles/index.css'
+import 'react-s-alert/dist/s-alert-default.css'
+import 'rc-slider/assets/index.css'
 import ServicesMatrix from './components/Matrix/ServicesMatrix'
 import ServicesNavbar from './components/Services/ServicesNavbar'
 import BioToolsData from './components/Services/BioToolsData'
@@ -22,7 +24,6 @@ import { autoRehydrate, persistStore } from 'redux-persist'
 import { Grid, Row } from 'react-bootstrap'
 import MatrixNavbar from './components/Matrix/MatrixNavbar'
 import Alert from 'react-s-alert'
-import 'react-s-alert/dist/s-alert-default.css'
 import { config } from './common/helperFunctions'
 
 const composeEnhancers = (
@@ -57,7 +58,9 @@ function configureStore () {
         )
       )
 
-      persistStore(store, { blacklist: ['router'] }, () => resolve(store))
+      persistStore(store, {
+        blacklist: ['router', 'ui', 'form'],
+      }, () => resolve(store))
     } catch (e) {
       reject(e)
     }

@@ -1,5 +1,5 @@
 import React, { PureComponent } from 'react'
-import { Image, MenuItem, Nav, Navbar, NavDropdown, NavItem } from 'react-bootstrap'
+import { Button, FormControl, FormGroup, Image, MenuItem, Nav, Navbar, NavDropdown, NavItem } from 'react-bootstrap'
 import { Link } from 'react-router-dom'
 import { LinkContainer } from 'react-router-bootstrap'
 import * as R from 'ramda'
@@ -8,7 +8,8 @@ import { connect } from 'react-redux'
 import * as ActionTypes from '../../constants/actionTypes'
 import buildActionCreators from '../../helpers/buildActionCreators'
 import elixirLogo from '../../images/elixir-logo.png'
-import { config } from '../../common/helperFunctions'
+import { allowCollectionChange, allowReportMode, config } from '../../common/helperFunctions'
+import NavbarForm from './NavbarForm'
 
 class ServicesNavbar extends PureComponent {
   constructor (props) {
@@ -58,11 +59,18 @@ class ServicesNavbar extends PureComponent {
               </NavDropdown>
             )}
           </Nav>
-          <Nav pullRight>
-            <NavItem onClick={changeReportPageVisibility}>
-              {showReportPage ? 'Info mode' : 'Report mode'}
-            </NavItem>
-          </Nav>
+          {allowCollectionChange &&
+            <Navbar.Form pullRight>
+              <NavbarForm />
+            </Navbar.Form>
+          }
+          {allowReportMode &&
+            <Nav pullRight>
+              <NavItem onClick={changeReportPageVisibility}>
+                {showReportPage ? 'Info mode' : 'Report mode'}
+              </NavItem>
+            </Nav>
+          }
         </Navbar.Collapse>
       </Navbar>
     )

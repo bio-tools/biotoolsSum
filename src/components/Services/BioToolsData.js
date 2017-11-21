@@ -12,6 +12,7 @@ import { formValueSelector } from 'redux-form'
 import { orderByAttributeAndTakeFirstX } from '../../biotoolsSum/services/index'
 import ToolsTableWithChart from './ToolsTableWithChart'
 import { reportType } from '../../constants/generateFile'
+import { getActiveCollection } from '../../selectors/collectionSelector'
 
 class BioToolsData extends React.PureComponent {
   shouldComponentUpdate (nextProps) {
@@ -53,7 +54,7 @@ class BioToolsData extends React.PureComponent {
                     </span>
                     <br />
                     <span>
-                      {'This happens whenever you refresh page'}
+                      {'This might take some time'}
                     </span>
                   </div>
                   <Loader />
@@ -100,14 +101,17 @@ export default BioToolsData = connect(state => {
     return null
   }
 
+  const activeCollection = getActiveCollection(state)
+
   const message = servicesName === ALL_SERVICES
     ? `All ${config.collectionID} services`
     : R.compose(
-    R.prop('message'),
-    R.find(R.propEq('route', servicesName)),
-    R.flatten,
-    R.pluck('cells'),
-  )(config.rows)
+      R.concat(`All ${activeCollection} `),
+      R.prop('message'),
+      R.find(R.propEq('route', servicesName)),
+      R.flatten,
+      R.pluck('cells'),
+    )(config.rows)
 
   const selector = formValueSelector('fileGenerationForm')
 

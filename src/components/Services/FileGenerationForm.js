@@ -5,7 +5,7 @@ import * as ActionTypes from '../../constants/actionTypes'
 import { connect } from 'react-redux'
 import { reportType } from '../../constants/generateFile'
 import SelectField from '../common/SelectField'
-import { Button, Col, Form, FormGroup, ToggleButton } from 'react-bootstrap'
+import { Button, Col, Form, FormGroup, Panel, ToggleButton } from 'react-bootstrap'
 import ToggleRadioButtonGroup from '../common/ToggleRadioButtonGroup'
 import TextField from '../common/TextField'
 import ToggleCheckboxButtonGroup from '../common/ToggleCheckboxButtonGroup'
@@ -22,48 +22,50 @@ class FileGenerationForm extends React.PureComponent {
     const { reset, submitting, reportTypeChosen, sortByChosen, orderChosen, includePropsChosen } = this.props
 
     return (
-      <Form horizontal onSubmit={this.generateFile}>
-        <Field name='reportType' component={SelectField} label='Choose type of report' >
-          <option value={reportType.DOCX}>{'DOCX tools report'}</option>
-          <option value={reportType.XLSX}>{'XLSX tools report'}</option>
-          <option value={reportType.CHART}>{'Citations chart'}</option>
-        </Field>
-        {reportTypeChosen === reportType.CHART
-          ? <Field name='createGraph' component={Checkbox} label='I want to create my own graph by selecting tools' />
-          : <div>
-            <Field name='sortBy' component={ToggleRadioButtonGroup} valueChosen={sortByChosen} label='Sort by' >
-              <ToggleButton value='citations'>{'Citations'}</ToggleButton>
-              <ToggleButton value='name'>{'Name'}</ToggleButton>
-            </Field>
-            <Field name='order' component={ToggleRadioButtonGroup} valueChosen={orderChosen} label='Order' >
-              <ToggleButton value='descend'>{'Descending'}</ToggleButton>
-              <ToggleButton value='ascend'>{'Ascending'}</ToggleButton>
-            </Field>
-            <Field name='takeFirstX' component={TextField} label='Number of tools' />
-            <Field name='includeProps' component={ToggleCheckboxButtonGroup} valueChosen={includePropsChosen} label='Include'>
-              <ToggleButton value='toolType'>{'Tool type'}</ToggleButton>
-              <ToggleButton value='institute'>{'Institute'}</ToggleButton>
-              <ToggleButton value='description'>{'Description'}</ToggleButton>
-              <ToggleButton value='publication'>{'Publications'}</ToggleButton>
-              <ToggleButton value='citations'>{'Citations'}</ToggleButton>
-              <ToggleButton value='topic'>{'Topic'}</ToggleButton>
-              <ToggleButton value='function'>{'Function'}</ToggleButton>
-              <ToggleButton value='maturity'>{'Maturity'}</ToggleButton>
-              <ToggleButton value='platform'>{'Platform'}</ToggleButton>
-            </Field>
-            <FormGroup>
-              <Col smOffset={2} sm={10}>
-                <Button type='submit' disabled={submitting}>
-                  {'Generate'}
-                </Button>
-                <Button type='button' disabled={submitting} onClick={reset}>
-                  {'Clear Values'}
-                </Button>
-              </Col>
-            </FormGroup>
-          </div>
-        }
-      </Form>
+      <Panel bsStyle='warning'>
+        <Form horizontal onSubmit={this.generateFile}>
+          <Field name='reportType' component={SelectField} label='Choose type of report' >
+            <option value={reportType.DOCX}>{'DOCX tools report'}</option>
+            <option value={reportType.XLSX}>{'XLSX tools report'}</option>
+            <option value={reportType.CHART}>{'Citations chart'}</option>
+          </Field>
+          {reportTypeChosen === reportType.CHART
+            ? <Field name='createGraph' component={Checkbox} label='I want to create my own graph by selecting tools' />
+            : <div>
+              <Field name='sortBy' component={ToggleRadioButtonGroup} valueChosen={sortByChosen} label='Sort by' >
+                <ToggleButton value='citations'>{'Citations'}</ToggleButton>
+                <ToggleButton value='name'>{'Name'}</ToggleButton>
+              </Field>
+              <Field name='order' component={ToggleRadioButtonGroup} valueChosen={orderChosen} label='Order' >
+                <ToggleButton value='descend'>{'Descending'}</ToggleButton>
+                <ToggleButton value='ascend'>{'Ascending'}</ToggleButton>
+              </Field>
+              <Field name='takeFirstX' component={TextField} label='Number of tools' />
+              <Field name='includeProps' component={ToggleCheckboxButtonGroup} valueChosen={includePropsChosen} label='Include'>
+                <ToggleButton value='toolType'>{'Tool type'}</ToggleButton>
+                <ToggleButton value='institute'>{'Institute'}</ToggleButton>
+                <ToggleButton value='description'>{'Description'}</ToggleButton>
+                <ToggleButton value='publication'>{'Publications'}</ToggleButton>
+                <ToggleButton value='citations'>{'Citations'}</ToggleButton>
+                <ToggleButton value='topic'>{'Topic'}</ToggleButton>
+                <ToggleButton value='function'>{'Function'}</ToggleButton>
+                <ToggleButton value='maturity'>{'Maturity'}</ToggleButton>
+                <ToggleButton value='platform'>{'Platform'}</ToggleButton>
+              </Field>
+              <FormGroup>
+                <Col smOffset={2} sm={10}>
+                  <Button type='submit' disabled={submitting}>
+                    {'Generate'}
+                  </Button>
+                  <Button type='button' disabled={submitting} onClick={reset}>
+                    {'Clear Values'}
+                  </Button>
+                </Col>
+              </FormGroup>
+            </div>
+          }
+        </Form>
+      </Panel>
     )
   }
 }
