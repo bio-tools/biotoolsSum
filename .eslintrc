@@ -1,0 +1,21 @@
+{
+  "extends": [
+    "react-app",
+    "standard",
+    "standard-jsx"
+  ],
+  "rules": {
+    "comma-dangle": ["error", "always-multiline"],
+    "no-class-assign": "off",
+    "react/jsx-no-literals": 2,
+    "react/jsx-no-bind": [1, {
+      "ignoreRefs": true,
+      "allowArrowFunctions": false,
+      "allowBind": false
+    }]
+  },
+  "env": {
+    "browser": true,
+    "jest": true
+  }
+}
