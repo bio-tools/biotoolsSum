@@ -22,20 +22,24 @@ export const specificServicesWithName = (servicesName = '') =>
       case Actions.SERVICES_FETCH:
         return R.evolve({
           serviceLoading: R.T,
+          serviceLoaded: R.F,
           citationsLoading: R.F,
+          citationsLoaded: R.F,
         })(state)
 
       case Actions.SERVICES_FETCH_SUCCESS: {
         const { count, list } = payload.service
         const pickedData = pickData(list)
+        const oldListByIds = R.groupBy(R.prop('id'), state.list)
+        const finalList = R.map(tool => R.mergeDeepLeft(tool, oldListByIds[tool.id][0]), pickedData)
 
         return R.evolve({
           count: R.always(count),
-          list: R.always(pickedData),
+          list: R.always(finalList),
           serviceLoading: R.F,
           serviceLoaded: R.T,
           citationsLoading: R.T,
-          persistExpiresAt: R.always(Date.now() + 600000), // 86400000 ms == 24 hours
+          persistExpiresAt: R.always(Date.now() + 6000), // 86400000 ms == 24 hours
         })(state)
       }
 

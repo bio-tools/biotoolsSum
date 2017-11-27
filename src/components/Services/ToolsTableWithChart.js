@@ -7,7 +7,7 @@ import { OverlayTooltip } from '../common/OverlayTooltip'
 import { PAGE_SIZE } from '../../constants/toolsTable'
 import { getChartConfig } from '../../biotoolsSum/services/index'
 import ReactHighcharts from 'react-highcharts'
-import { getCitationsSource, getPublicationLink } from '../../biotoolsSum/table/index'
+import { getCitationsSource, getPublicationAndCitationsLink } from '../../biotoolsSum/table/index'
 import { Button } from 'react-bootstrap'
 import ChartWithSlider from './ChartWithSlider'
 
@@ -43,7 +43,7 @@ const getColumns = () => [
             ? filteredPublications.map((publication, index) =>
               <span key={index}>
                 {'['}
-                {getPublicationLink(publication, index + 1)}
+                {getPublicationAndCitationsLink(publication, index + 1)}
                 {index + 1 < filteredPublications.length ? '], ' : ']'}
               </span>
             )

@@ -53,7 +53,6 @@ const getPublicationsInfo = uniquePublications => uniquePublications.map(pub => 
         return null
       }
       const { source, id: resultId, citedByCount } = result
-
       const pages = Math.ceil(citedByCount / 1000)
 
       let apiPromises = []
@@ -92,7 +91,10 @@ export const updatedData = tools => {
     const { publication } = tool
 
     if (publication.length === 0) {
-      return Rx.Observable.of(R.assoc('citations', 0, tool))
+      return Rx.Observable.of(R.compose(
+        R.assoc('publicationsIdSourcePairs', []),
+        R.assoc('citations', 0),
+      )(tool))
     }
 
     // There were occasionally duplicates in the publications record

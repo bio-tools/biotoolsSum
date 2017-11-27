@@ -10,7 +10,7 @@ export const MatrixCellWithLink = ({ linkTo, image, text, numberOfServices }) =>
           <div className='table'>
             <div className='table-cell text-big'>
               {image
-                ? <Image src={image || '/../../images/1d-dna.png'} rounded className={`responsive-img ${!numberOfServices ? 'grey' : ''}`} />
+                ? <Image src={image} className={`responsive-img ${!numberOfServices ? 'grey' : ''}`} />
                 : text && <span>{text}</span>}
               <div className='text-little'>{numberOfServices}</div>
             </div>

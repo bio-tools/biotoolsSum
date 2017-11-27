@@ -1,5 +1,5 @@
 import React, { PureComponent } from 'react'
-import { Button, FormControl, FormGroup, Image, MenuItem, Nav, Navbar, NavDropdown, NavItem } from 'react-bootstrap'
+import { Image, MenuItem, Nav, Navbar, NavDropdown, NavItem } from 'react-bootstrap'
 import { Link } from 'react-router-dom'
 import { LinkContainer } from 'react-router-bootstrap'
 import * as R from 'ramda'

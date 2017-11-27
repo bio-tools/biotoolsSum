@@ -12,11 +12,13 @@ const ServicesNavbar = () => (
       </Navbar.Brand>
       <Navbar.Toggle />
     </Navbar.Header>
+    <Navbar.Collapse>
     {allowCollectionChange &&
       <Navbar.Form pullRight>
         <NavbarForm />
       </Navbar.Form>
     }
+    </Navbar.Collapse>
   </Navbar>
 )
 

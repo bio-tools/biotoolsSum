@@ -13,13 +13,13 @@ export const fetchServicesEpic = (action$, { getState }) =>
   action$.ofType(ActionTypes.SERVICES_FETCH)
     .concatMap(({ payload: { name, query } }) => Rx.Observable
       .fromPromise(getServices(query))
-      .map((service) => buildActionWithName(ActionTypes.SERVICES_FETCH_SUCCESS, {service, name}))
+      .map((service) => buildActionWithName(ActionTypes.SERVICES_FETCH_SUCCESS, { service, name }))
       .retry(3)
       .catch(serverIsDown)
       .catch(() => Rx.Observable.of(buildAction(ActionTypes.SERVICES_FETCH_FAILURE))))
 
 export const fetchCitationsEpic = (action$) =>
-  action$.ofType(ActionTypes.SERVICES_FETCH_SUCCESS)
+  action$.ofType(ActionTypes.SERVICES_FETCH_SUCCESS, ActionTypes.CITATIONS_FETCH)
     .concatMap(({ payload: { service, name } }) => Rx.Observable
       .combineLatest(updatedData(service.list))
       .map(tools => {
@@ -35,9 +35,7 @@ export const generateFile = (action$, { getState }) => {
   return action$.ofType(ActionTypes.GENERATE_FILE)
     .switchMap(({ payload: { list } }) => {
       const { form: { fileGenerationForm: { values } } } = getState()
-      if (values.reportType === reportType.JPG) {
-        // for now nothing here
-      } else if (values.reportType === reportType.DOCX) {
+      if (values.reportType === reportType.DOCX) {
         let pickedListOfTools = R.map(
           R.pick(
             ['name', 'credit', 'description', 'publicationsStrings', 'citations',

@@ -12,29 +12,9 @@ export const createQueryString = R.compose(
 
 export const camelCased = string => string.replace(/-([a-z0-9])/g, match => match[1].toUpperCase())
 
-const imageExtensions = ['svg', 'png', 'jpg', 'jpeg', 'gif']
-
-export const requireImage = imageName => {
-  let image = null
-
-  for (let i = 0; i < imageExtensions.length; i++) {
-    try {
-      image = require(`../images/${imageName}.${imageExtensions[i]}`)
-
-      if (image) {
-        break
-      }
-    } catch (e) {
-
-    }
-  }
-
-  return image
-}
-
 export const config = window.config || require('../../public/config.js').config
 
-export const servicesNames = R.compose(
+export const getServicesNames = R.compose(
   R.map(camelCased),
   R.prepend(ALL_SERVICES),
   R.pluck('route'),
