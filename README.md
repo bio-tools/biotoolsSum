@@ -1,3 +1,8 @@
+
+biotoosSum is a client-side web application for rendering views over `bio.tools <https://bio.tools/>`_ content for use on local websites.  For an example see https://biotools-sum.firebaseapp.com/.
+
+
+#Create React App docs
 THIS IS README CREATED WITH BASIC TEMPLATE, IT DOES NOT CONTAIN ANY INFORMATION ABOUT THIS PROJECT YET.
 
 This project was bootstrapped with [Create React App](https://github.com/facebookincubator/create-react-app).
