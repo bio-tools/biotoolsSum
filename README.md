@@ -1,5 +1,5 @@
 
-**biotoosSum** is a client-side web application for rendering views of tool descriptions from the [ELIXIR Tools & Data Services Registry](https://bio.tools), for use on local websites.  For an example see https://biotools-sum.firebaseapp.com/.
+**biotoosSum** is a client-side web application for rendering views and reports of tool descriptions from the [ELIXIR Tools & Data Services Registry](https://bio.tools), for use on local websites.  For an example see https://biotools-sum.firebaseapp.com/.
 
 
 # Create React App docs
