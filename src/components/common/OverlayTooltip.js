@@ -1,7 +1,7 @@
 import React from 'react'
 import { OverlayTrigger, Tooltip } from 'react-bootstrap'
 
-export const OverlayTooltip = ({ id, tooltipText, children, delayShow, delayHide, placement }) => {
+const OverlayTooltip = ({ id, tooltipText, children, delayShow = 300, delayHide = 150, placement = 'top' }) => {
   const tooltip = <Tooltip id={id}>{tooltipText}</Tooltip>
 
   return (
@@ -16,8 +16,4 @@ export const OverlayTooltip = ({ id, tooltipText, children, delayShow, delayHide
   )
 }
 
-OverlayTooltip.defaultProps = {
-  delayShow: 300,
-  delayHide: 150,
-  placement: 'top',
-}
+export default OverlayTooltip

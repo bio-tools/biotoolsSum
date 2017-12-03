@@ -7,7 +7,7 @@ import { OverlayTooltip } from '../common/OverlayTooltip'
 import { PAGE_SIZE } from '../../constants/toolsTable'
 import { getChartConfig } from '../../biotoolsSum/services/index'
 import ReactHighcharts from 'react-highcharts'
-import { getCitationsSource, getPublicationAndCitationsLink } from '../../biotoolsSum/table/index'
+import { getPublicationAndCitationsLink } from '../../biotoolsSum/table/index'
 import { Button } from 'react-bootstrap'
 import ChartWithSlider from './ChartWithSlider'
 
@@ -23,11 +23,18 @@ const getColumns = () => [
     filterable: true,
     filterMethod: (filter, row) => row[filter.id].toLowerCase().includes(filter.value.toLowerCase()),
     Cell: data => {
-      const { id, version, name, homepage, publication: publications, publicationsIdSourcePairs, citations } = data.original
-      const filteredPublications = R.filter(
-          publication => publication.doi !== null || publication.pmid !== null || publication.pmcid !== null,
-          publications
-        )
+      const { id, version, name, homepage, publication, publicationsIdSourcePairs, citations } = data.original
+      const publicationWithSource = publication => publication.map((publication, index) => {
+        const citationsSource = publicationsIdSourcePairs && publicationsIdSourcePairs[index]
+        return citationsSource
+          ? R.assoc('citationsSource', citationsSource, publication)
+          : publication
+      })
+
+      const publicationsWithCitationsSources = R.compose(
+        publicationWithSource,
+        R.filter(publication => publication.doi !== null || publication.pmid !== null || publication.pmcid !== null)
+      )(publication)
 
       return <div>
         <a href={homepage} target='_blank'>{name}</a>
@@ -38,33 +45,26 @@ const getColumns = () => [
           </a>
         </OverlayTooltip>
         <hr className='table-delimiter' />
-        <strong>{'Publications: '}</strong>
-        {filteredPublications.length > 0
-            ? filteredPublications.map((publication, index) =>
-              <span key={index}>
-                {'['}
-                {getPublicationAndCitationsLink(publication, index + 1)}
-                {index + 1 < filteredPublications.length ? '], ' : ']'}
-              </span>
-            )
-            : 'no'
-          }
+
+        <div>
+          <strong>{'Publications: '}</strong>
+          {publicationsWithCitationsSources.length > 0
+              ? publicationsWithCitationsSources.map((publication, index) =>
+                <span key={index}>
+                  {'['}
+                  {getPublicationAndCitationsLink(publication, index + 1)}
+                  {index + 1 < publicationsWithCitationsSources.length ? '], ' : ']'}
+                </span>
+              )
+              : 'no'
+            }
+        </div>
         <hr className='table-delimiter' />
-        <strong>
-          {`Total Citations: ${citations}`}
-        </strong>
-        <br />
-        <strong>{`Citations source: `}</strong>
-        {publicationsIdSourcePairs && publicationsIdSourcePairs.length > 0 && citations > 0
-            ? publicationsIdSourcePairs.map((idSourcePair, index) =>
-              <span key={index}>
-                {'['}
-                {getCitationsSource(idSourcePair, index + 1)}
-                {index + 1 < publicationsIdSourcePairs.length ? '], ' : ']'}
-              </span>
-            )
-            : '-'
-          }
+        <div>
+          <strong>
+            {`Total Citations: ${citations || '-'}`}
+          </strong>
+        </div>
       </div>
     },
     minWidth: 140,

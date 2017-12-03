@@ -5,7 +5,7 @@ import ReactTable from 'react-table'
 import ReadMore from '../common/ReadMore'
 import { Label } from 'react-bootstrap'
 import FontAwesome from 'react-fontawesome'
-import { OverlayTooltip } from '../common/OverlayTooltip'
+import OverlayTooltip from '../common/OverlayTooltip'
 import ShowMore from '../common/ShowMore'
 import { MAIN_ROW_CELLS_COUNT, PAGE_SIZE } from '../../constants/toolsTable'
 import { getCellsCount, getChartConfig } from '../../biotoolsSum/services/index'
@@ -88,8 +88,6 @@ const getColumns = (includePropsChosen) => {
     )
   }
 
-
-
   const includePublications = !isInfoMode && includePropsChosen.includes('publication')
   const includeCitations = !isInfoMode && includePropsChosen.includes('citations')
   if (isInfoMode || includePublications || includeCitations) {
@@ -104,30 +102,17 @@ const getColumns = (includePropsChosen) => {
           if (b === '-') return 1
           return a - b
         },
-        Cell: ({ original: { publication, publicationsIdSourcePairs, citations } }) => {
-
-          const publicationWithSource = publication => publication.map((publication, index) => {
-            const citationsSource = publicationsIdSourcePairs && publicationsIdSourcePairs[index]
-            return citationsSource
-              ? R.assoc('citationsSource', citationsSource, publication)
-              : publication
-          })
-
-          const publicationsWithCitationsSources = R.compose(
-            publicationWithSource,
-            R.filter(publication => publication.doi !== null || publication.pmid !== null || publication.pmcid !== null)
-          )(publication)
-
+        Cell: ({ original: { publication: publications, citations } }) => {
           return <div>
             {(isInfoMode || includePublications) &&
               <div>
                 <strong>{'Publications: '}</strong>
-                {publicationsWithCitationsSources.length > 0
-                  ? publicationsWithCitationsSources.map((publication, index) =>
+                {publications.length > 0
+                  ? publications.map((publication, index) =>
                     <span key={index}>
                       {'['}
                       {getPublicationAndCitationsLink(publication, index + 1)}
-                      {index + 1 < publicationsWithCitationsSources.length ? '], ' : ']'}
+                      {index + 1 < publications.length ? '], ' : ']'}
                     </span>
                   )
                   : 'no'
@@ -140,7 +125,7 @@ const getColumns = (includePropsChosen) => {
             {(isInfoMode || includeCitations) &&
               <div>
                 <strong>
-                  {`Total Citations: ${citations}`}
+                  {`Total Citations: ${citations || '-'}`}
                 </strong>
               </div>
             }
@@ -291,8 +276,8 @@ class ToolsTable extends React.PureComponent {
             operatingSystem: original.operatingSystem,
           }]
 
-          const { citationsYears, citations, publicationsIdSourcePairs } = original
-          const seriesNames = R.map(R.join(': '), publicationsIdSourcePairs)
+          const { citationsYears, citations, publication } = original
+          const seriesNames = R.map(R.join(': '), R.pluck('publicationIdSourcePair', publication))
 
           return (
             <div className='sub-table'>

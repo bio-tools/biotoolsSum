@@ -1,0 +1,15 @@
+exports[`test Renders ReadMore correctly 1`] = `
+<div>
+  <span>
+    Lorem Ipsu
+  </span>
+  <span>
+    ... 
+    <a
+      href="#"
+      onClick={[Function]}>
+      Show more
+    </a>
+  </span>
+</div>
+`;

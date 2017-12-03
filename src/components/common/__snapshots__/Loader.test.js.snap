@@ -1,0 +1,11 @@
+exports[`test Renders Loader correctly 1`] = `
+<div
+  className="loader">
+  <div
+    className="bounce1" />
+  <div
+    className="bounce2" />
+  <div
+    className="bounce3" />
+</div>
+`;

@@ -1,0 +1,21 @@
+exports[`test Renders NavbarTextField with placeholder correctly 1`] = `
+<div
+  className="form-group">
+  <input
+    className="form-control"
+    id={undefined}
+    placeholder="Write something"
+    type="text" />
+</div>
+`;
+
+exports[`test Renders NavbarTextField without placeholder correctly 1`] = `
+<div
+  className="form-group">
+  <input
+    className="form-control"
+    id={undefined}
+    placeholder={undefined}
+    type="text" />
+</div>
+`;

@@ -1,7 +1,7 @@
 import * as React from 'react'
 import { Image } from 'react-bootstrap'
 
-export const MatrixCell = ({ image, text }) => {
+const MatrixCell = ({ image, text }) => {
   return (
     <div className={`square ${image || text ? 'dark-grey-background' : 'white-background'}`}>
       <div className='square-content'>
@@ -15,3 +15,5 @@ export const MatrixCell = ({ image, text }) => {
     </div>
   )
 }
+
+export default MatrixCell

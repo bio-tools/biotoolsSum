@@ -1,0 +1,19 @@
+exports[`test Renders TextField correctly 1`] = `
+<div
+  className="form-group">
+  <label
+    className="col-sm-2 control-label"
+    htmlFor="snapshot-textfield">
+    I want to create my own graph by selecting tools
+  </label>
+  <div
+    className="col-sm-10">
+    <input
+      className="form-control"
+      id="snapshot-textfield"
+      name="snapshot-textfield"
+      type={undefined}
+      value="Hello" />
+  </div>
+</div>
+`;

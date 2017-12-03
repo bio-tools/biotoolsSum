@@ -2,7 +2,7 @@ import * as React from 'react'
 import { Link } from 'react-router-dom'
 import { Image } from 'react-bootstrap'
 
-export const MatrixCellWithLink = ({ linkTo, image, text, numberOfServices }) => {
+const MatrixCellWithLink = ({ linkTo, image, text, numberOfServices }) => {
   return (
     <div className='square light-grey-background greyscale'>
       <Link to={linkTo}>
@@ -20,3 +20,5 @@ export const MatrixCellWithLink = ({ linkTo, image, text, numberOfServices }) =>
     </div>
   )
 }
+
+export default MatrixCellWithLink

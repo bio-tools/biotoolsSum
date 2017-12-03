@@ -83,7 +83,7 @@ async function init () {
         </Grid>
       </ConnectedRouter>
     </Provider>,
-    document.getElementById('root')
+      document.getElementById('root')
   )
 
   ReactDOM.render(

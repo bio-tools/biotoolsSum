@@ -7,7 +7,7 @@ import { Button, Form } from 'react-bootstrap'
 import NavbarTextField from '../common/NavbarTextField'
 import { isLoadingInProgress } from '../../selectors/servicesSelector'
 import { getServicesNames } from '../../common/helperFunctions'
-import { OverlayTooltip } from '../common/OverlayTooltip'
+import OverlayTooltip from '../common/OverlayTooltip'
 
 class NavbarForm extends React.PureComponent {
   setCollection = event => {

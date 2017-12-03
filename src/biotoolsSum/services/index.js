@@ -58,26 +58,24 @@ const getPublicationsInfo = uniquePublications => uniquePublications.map(pub => 
       let apiPromises = []
       for (let i = 1; i <= pages; i++) {
         apiPromises.push(
-          fetch(config.getCitationsApiUrl(source, resultId, i))
-            .then(response => response.json())
+          fetch(config.getCitationsApiUrl(source, resultId, i)).then(response => response.json())
         )
       }
 
-      return Promise.all(apiPromises)
-        .then(citationsInfo => {
-          const citationsYears = citationsInfo.length > 0
-            ? R.compose(
-              R.map(R.length),
-              R.groupBy(R.identity),
-              R.pluck('pubYear'),
-              R.flatten,
-              R.pluck('citation'),
-              R.pluck('citationList'),
-            )(citationsInfo)
-            : {}
+      return Promise.all(apiPromises).then(citationsInfo => {
+        const citationsYears = citationsInfo.length > 0
+          ? R.compose(
+            R.map(R.length),
+            R.groupBy(R.identity),
+            R.pluck('pubYear'),
+            R.flatten,
+            R.pluck('citation'),
+            R.pluck('citationList'),
+          )(citationsInfo)
+          : {}
 
-          return ({ publicationInfo, citationsYears })
-        })
+        return ({ publicationInfo, citationsYears })
+      })
     })
   )
 })
@@ -141,7 +139,13 @@ export const updatedData = tools => {
           R.assoc('citations', citations),
           R.assoc('citationsYears', citationsYears),
           R.assoc('publicationsStrings', publicationsStrings),
-          R.assoc('publicationsIdSourcePairs', publicationsIdSourcePairs),
+          R.evolve({
+            publication: R.compose(
+              publication => publication.map((publication, index) =>
+                R.assoc('publicationIdSourcePair', publicationsIdSourcePairs[index], publication)),
+              R.filter(publication => publication.doi !== null || publication.pmid !== null || publication.pmcid !== null),
+            ),
+          })
         )(tool)
       })
   })

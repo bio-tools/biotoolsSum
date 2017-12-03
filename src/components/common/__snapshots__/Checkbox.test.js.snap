@@ -1,0 +1,29 @@
+exports[`test Renders Checkbox correctly 1`] = `
+<div
+  className="form-group">
+  <div
+    className="col-sm-10 col-sm-offset-2">
+    <div
+      className="pretty p-icon p-smooth p-round p-bigger"
+      style={
+        Object {
+          "marginRight": 0,
+        }
+      }>
+      <input
+        checked={true}
+        onChange={[Function]}
+        type="checkbox" />
+      <div
+        className="state p-success">
+        <i
+          aria-hidden="true"
+          className="icon fa fa-check" />
+        <label>
+          Hello, check me
+        </label>
+      </div>
+    </div>
+  </div>
+</div>
+`;

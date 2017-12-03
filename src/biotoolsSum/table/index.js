@@ -1,6 +1,6 @@
 import React from 'react'
 import FontAwesome from 'react-fontawesome'
-import { OverlayTooltip } from '../../components/common/OverlayTooltip'
+import OverlayTooltip from '../../components/common/OverlayTooltip'
 
 export function getPublicationLink (publication, index) {
   if (publication.doi) {
@@ -38,7 +38,7 @@ export function getPublicationAndCitationsLink (publication, index) {
   return (
     <span>
       {getPublicationLink(publication, index)}
-      {publication.citationsSource && getCitationsSource(publication.citationsSource)}
+      {publication.publicationIdSourcePair && getCitationsSource(publication.publicationIdSourcePair)}
     </span>
   )
 }
