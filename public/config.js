@@ -1,9 +1,8 @@
 var config = {
   basename: '',
-  showOnlyAllTools: false,     // true or false
   allowReportMode: true,       // true or false
-  allowCollectionChange: true, // true or false
   collectionID: 'elixir-cz',   // if collection doesn't exist, it defaults to Elixir-cz
+  allowCollectionChange: true, // true or false
   rows: [
     {
       name: 'DNA',

@@ -11,8 +11,9 @@ import { generateDocx, generateXlsx } from '../biotoolsSum/generation/index'
 
 export const fetchServicesEpic = (action$, { getState }) =>
   action$.ofType(ActionTypes.SERVICES_FETCH)
-    .concatMap(({ payload: { name, query } }) => Rx.Observable
+    .mergeMap(({ payload: { name, query } }) => Rx.Observable
       .fromPromise(getServices(query))
+      .takeUntil(action$.ofType(ActionTypes.SERVICES_AND_CITATIONS_FETCH_CANCEL))
       .map((service) => buildActionWithName(ActionTypes.SERVICES_FETCH_SUCCESS, { service, name }))
       .retry(3)
       .catch(serverIsDown)
@@ -20,8 +21,9 @@ export const fetchServicesEpic = (action$, { getState }) =>
 
 export const fetchCitationsEpic = (action$) =>
   action$.ofType(ActionTypes.SERVICES_FETCH_SUCCESS, ActionTypes.CITATIONS_FETCH)
-    .concatMap(({ payload: { service, name } }) => Rx.Observable
+    .mergeMap(({ payload: { service, name } }) => Rx.Observable
       .combineLatest(updatedData(service.list))
+      .takeUntil(action$.ofType(ActionTypes.SERVICES_AND_CITATIONS_FETCH_CANCEL))
       .map(tools => {
         const updatedService = R.assoc('list', tools, service)
         return buildActionWithName(ActionTypes.CITATIONS_FETCH_SUCCESS, { updatedService, name })

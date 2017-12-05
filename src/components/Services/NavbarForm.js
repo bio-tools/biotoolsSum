@@ -5,32 +5,24 @@ import * as ActionTypes from '../../constants/actionTypes'
 import { connect } from 'react-redux'
 import { Button, Form } from 'react-bootstrap'
 import NavbarTextField from '../common/NavbarTextField'
-import { isLoadingInProgress } from '../../selectors/servicesSelector'
-import { getServicesNames } from '../../common/helperFunctions'
-import OverlayTooltip from '../common/OverlayTooltip'
+import { getActiveCollection } from '../../selectors/collectionSelector'
 
 class NavbarForm extends React.PureComponent {
   setCollection = event => {
     event.preventDefault()
-    const { setCollection, enteredCollection, isLoadingInProgress } = this.props
-    if (!isLoadingInProgress) {
+    const { setCollection, servicesAndCitationsFetchCancel, enteredCollection, activeCollection } = this.props
+    if (activeCollection !== enteredCollection) {
+      servicesAndCitationsFetchCancel()
       setCollection({collection: enteredCollection, userEnteredCollection: true})
     }
   }
 
   render () {
-    const { submitting, isLoadingInProgress } = this.props
-
     return (
       <Form onSubmit={this.setCollection}>
         <Field name='enteredCollection' component={NavbarTextField} placeholder='Enter collection' />
         {' '}
-        {submitting || isLoadingInProgress
-          ? <OverlayTooltip id='no-submit-tooltip' tooltipText='Loading in progress...' placement='right'>
-            <Button type='submit' disabled>{'Submit'}</Button>
-          </OverlayTooltip>
-          : <Button type='submit'>{'Submit'}</Button>
-        }
+        <Button type='submit'>{'Submit'}</Button>
       </Form>
     )
   }
@@ -44,10 +36,11 @@ export default connect(state => {
   const selector = formValueSelector('collectionForm')
 
   return {
-    isLoadingInProgress: isLoadingInProgress(state, getServicesNames),
     enteredCollection: selector(state, 'enteredCollection'),
     initialValues: { enteredCollection: '' },
+    activeCollection: getActiveCollection(state),
   }
 }, buildActionCreators({
+  servicesAndCitationsFetchCancel: ActionTypes.SERVICES_AND_CITATIONS_FETCH_CANCEL,
   setCollection: ActionTypes.SET_COLLECTION,
 }))(NavbarForm)
