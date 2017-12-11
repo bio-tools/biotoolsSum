@@ -3,7 +3,7 @@ import React from 'react'
 import * as R from 'ramda'
 import ReactTable from 'react-table'
 import FontAwesome from 'react-fontawesome'
-import { OverlayTooltip } from '../common/OverlayTooltip'
+import OverlayTooltip from '../common/OverlayTooltip'
 import { PAGE_SIZE } from '../../constants/toolsTable'
 import { getChartConfig } from '../../biotoolsSum/services/index'
 import ReactHighcharts from 'react-highcharts'
@@ -23,18 +23,7 @@ const getColumns = () => [
     filterable: true,
     filterMethod: (filter, row) => row[filter.id].toLowerCase().includes(filter.value.toLowerCase()),
     Cell: data => {
-      const { id, version, name, homepage, publication, publicationsIdSourcePairs, citations } = data.original
-      const publicationWithSource = publication => publication.map((publication, index) => {
-        const citationsSource = publicationsIdSourcePairs && publicationsIdSourcePairs[index]
-        return citationsSource
-          ? R.assoc('citationsSource', citationsSource, publication)
-          : publication
-      })
-
-      const publicationsWithCitationsSources = R.compose(
-        publicationWithSource,
-        R.filter(publication => publication.doi !== null || publication.pmid !== null || publication.pmcid !== null)
-      )(publication)
+      const { id, version, name, homepage, publication: publications, citations } = data.original
 
       return <div>
         <a href={homepage} target='_blank'>{name}</a>
@@ -48,12 +37,12 @@ const getColumns = () => [
 
         <div>
           <strong>{'Publications: '}</strong>
-          {publicationsWithCitationsSources.length > 0
-              ? publicationsWithCitationsSources.map((publication, index) =>
+          {publications.length > 0
+              ? publications.map((publication, index) =>
                 <span key={index}>
                   {'['}
                   {getPublicationAndCitationsLink(publication, index + 1)}
-                  {index + 1 < publicationsWithCitationsSources.length ? '], ' : ']'}
+                  {index + 1 < publications.length ? '], ' : ']'}
                 </span>
               )
               : 'no'
@@ -100,6 +89,12 @@ class ToolsTableWithChart extends React.PureComponent {
     super(props)
     this.state = {
       selected: {},
+    }
+  }
+
+  componentWillReceiveProps (nextProps) {
+    if (!nextProps.createGraph) {
+      this.deselectAll()
     }
   }
 

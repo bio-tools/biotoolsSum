@@ -3,7 +3,7 @@ import { Alert } from 'react-bootstrap'
 import { connect } from 'react-redux'
 import ToolsTable from './ToolsTable'
 import { getServices } from '../../selectors/servicesSelector'
-import { camelCased, config } from '../../common/helperFunctions'
+import { camelCased, config, showOnlyAllServicesInCollection } from '../../common/helperFunctions'
 import Loader from '../common/Loader'
 import * as R from 'ramda'
 import { ALL_SERVICES } from '../../constants/stringConstants'
@@ -94,10 +94,14 @@ class BioToolsData extends React.PureComponent {
 
 export default BioToolsData = connect(state => {
   const path = state.router.location.pathname
-  const servicesName = path.substr(path.lastIndexOf('/') + 1)
+  let servicesName = path.substr(path.lastIndexOf('/') + 1)
 
-  if (path === '/') {
-    return null
+  if (showOnlyAllServicesInCollection) {
+    servicesName = ALL_SERVICES
+  }
+
+  if (path === '/' && !showOnlyAllServicesInCollection) {
+    return {}
   }
 
   const activeCollection = getActiveCollection(state)
@@ -118,11 +122,8 @@ export default BioToolsData = connect(state => {
     showReportPage: state.ui.showReportPage,
     services: getServices(state, camelCased(servicesName)),
     message,
-
     reportTypeChosen: selector(state, 'reportType'),
-
     createGraph: selector(state, 'createGraph'),
-
     includePropsChosen: selector(state, 'includeProps'),
     sortBy: selector(state, 'sortBy'),
     order: selector(state, 'order'),

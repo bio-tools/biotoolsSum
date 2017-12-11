@@ -4,7 +4,16 @@ import MatrixCell from './MatrixCell'
 
 it('Renders MatrixCell correctly', () => {
   const component = renderer.create(
-    <MatrixCell text='This is some text' />
+    <MatrixCell />
+  )
+
+  let tree = component.toJSON()
+  expect(tree).toMatchSnapshot()
+})
+
+it('Renders MatrixCell with name correctly', () => {
+  const component = renderer.create(
+    <MatrixCell name='A cell' />
   )
 
   let tree = component.toJSON()

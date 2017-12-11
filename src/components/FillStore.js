@@ -2,7 +2,10 @@ import React from 'react'
 import { connect } from 'react-redux'
 import buildActionCreators from '../helpers/buildActionCreators'
 import * as ActionTypes from '../constants/actionTypes'
-import { camelCased, createQueryString, config, getServicesNames, configCollection } from '../common/helperFunctions'
+import {
+  camelCased, createQueryString, config, getServicesNames, configCollection,
+  showOnlyAllServicesInCollection
+} from '../common/helperFunctions'
 import * as R from 'ramda'
 import { ALL_SERVICES } from '../constants/stringConstants'
 import { getServicesInfo } from '../selectors/servicesSelector'
@@ -48,27 +51,29 @@ class FillStore extends React.PureComponent {
       })
     }
 
-    config.rows.forEach(row =>
-      R.take(4, row.cells).forEach(cell => {
-        if (!R.isEmpty(cell) && cell.route) {
-          const name = camelCased(cell.route)
-          const namedServicesInfo = servicesInfo[name]
+    if (!showOnlyAllServicesInCollection) {
+      config.rows.forEach(row =>
+        R.take(4, row.cells).forEach(cell => {
+          if (!R.isEmpty(cell) && cell.route) {
+            const name = camelCased(cell.route)
+            const namedServicesInfo = servicesInfo[name]
 
-          if (shouldRefetch || namedServicesInfo.persistExpiresAt < Date.now() ||
-            !namedServicesInfo.serviceLoaded) {
-            servicesFetch({
-              name: name,
-              query: createQueryString(R.assoc('collectionID', activeCollection || configCollection, cell.qsObject)),
-            })
-          } else if (!namedServicesInfo.citationsLoaded) {
-            citationsFetch({
-              service: namedServicesInfo,
-              name,
-            })
+            if (shouldRefetch || namedServicesInfo.persistExpiresAt < Date.now() ||
+              !namedServicesInfo.serviceLoaded) {
+              servicesFetch({
+                name: name,
+                query: createQueryString(R.assoc('collectionID', activeCollection || configCollection, cell.qsObject)),
+              })
+            } else if (!namedServicesInfo.citationsLoaded) {
+              citationsFetch({
+                service: namedServicesInfo,
+                name,
+              })
+            }
           }
-        }
-      })
-    )
+        })
+      )
+    }
   }
 
   render () {

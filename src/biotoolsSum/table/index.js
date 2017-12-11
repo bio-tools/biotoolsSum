@@ -37,7 +37,9 @@ export function getCitationsSource (citationsSource) {
 export function getPublicationAndCitationsLink (publication, index) {
   return (
     <span>
+      {'['}
       {getPublicationLink(publication, index)}
+      {']'}
       {publication.publicationIdSourcePair && getCitationsSource(publication.publicationIdSourcePair)}
     </span>
   )

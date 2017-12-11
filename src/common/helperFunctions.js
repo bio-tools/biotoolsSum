@@ -14,17 +14,21 @@ export const camelCased = string => string.replace(/-([a-z0-9])/g, match => matc
 
 export const config = window.config || require('../../public/config.js').config
 
-export const getServicesNames = R.compose(
-  R.map(camelCased),
-  R.prepend(ALL_SERVICES),
-  R.pluck('route'),
-  R.unnest,
-  R.pluck('cells'),
-  R.prop('rows'),
-)(config)
-
 export const configCollection = config.collectionID
 
 export const allowReportMode = config.allowReportMode
 
 export const allowCollectionChange = config.allowCollectionChange
+
+export const showOnlyAllServicesInCollection = config.showOnlyAllServicesInCollection
+
+export const getServicesNames = showOnlyAllServicesInCollection
+  ? [camelCased(ALL_SERVICES)]
+  : R.compose(
+    R.map(camelCased),
+    R.prepend(ALL_SERVICES),
+    R.pluck('route'),
+    R.unnest,
+    R.pluck('cells'),
+    R.prop('rows'),
+  )(config)

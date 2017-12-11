@@ -4,7 +4,7 @@ import elixirLogo from '../../images/elixir-logo.png'
 import NavbarForm from '../Services/NavbarForm'
 import { allowCollectionChange } from '../../common/helperFunctions'
 
-const ServicesNavbar = () => (
+const MatrixNavbar = () => (
   <Navbar collapseOnSelect bsStyle='default'>
     <Navbar.Header>
       <Navbar.Brand>
@@ -13,13 +13,13 @@ const ServicesNavbar = () => (
       <Navbar.Toggle />
     </Navbar.Header>
     <Navbar.Collapse>
-    {allowCollectionChange &&
-      <Navbar.Form pullRight>
-        <NavbarForm />
-      </Navbar.Form>
-    }
+      {allowCollectionChange &&
+        <Navbar.Form pullRight>
+          <NavbarForm />
+        </Navbar.Form>
+      }
     </Navbar.Collapse>
   </Navbar>
 )
 
-export default ServicesNavbar
+export default MatrixNavbar

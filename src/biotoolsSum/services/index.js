@@ -211,11 +211,9 @@ export function getChartConfig (citationsYears, toolName, seriesNames) {
 
   for (let i = 1; i < years.length; i++) {
     if (years[i] - years[i - 1] !== 1) {
-      years = R.insert(i, Number(years[i - 1]) + 1, years)
+      years = R.insert(i, (Number(years[i - 1]) + 1).toString(), years)
     }
   }
-
-  const totalNumberOfCitations = R.values(allCitationsYears)
 
   let data = []
   if (citationsYears.length > 1) {
@@ -235,6 +233,15 @@ export function getChartConfig (citationsYears, toolName, seriesNames) {
       }
     }
   }
+
+  const totalNumberOfCitations = R.compose(
+    R.values,
+    obj => {
+      let newObj = obj
+      R.forEach(year => { if (!R.has(year, obj)) newObj[year] = 0 }, years)
+      return newObj
+    },
+  )(allCitationsYears)
 
   const series = R.compose(
     R.map(R.assoc('maxPointWidth', 40), R.__),

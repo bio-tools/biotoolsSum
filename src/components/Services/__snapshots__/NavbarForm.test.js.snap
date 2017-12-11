@@ -1,0 +1,28 @@
+exports[`test Renders MatrixCellWithLink with link and name correctly 1`] = `
+<form
+  className=""
+  onSubmit={[Function]}>
+  <div
+    className="form-group">
+    <input
+      className="form-control"
+      id={undefined}
+      name="enteredCollection"
+      onBlur={[Function]}
+      onChange={[Function]}
+      onDragStart={[Function]}
+      onDrop={[Function]}
+      onFocus={[Function]}
+      placeholder="Enter collection"
+      type="text"
+      value="" />
+  </div>
+   
+  <button
+    className="btn btn-default"
+    disabled={false}
+    type="submit">
+    Submit
+  </button>
+</form>
+`;

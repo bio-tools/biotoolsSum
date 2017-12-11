@@ -1,0 +1,305 @@
+exports[`test Renders MatrixCellWithLink with link and name correctly 1`] = `
+<div
+  className="panel panel-warning"
+  id={undefined}>
+  <div
+    className="panel-body">
+    <form
+      className="form-horizontal"
+      onSubmit={[Function]}>
+      <div
+        className="form-group">
+        <label
+          className="col-sm-2 control-label"
+          htmlFor="reportType">
+          Choose type of report
+        </label>
+        <div
+          className="col-sm-10">
+          <select
+            className="form-control"
+            id="reportType"
+            name="reportType"
+            onBlur={[Function]}
+            onChange={[Function]}
+            onDragStart={[Function]}
+            onDrop={[Function]}
+            onFocus={[Function]}
+            type={undefined}
+            value="docx">
+            <option
+              value="docx">
+              DOCX tools report
+            </option>
+            <option
+              value="xlsx">
+              XLSX tools report
+            </option>
+            <option
+              value="chart">
+              Citations chart
+            </option>
+          </select>
+        </div>
+      </div>
+      <div>
+        <div
+          className="form-group">
+          <label
+            className="col-sm-2 control-label"
+            htmlFor={undefined}>
+            Sort by
+          </label>
+          <div
+            className="col-sm-10">
+            <div
+              className="btn-group"
+              data-toggle="buttons">
+              <label
+                className="btn btn-default active"
+                disabled={false}
+                type="button">
+                <input
+                  autoComplete="off"
+                  checked={true}
+                  name="sortBy"
+                  onChange={[Function]}
+                  type="radio"
+                  value="citations" />
+                Citations
+              </label>
+              <label
+                className="btn btn-default"
+                disabled={false}
+                type="button">
+                <input
+                  autoComplete="off"
+                  checked={false}
+                  name="sortBy"
+                  onChange={[Function]}
+                  type="radio"
+                  value="name" />
+                Name
+              </label>
+            </div>
+          </div>
+        </div>
+        <div
+          className="form-group">
+          <label
+            className="col-sm-2 control-label"
+            htmlFor={undefined}>
+            Order
+          </label>
+          <div
+            className="col-sm-10">
+            <div
+              className="btn-group"
+              data-toggle="buttons">
+              <label
+                className="btn btn-default active"
+                disabled={false}
+                type="button">
+                <input
+                  autoComplete="off"
+                  checked={true}
+                  name="order"
+                  onChange={[Function]}
+                  type="radio"
+                  value="descend" />
+                Descending
+              </label>
+              <label
+                className="btn btn-default"
+                disabled={false}
+                type="button">
+                <input
+                  autoComplete="off"
+                  checked={false}
+                  name="order"
+                  onChange={[Function]}
+                  type="radio"
+                  value="ascend" />
+                Ascending
+              </label>
+            </div>
+          </div>
+        </div>
+        <div
+          className="form-group">
+          <label
+            className="col-sm-2 control-label"
+            htmlFor="takeFirstX">
+            Number of tools
+          </label>
+          <div
+            className="col-sm-10">
+            <input
+              className="form-control"
+              id="takeFirstX"
+              name="takeFirstX"
+              onBlur={[Function]}
+              onChange={[Function]}
+              onDragStart={[Function]}
+              onDrop={[Function]}
+              onFocus={[Function]}
+              type={undefined}
+              value="" />
+          </div>
+        </div>
+        <div
+          className="form-group">
+          <label
+            className="col-sm-2 control-label"
+            htmlFor={undefined}>
+            Include
+          </label>
+          <div
+            className="col-sm-10">
+            <div
+              className="btn-group"
+              data-toggle="buttons">
+              <label
+                className="btn btn-default"
+                disabled={false}
+                type="button">
+                <input
+                  autoComplete="off"
+                  checked={false}
+                  name="includeProps"
+                  onChange={[Function]}
+                  type="checkbox"
+                  value="toolType" />
+                Tool type
+              </label>
+              <label
+                className="btn btn-default"
+                disabled={false}
+                type="button">
+                <input
+                  autoComplete="off"
+                  checked={false}
+                  name="includeProps"
+                  onChange={[Function]}
+                  type="checkbox"
+                  value="institute" />
+                Institute
+              </label>
+              <label
+                className="btn btn-default"
+                disabled={false}
+                type="button">
+                <input
+                  autoComplete="off"
+                  checked={false}
+                  name="includeProps"
+                  onChange={[Function]}
+                  type="checkbox"
+                  value="description" />
+                Description
+              </label>
+              <label
+                className="btn btn-default"
+                disabled={false}
+                type="button">
+                <input
+                  autoComplete="off"
+                  checked={false}
+                  name="includeProps"
+                  onChange={[Function]}
+                  type="checkbox"
+                  value="publication" />
+                Publications
+              </label>
+              <label
+                className="btn btn-default"
+                disabled={false}
+                type="button">
+                <input
+                  autoComplete="off"
+                  checked={false}
+                  name="includeProps"
+                  onChange={[Function]}
+                  type="checkbox"
+                  value="citations" />
+                Citations
+              </label>
+              <label
+                className="btn btn-default"
+                disabled={false}
+                type="button">
+                <input
+                  autoComplete="off"
+                  checked={false}
+                  name="includeProps"
+                  onChange={[Function]}
+                  type="checkbox"
+                  value="topic" />
+                Topic
+              </label>
+              <label
+                className="btn btn-default"
+                disabled={false}
+                type="button">
+                <input
+                  autoComplete="off"
+                  checked={false}
+                  name="includeProps"
+                  onChange={[Function]}
+                  type="checkbox"
+                  value="function" />
+                Function
+              </label>
+              <label
+                className="btn btn-default"
+                disabled={false}
+                type="button">
+                <input
+                  autoComplete="off"
+                  checked={false}
+                  name="includeProps"
+                  onChange={[Function]}
+                  type="checkbox"
+                  value="maturity" />
+                Maturity
+              </label>
+              <label
+                className="btn btn-default"
+                disabled={false}
+                type="button">
+                <input
+                  autoComplete="off"
+                  checked={false}
+                  name="includeProps"
+                  onChange={[Function]}
+                  type="checkbox"
+                  value="platform" />
+                Platform
+              </label>
+            </div>
+          </div>
+        </div>
+        <div
+          className="form-group">
+          <div
+            className="col-sm-10 col-sm-offset-2">
+            <button
+              className="btn btn-default"
+              disabled={false}
+              type="submit">
+              Generate
+            </button>
+            <button
+              className="btn btn-default"
+              disabled={false}
+              onClick={[Function]}
+              type="button">
+              Clear Values
+            </button>
+          </div>
+        </div>
+      </div>
+    </form>
+  </div>
+</div>
+`;

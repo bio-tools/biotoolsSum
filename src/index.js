@@ -24,7 +24,7 @@ import { autoRehydrate, persistStore } from 'redux-persist'
 import { Grid, Row } from 'react-bootstrap'
 import MatrixNavbar from './components/Matrix/MatrixNavbar'
 import Alert from 'react-s-alert'
-import { config } from './common/helperFunctions'
+import { config, showOnlyAllServicesInCollection } from './common/helperFunctions'
 
 const composeEnhancers = (
   process.env.NODE_ENV !== 'production' &&
@@ -69,8 +69,22 @@ function configureStore () {
 
 async function init () {
   const store = await configureStore()
-  ReactDOM.render(
-    <Provider store={store}>
+  let renderedComponent = {}
+
+  if (showOnlyAllServicesInCollection) {
+    renderedComponent = <Provider store={store}>
+      <ConnectedRouter history={history}>
+        <Grid>
+          <Row className='show-grid'>
+            <Route path='/' component={FillStore} />
+            <Route path='/' component={ServicesNavbar} />
+            <Route path='/' component={BioToolsData} />
+          </Row>
+        </Grid>
+      </ConnectedRouter>
+    </Provider>
+  } else {
+    renderedComponent = <Provider store={store}>
       <ConnectedRouter history={history}>
         <Grid>
           <Row className='show-grid'>
@@ -82,8 +96,12 @@ async function init () {
           </Row>
         </Grid>
       </ConnectedRouter>
-    </Provider>,
-      document.getElementById('root')
+    </Provider>
+  }
+
+  ReactDOM.render(
+    renderedComponent,
+    document.getElementById('root')
   )
 
   ReactDOM.render(

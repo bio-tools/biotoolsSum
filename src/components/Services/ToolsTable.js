@@ -110,9 +110,8 @@ const getColumns = (includePropsChosen) => {
                 {publications.length > 0
                   ? publications.map((publication, index) =>
                     <span key={index}>
-                      {'['}
                       {getPublicationAndCitationsLink(publication, index + 1)}
-                      {index + 1 < publications.length ? '], ' : ']'}
+                      {index + 1 < publications.length && ', '}
                     </span>
                   )
                   : 'no'

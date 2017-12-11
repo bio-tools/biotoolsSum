@@ -4,24 +4,17 @@ import * as R from 'ramda'
 import { Panel } from 'react-bootstrap'
 import MatrixCell from './MatrixCell'
 import MatrixCellWithLink from './MatrixCellWithLink'
-import { getServicesCounts, isLoadingInProgress } from '../../selectors/servicesSelector'
-import { camelCased, config, getServicesNames } from '../../common/helperFunctions'
+import { getServicesCounts } from '../../selectors/servicesSelector'
+import { camelCased, config } from '../../common/helperFunctions'
 import { AbstractionCategory, ALL_SERVICES } from '../../constants/stringConstants'
-import Loader from '../common/Loader'
 
 class ServicesMatrix extends PureComponent {
   render () {
-    const { servicesCounts, isLoadingInProgress } = this.props
+    const { servicesCounts } = this.props
 
     const panelHeader = (
       <div className='center-text'>
         <h4>{'Category selection matrix '}</h4>
-        {isLoadingInProgress &&
-        <div>
-          {'Loading services...'}
-          <Loader />
-        </div>
-        }
       </div>
     )
 
@@ -45,7 +38,7 @@ class ServicesMatrix extends PureComponent {
                 : <MatrixCellWithLink
                   key={cell.route}
                   linkTo={`/${cell.route}`}
-                  image={process.env.PUBLIC_URL + `/images/${cell.route}.png`}
+                  image={process.env.PUBLIC_URL + `/images/${cell.image}`}
                   numberOfServices={servicesCounts[camelCased(cell.route)]}
                 />
               )}
@@ -59,5 +52,4 @@ class ServicesMatrix extends PureComponent {
 
 export default ServicesMatrix = connect(state => ({
   servicesCounts: getServicesCounts(state),
-  isLoadingInProgress: isLoadingInProgress(state, getServicesNames),
 }))(ServicesMatrix)
