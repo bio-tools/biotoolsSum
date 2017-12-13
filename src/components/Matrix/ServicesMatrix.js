@@ -5,7 +5,7 @@ import { Panel } from 'react-bootstrap'
 import MatrixCell from './MatrixCell'
 import MatrixCellWithLink from './MatrixCellWithLink'
 import { getServicesCounts } from '../../selectors/servicesSelector'
-import { camelCased, config } from '../../biotoolsSum/common/helperFunctions'
+import { hyphenDelimitedToCamelCased, config } from '../../biotoolsSum/common/helperFunctions'
 import { AbstractionCategory, ALL_SERVICES } from '../../constants/stringConstants'
 
 class ServicesMatrix extends PureComponent {
@@ -24,7 +24,7 @@ class ServicesMatrix extends PureComponent {
           <MatrixCellWithLink
             linkTo={`/${ALL_SERVICES}`}
             text='All services'
-            numberOfServices={servicesCounts[camelCased(ALL_SERVICES)]}
+            numberOfServices={servicesCounts[hyphenDelimitedToCamelCased(ALL_SERVICES)]}
           />
           <MatrixCell text={AbstractionCategory[0]} />
           <MatrixCell text={AbstractionCategory[1]} />
@@ -39,7 +39,7 @@ class ServicesMatrix extends PureComponent {
                   key={cell.route}
                   linkTo={`/${cell.route}`}
                   image={process.env.PUBLIC_URL + `/images/${cell.image}`}
-                  numberOfServices={servicesCounts[camelCased(cell.route)]}
+                  numberOfServices={servicesCounts[hyphenDelimitedToCamelCased(cell.route)]}
                 />
               )}
             </div>

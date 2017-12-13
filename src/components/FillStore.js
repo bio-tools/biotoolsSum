@@ -3,7 +3,7 @@ import { connect } from 'react-redux'
 import buildActionCreators from '../helpers/buildActionCreators'
 import * as ActionTypes from '../constants/actionTypes'
 import {
-  camelCased, createQueryString, config, getServicesNames, configCollection,
+  hyphenDelimitedToCamelCased, createQueryString, config, getServicesNames, configCollection,
   showOnlyAllServicesInCollection
 } from '../biotoolsSum/common/helperFunctions'
 import * as R from 'ramda'
@@ -31,7 +31,7 @@ class FillStore extends React.PureComponent {
   fetchData = (shouldRefetch) => {
     const { activeCollection, isUserEnteredCollection, servicesInfo, servicesFetch, citationsFetch, setCollection } = this.props
 
-    const allServices = camelCased(ALL_SERVICES)
+    const allServices = hyphenDelimitedToCamelCased(ALL_SERVICES)
     const allServicesInfo = servicesInfo[allServices]
 
     if (!isUserEnteredCollection) {
@@ -55,7 +55,7 @@ class FillStore extends React.PureComponent {
       config.rows.forEach(row =>
         R.take(4, row.cells).forEach(cell => {
           if (!R.isEmpty(cell) && cell.route) {
-            const name = camelCased(cell.route)
+            const name = hyphenDelimitedToCamelCased(cell.route)
             const namedServicesInfo = servicesInfo[name]
 
             if (shouldRefetch || namedServicesInfo.persistExpiresAt < Date.now() ||

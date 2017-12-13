@@ -10,7 +10,7 @@ export const createQueryString = R.compose(
   }),
 )
 
-export const camelCased = string => string.replace(/-([a-z0-9])/g, match => match[1].toUpperCase())
+export const hyphenDelimitedToCamelCased = string => string.replace(/-([a-z0-9])/g, match => match[1].toUpperCase())
 
 export const config = window.config || require('../../../public/config.js').config
 
@@ -23,9 +23,9 @@ export const allowCollectionChange = config.allowCollectionChange
 export const showOnlyAllServicesInCollection = config.showOnlyAllServicesInCollection
 
 export const getServicesNames = showOnlyAllServicesInCollection
-  ? [camelCased(ALL_SERVICES)]
+  ? [hyphenDelimitedToCamelCased(ALL_SERVICES)]
   : R.compose(
-    R.map(camelCased),
+    R.map(hyphenDelimitedToCamelCased),
     R.prepend(ALL_SERVICES),
     R.pluck('route'),
     R.unnest,

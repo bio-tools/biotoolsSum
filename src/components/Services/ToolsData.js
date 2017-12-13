@@ -3,7 +3,7 @@ import { Alert } from 'react-bootstrap'
 import { connect } from 'react-redux'
 import ToolsTable from './ToolsTable'
 import { getServices } from '../../selectors/servicesSelector'
-import { camelCased, config, showOnlyAllServicesInCollection } from '../../biotoolsSum/common/helperFunctions'
+import { hyphenDelimitedToCamelCased, config, showOnlyAllServicesInCollection } from '../../biotoolsSum/common/helperFunctions'
 import Loader from '../common/Loader'
 import * as R from 'ramda'
 import { ALL_SERVICES } from '../../constants/stringConstants'
@@ -120,7 +120,7 @@ export default BioToolsData = connect(state => {
 
   return ({
     showReportPage: state.ui.showReportPage,
-    services: getServices(state, camelCased(servicesName)),
+    services: getServices(state, hyphenDelimitedToCamelCased(servicesName)),
     message,
     reportTypeChosen: selector(state, 'reportType'),
     createGraph: selector(state, 'createGraph'),
