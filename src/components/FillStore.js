@@ -5,7 +5,7 @@ import * as ActionTypes from '../constants/actionTypes'
 import {
   camelCased, createQueryString, config, getServicesNames, configCollection,
   showOnlyAllServicesInCollection
-} from '../common/helperFunctions'
+} from '../biotoolsSum/common/helperFunctions'
 import * as R from 'ramda'
 import { ALL_SERVICES } from '../constants/stringConstants'
 import { getServicesInfo } from '../selectors/servicesSelector'

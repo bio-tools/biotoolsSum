@@ -5,7 +5,7 @@ import { Panel } from 'react-bootstrap'
 import MatrixCell from './MatrixCell'
 import MatrixCellWithLink from './MatrixCellWithLink'
 import { getServicesCounts } from '../../selectors/servicesSelector'
-import { camelCased, config } from '../../common/helperFunctions'
+import { camelCased, config } from '../../biotoolsSum/common/helperFunctions'
 import { AbstractionCategory, ALL_SERVICES } from '../../constants/stringConstants'
 
 class ServicesMatrix extends PureComponent {

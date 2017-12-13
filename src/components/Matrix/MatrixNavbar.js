@@ -2,7 +2,7 @@ import React from 'react'
 import { Image, Navbar } from 'react-bootstrap'
 import elixirLogo from '../../images/elixir-logo.png'
 import NavbarForm from '../Services/NavbarForm'
-import { allowCollectionChange } from '../../common/helperFunctions'
+import { allowCollectionChange } from '../../biotoolsSum/common/helperFunctions'
 
 const MatrixNavbar = () => (
   <Navbar collapseOnSelect bsStyle='default'>

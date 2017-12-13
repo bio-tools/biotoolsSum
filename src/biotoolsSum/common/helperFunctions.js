@@ -1,5 +1,5 @@
 import * as R from 'ramda'
-import { ALL_SERVICES } from '../constants/stringConstants'
+import { ALL_SERVICES } from '../../constants/stringConstants'
 
 export const createQueryString = R.compose(
   R.join('&'),
@@ -12,7 +12,7 @@ export const createQueryString = R.compose(
 
 export const camelCased = string => string.replace(/-([a-z0-9])/g, match => match[1].toUpperCase())
 
-export const config = window.config || require('../../public/config.js').config
+export const config = window.config || require('../../../public/config.js').config
 
 export const configCollection = config.collectionID
 

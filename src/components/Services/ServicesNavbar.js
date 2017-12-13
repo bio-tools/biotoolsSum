@@ -11,7 +11,7 @@ import elixirLogo from '../../images/elixir-logo.png'
 import {
   allowCollectionChange, allowReportMode, config,
   showOnlyAllServicesInCollection
-} from '../../common/helperFunctions'
+} from '../../biotoolsSum/common/helperFunctions'
 import NavbarForm from './NavbarForm'
 
 class ServicesNavbar extends PureComponent {

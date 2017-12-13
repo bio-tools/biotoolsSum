@@ -24,7 +24,7 @@ import { autoRehydrate, persistStore } from 'redux-persist'
 import { Grid, Row } from 'react-bootstrap'
 import MatrixNavbar from './components/Matrix/MatrixNavbar'
 import Alert from 'react-s-alert'
-import { config, showOnlyAllServicesInCollection } from './common/helperFunctions'
+import { config, showOnlyAllServicesInCollection } from './biotoolsSum/common/helperFunctions'
 
 const composeEnhancers = (
   process.env.NODE_ENV !== 'production' &&

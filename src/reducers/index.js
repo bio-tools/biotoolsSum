@@ -5,7 +5,7 @@ import { specificServicesWithName } from './specificServices'
 import * as R from 'ramda'
 import { ui } from './ui'
 import { collection } from './collection'
-import { getServicesNames } from '../common/helperFunctions'
+import { getServicesNames } from '../biotoolsSum/common/helperFunctions'
 
 const biotoolsSumApp = () => {
   const reducers = R.map(specificServicesWithName, getServicesNames)
