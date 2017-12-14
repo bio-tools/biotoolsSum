@@ -93,5 +93,3 @@ The `.htaccess` file might look like this:
   RewriteRule ^ - [L]
   RewriteRule ^ index.html [L]
 ```
-
-It will get copied to the `build` folder when you run `npm run build`.
