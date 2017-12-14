@@ -1,11 +1,8 @@
 For running this project, you need to install [node package manager](https://www.npmjs.com/get-npm).
 
-THIS IS README CREATED WITH BASIC TEMPLATE, IT DOES NOT CONTAIN ANY INFORMATION ABOUT THIS PROJECT YET.
-
 This project was bootstrapped with [Create React App](https://github.com/facebookincubator/create-react-app).
 
 Below you will find some information on how to perform common tasks.<br>
-You can find the most recent version of this guide [here](https://github.com/facebookincubator/create-react-app/blob/master/packages/react-scripts/template/README.md).
 
 ## Table of Contents
 
@@ -13,12 +10,8 @@ You can find the most recent version of this guide [here](https://github.com/fac
   - [npm start](#npm-start)
   - [npm test](#npm-test)
   - [npm run build](#npm-run-build)
-  - [npm run eject](#npm-run-eject)
 
 - [Deployment](#deployment)
-  - [Static Server](#static-server)
-  - [Other Solutions](#other-solutions)
-  - [Serving Apps with Client-Side Routing](#serving-apps-with-client-side-routing)
   - [Building for Relative Paths](#building-for-relative-paths)
 
 For the project to build, **these files must exist with exact filenames**:
