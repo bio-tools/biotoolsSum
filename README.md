@@ -82,13 +82,16 @@ You have to specify it in config, because this application is using the HTML5 [`
 
 This will let this application correctly infer the root path to use in the generated HTML file.
 
-If you’re using [Apache](https://httpd.apache.org/), you need to create a `.htaccess` file in the `public` folder that looks like this:
+
+If you’re using [Apache](https://httpd.apache.org/), you need to create a `.htaccess` file. The whole javascript and css is loaded into a single HTML file. Because of HTML5 `pushState` history API, URL changes are manages internally but Apache doesn't know that. Instead of using this single HTML file, Apache is looking for files on path that corresponds to URL. You should tell Apache that if it doesn't find corresponding file, it should fall back to the single HTML file.
+The `.htaccess` file might look like this:
 
 ```
-    Options -MultiViews
-    RewriteEngine On
-    RewriteCond %{REQUEST_FILENAME} !-f
-    RewriteRule ^ index.html [QSA,L]
+  RewriteEngine on
+  RewriteCond %{REQUEST_FILENAME} -f [OR]
+  RewriteCond %{REQUEST_FILENAME} -d
+  RewriteRule ^ - [L]
+  RewriteRule ^ index.html [L]
 ```
 
 It will get copied to the `build` folder when you run `npm run build`.
