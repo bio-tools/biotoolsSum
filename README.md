@@ -147,6 +147,7 @@ var config = {
   .
   . 
 }
+```
 
 You have to specify it in config, because this application is using the HTML5 [`pushState` history API](https://developer.mozilla.org/en-US/docs/Web/API/History_API#Adding_and_modifying_history_entries) under the hood as client-site routing.
 
