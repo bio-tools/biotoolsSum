@@ -46,7 +46,18 @@ See the section about [deployment](#deployment) for more information.
 
 ## Deployment
 
-`npm run build` creates a `build` directory with a production build of this app. Set up your favourite HTTP server so that a visitor to your site is served `index.html`, and requests to static paths like `/static/js/main.<hash>.js` are served with the contents of the `/static/js/main.<hash>.js` file.
+`npm run build` creates a `build` directory with a production build of this app. Build itself has a single
+HTML file `index.html`, a JavaScript file `config.js` and a folder called static that contains three other
+folders – `css`, `js` and `media`. Folder `js` contains one minified JavaScript file that contains whole
+application. Folder `css` contains one minified CSS file that contains all styles used in application.
+Folder `media` contains all images used inside application. File `index.html` is an entry point of the
+application as it contains links to minified JavaScript and CSS files, and a configuration file
+`config.js`. You always must have an entry point for these files, but it has not to be `index.html`. It
+could be any other HTML file of your choice, but the file must always refer to JavaScript and CSS
+files in order for the application to work correctly. Set up your favourite HTTP server so that a
+visitor to your site is served entry point HTML file (`index.html` by default), and requests to static
+paths like `/static/js/main.<hash>.js` are served with the contents of the `/static/js/main.<hash>.js`
+file.
 
 ### Building for Relative Paths 
 
