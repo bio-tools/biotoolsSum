@@ -143,7 +143,7 @@ export const updatedData = tools => {
             publication: R.compose(
               publication => publication.map((publication, index) =>
                 R.assoc('publicationIdSourcePair', publicationsIdSourcePairs[index], publication)),
-              R.filter(publication => publication.doi !== null || publication.pmid !== null || publication.pmcid !== null),
+              R.filter(publication => publication.doi === null && publication.pmid === null && publication.pmcid === null),
             ),
           })
         )(tool)
