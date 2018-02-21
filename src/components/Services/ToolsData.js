@@ -3,7 +3,7 @@ import { Alert } from 'react-bootstrap'
 import { connect } from 'react-redux'
 import ToolsTable from './ToolsTable'
 import { getServices } from '../../selectors/servicesSelector'
-import { camelCased, config } from '../../common/helperFunctions'
+import { hyphenDelimitedToCamelCased, config, showOnlyAllServicesInCollection } from '../../biotoolsSum/common/helperFunctions'
 import Loader from '../common/Loader'
 import * as R from 'ramda'
 import { ALL_SERVICES } from '../../constants/stringConstants'
@@ -43,29 +43,27 @@ class BioToolsData extends React.PureComponent {
         {count
           ? <div>
             <Alert bsStyle='warning'>
-              {message + '.'}
-              <br />
-              {'There is a total number of '}<strong>{count}</strong>{' tools available.'}
+              <div className='center-text'>
+                {message + '.'}
+                <br />
+                {'There is a total number of '}<strong>{count}</strong>{' tools available.'}
+              </div>
               {serviceLoading &&
-                <div>
-                  <div className='loader-text'>
-                    <span>
-                      {'Reloading tools...'}
-                    </span>
-                    <br />
-                    <span>
-                      {'This might take some time'}
-                    </span>
-                  </div>
+                <div className='center-text'>
+                  <br />
+                  {'Reloading tools...'}
+                  <br />
+                  {'This might take some time...'}
                   <Loader />
                 </div>
               }
               {citationsLoading &&
               <div>
-                <div className='loader-text'>
-                  <span>{'Reloading citations count...'}</span>
+                <div className='center-text'>
                   <br />
-                  <span>{'This might take some time, but you are free to explore tools.'}</span>
+                  {'Reloading citations count...'}
+                  <br />
+                  {'This might take some time, but you are free to explore tools.'}
                 </div>
                 <Loader />
               </div>
@@ -79,12 +77,13 @@ class BioToolsData extends React.PureComponent {
           </div>
           : serviceLoading
             ? <Alert bsStyle='warning'>
-              <div className='loader-text'>
-                <span>{'Loading tools...'}</span>
+              <div className='center-text'>
                 <br />
-                <span>{'This might take some time...'}</span>
+                {'Loading tools...'}
+                <br />
+                {'This might take some time...'}
+                <Loader />
               </div>
-              <Loader />
             </Alert>
             : <Alert bsStyle='danger'>{'We are sorry, but there are no services.'}</Alert>
         }
@@ -95,16 +94,20 @@ class BioToolsData extends React.PureComponent {
 
 export default BioToolsData = connect(state => {
   const path = state.router.location.pathname
-  const servicesName = path.substr(path.lastIndexOf('/') + 1)
+  let servicesName = path.substr(path.lastIndexOf('/') + 1)
 
-  if (path === '/') {
-    return null
+  if (showOnlyAllServicesInCollection) {
+    servicesName = ALL_SERVICES
+  }
+
+  if (path === '/' && !showOnlyAllServicesInCollection) {
+    return {}
   }
 
   const activeCollection = getActiveCollection(state)
 
   const message = servicesName === ALL_SERVICES
-    ? `All ${config.collectionID} services`
+    ? `All ${activeCollection} services`
     : R.compose(
       R.concat(`All ${activeCollection} `),
       R.prop('message'),
@@ -117,13 +120,10 @@ export default BioToolsData = connect(state => {
 
   return ({
     showReportPage: state.ui.showReportPage,
-    services: getServices(state, camelCased(servicesName)),
+    services: getServices(state, hyphenDelimitedToCamelCased(servicesName)),
     message,
-
     reportTypeChosen: selector(state, 'reportType'),
-
     createGraph: selector(state, 'createGraph'),
-
     includePropsChosen: selector(state, 'includeProps'),
     sortBy: selector(state, 'sortBy'),
     order: selector(state, 'order'),

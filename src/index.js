@@ -13,7 +13,7 @@ import 'react-s-alert/dist/s-alert-default.css'
 import 'rc-slider/assets/index.css'
 import ServicesMatrix from './components/Matrix/ServicesMatrix'
 import ServicesNavbar from './components/Services/ServicesNavbar'
-import BioToolsData from './components/Services/BioToolsData'
+import BioToolsData from './components/Services/ToolsData'
 import FillStore from './components/FillStore'
 import { Route } from 'react-router'
 import { ConnectedRouter, routerMiddleware } from 'react-router-redux'
@@ -24,7 +24,7 @@ import { autoRehydrate, persistStore } from 'redux-persist'
 import { Grid, Row } from 'react-bootstrap'
 import MatrixNavbar from './components/Matrix/MatrixNavbar'
 import Alert from 'react-s-alert'
-import { config } from './common/helperFunctions'
+import { config, showOnlyAllServicesInCollection } from './biotoolsSum/common/helperFunctions'
 
 const composeEnhancers = (
   process.env.NODE_ENV !== 'production' &&
@@ -69,8 +69,22 @@ function configureStore () {
 
 async function init () {
   const store = await configureStore()
-  ReactDOM.render(
-    <Provider store={store}>
+  let renderedComponent = {}
+
+  if (showOnlyAllServicesInCollection) {
+    renderedComponent = <Provider store={store}>
+      <ConnectedRouter history={history}>
+        <Grid>
+          <Row className='show-grid'>
+            <Route path='/' component={FillStore} />
+            <Route path='/' component={ServicesNavbar} />
+            <Route path='/' component={BioToolsData} />
+          </Row>
+        </Grid>
+      </ConnectedRouter>
+    </Provider>
+  } else {
+    renderedComponent = <Provider store={store}>
       <ConnectedRouter history={history}>
         <Grid>
           <Row className='show-grid'>
@@ -82,7 +96,11 @@ async function init () {
           </Row>
         </Grid>
       </ConnectedRouter>
-    </Provider>,
+    </Provider>
+  }
+
+  ReactDOM.render(
+    renderedComponent,
     document.getElementById('root')
   )
 

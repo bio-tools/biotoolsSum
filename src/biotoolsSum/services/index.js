@@ -53,32 +53,29 @@ const getPublicationsInfo = uniquePublications => uniquePublications.map(pub => 
         return null
       }
       const { source, id: resultId, citedByCount } = result
-
       const pages = Math.ceil(citedByCount / 1000)
 
       let apiPromises = []
       for (let i = 1; i <= pages; i++) {
         apiPromises.push(
-          fetch(config.getCitationsApiUrl(source, resultId, i))
-            .then(response => response.json())
+          fetch(config.getCitationsApiUrl(source, resultId, i)).then(response => response.json())
         )
       }
 
-      return Promise.all(apiPromises)
-        .then(citationsInfo => {
-          const citationsYears = citationsInfo.length > 0
-            ? R.compose(
-              R.map(R.length),
-              R.groupBy(R.identity),
-              R.pluck('pubYear'),
-              R.flatten,
-              R.pluck('citation'),
-              R.pluck('citationList'),
-            )(citationsInfo)
-            : {}
+      return Promise.all(apiPromises).then(citationsInfo => {
+        const citationsYears = citationsInfo.length > 0
+          ? R.compose(
+            R.map(R.length),
+            R.groupBy(R.identity),
+            R.pluck('pubYear'),
+            R.flatten,
+            R.pluck('citation'),
+            R.pluck('citationList'),
+          )(citationsInfo)
+          : {}
 
-          return ({ publicationInfo, citationsYears })
-        })
+        return ({ publicationInfo, citationsYears })
+      })
     })
   )
 })
@@ -92,7 +89,10 @@ export const updatedData = tools => {
     const { publication } = tool
 
     if (publication.length === 0) {
-      return Rx.Observable.of(R.assoc('citations', 0, tool))
+      return Rx.Observable.of(R.compose(
+        R.assoc('publicationsIdSourcePairs', []),
+        R.assoc('citations', 0),
+      )(tool))
     }
 
     // There were occasionally duplicates in the publications record
@@ -139,7 +139,13 @@ export const updatedData = tools => {
           R.assoc('citations', citations),
           R.assoc('citationsYears', citationsYears),
           R.assoc('publicationsStrings', publicationsStrings),
-          R.assoc('publicationsIdSourcePairs', publicationsIdSourcePairs),
+          R.evolve({
+            publication: R.compose(
+              publication => publication.map((publication, index) =>
+                R.assoc('publicationIdSourcePair', publicationsIdSourcePairs[index], publication)),
+              R.filter(publication => publication.doi === null && publication.pmid === null && publication.pmcid === null),
+            ),
+          })
         )(tool)
       })
   })
@@ -205,11 +211,9 @@ export function getChartConfig (citationsYears, toolName, seriesNames) {
 
   for (let i = 1; i < years.length; i++) {
     if (years[i] - years[i - 1] !== 1) {
-      years = R.insert(i, Number(years[i - 1]) + 1, years)
+      years = R.insert(i, (Number(years[i - 1]) + 1).toString(), years)
     }
   }
-
-  const totalNumberOfCitations = R.values(allCitationsYears)
 
   let data = []
   if (citationsYears.length > 1) {
@@ -229,6 +233,15 @@ export function getChartConfig (citationsYears, toolName, seriesNames) {
       }
     }
   }
+
+  const totalNumberOfCitations = R.compose(
+    R.values,
+    obj => {
+      let newObj = obj
+      R.forEach(year => { if (!R.has(year, obj)) newObj[year] = 0 }, years)
+      return newObj
+    },
+  )(allCitationsYears)
 
   const series = R.compose(
     R.map(R.assoc('maxPointWidth', 40), R.__),

@@ -1,8 +1,7 @@
 import React from 'react'
-import PropTypes from 'prop-types'
 import { OverlayTrigger, Tooltip } from 'react-bootstrap'
 
-export const OverlayTooltip = ({ id, tooltipText, children, delayShow, delayHide, placement }) => {
+const OverlayTooltip = ({ id, tooltipText, children, delayShow = 300, delayHide = 150, placement = 'top' }) => {
   const tooltip = <Tooltip id={id}>{tooltipText}</Tooltip>
 
   return (
@@ -17,17 +16,4 @@ export const OverlayTooltip = ({ id, tooltipText, children, delayShow, delayHide
   )
 }
 
-OverlayTooltip.defaultProps = {
-  delayShow: 300,
-  delayHide: 150,
-  placement: 'top',
-}
-
-OverlayTooltip.propTypes = {
-  children: PropTypes.node.isRequired,
-  id: PropTypes.string,
-  tooltipText: PropTypes.string.isRequired,
-  delayShow: PropTypes.number,
-  delayHide: PropTypes.number,
-  placement: PropTypes.string,
-}
+export default OverlayTooltip

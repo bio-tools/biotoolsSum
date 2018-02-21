@@ -3,6 +3,7 @@ import React from 'react'
 import ReactHighcharts from 'react-highcharts'
 import Slider from 'rc-slider'
 import * as R from 'ramda'
+import { Panel } from 'react-bootstrap'
 const createSliderWithTooltip = Slider.createSliderWithTooltip
 const Range = createSliderWithTooltip(Slider.Range)
 
@@ -47,11 +48,38 @@ class ChartWithSlider extends React.PureComponent {
     )(chartConfig)
 
     return (
-      <div>
+      <Panel bsStyle='warning'>
         <ReactHighcharts config={newChartConfig} />
         {minYear && maxYear &&
-          <Range min={minYear} max={maxYear} defaultValue={[minYear, maxYear]} onAfterChange={this.changeYearsRange} />}
-      </div>
+          <div>
+            <strong>{`Choose range of years for chart. Current range: [${minValue}, ${maxValue}]`}</strong>
+            <Range
+              min={minYear}
+              max={maxYear}
+              value={[minValue, maxValue]}
+              onChange={this.changeYearsRange}
+              dots
+              dotStyle={{ borderColor: '#ef7500', backgroundColor: '#fcf8e3', height: 12, width: 12, marginBottom: -3 }}
+              trackStyle={[{ backgroundColor: '#ef7500', height: 6 }, { backgroundColor: 'ef7500', height: 6 }]}
+              railStyle={{ backgroundColor: '#fcf6b4', height: 6 }}
+              handleStyle={[
+                {
+                  borderColor: '#ef7500',
+                  height: 16,
+                  width: 16,
+                  backgroundColor: '#fcf8e3',
+                },
+                {
+                  borderColor: '#ef7500',
+                  height: 16,
+                  width: 16,
+                  backgroundColor: '#fcf8e3',
+                },
+              ]}
+            />
+          </div>
+        }
+      </Panel>
     )
   }
 }

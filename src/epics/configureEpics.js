@@ -7,7 +7,7 @@ import errorEpics from './errorEpics'
 
 const epics = [...servicesEpics, ...errorEpics]
 
-const configureEpics = (deps: Object, platformEpics: Array) => (action$, { getState }) =>
+const configureEpics = (deps, platformEpics) => (action$, { getState }) =>
   combineEpics(...epics, ...platformEpics)(action$, { ...deps, getState })
 
 export default configureEpics

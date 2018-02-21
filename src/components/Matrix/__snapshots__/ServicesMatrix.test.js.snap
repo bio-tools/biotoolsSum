@@ -1,0 +1,540 @@
+exports[`test Renders ServicesMatrix correctly 1`] = `
+<div
+  className="panel panel-warning"
+  id={undefined}>
+  <div
+    className="panel-heading">
+    <div
+      className="center-text panel-title">
+      <h4>
+        Category selection matrix 
+      </h4>
+    </div>
+  </div>
+  <div
+    className="panel-body">
+    <div
+      className="matrix">
+      <div
+        className="square light-grey-background greyscale">
+        <a
+          href="/all-services"
+          onClick={[Function]}>
+          <div
+            className="square-content">
+            <div
+              className="table">
+              <div
+                className="table-cell text-big">
+                <span>
+                  All services
+                </span>
+                <div
+                  className="text-little">
+                  0
+                </div>
+              </div>
+            </div>
+          </div>
+        </a>
+      </div>
+      <div
+        className="square dark-grey-background">
+        <div
+          className="square-content">
+          <div
+            className="table">
+            <div
+              className="table-cell text-big">
+              <span>
+                1D sequence
+              </span>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div
+        className="square dark-grey-background">
+        <div
+          className="square-content">
+          <div
+            className="table">
+            <div
+              className="table-cell text-big">
+              <span>
+                2D topology
+              </span>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div
+        className="square dark-grey-background">
+        <div
+          className="square-content">
+          <div
+            className="table">
+            <div
+              className="table-cell text-big">
+              <span>
+                3D structure
+              </span>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div
+        className="square dark-grey-background">
+        <div
+          className="square-content">
+          <div
+            className="table">
+            <div
+              className="table-cell text-big">
+              <span>
+                xD omics
+              </span>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div>
+        <div
+          className="square dark-grey-background">
+          <div
+            className="square-content">
+            <div
+              className="table">
+              <div
+                className="table-cell text-big">
+                <span>
+                  DNA
+                </span>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div
+          className="square light-grey-background greyscale">
+          <a
+            href="/dna-1d-services"
+            onClick={[Function]}>
+            <div
+              className="square-content">
+              <div
+                className="table">
+                <div
+                  className="table-cell text-big">
+                  <img
+                    className="responsive-img grey"
+                    src="/images/dna-1d-services.png" />
+                  <div
+                    className="text-little">
+                    0
+                  </div>
+                </div>
+              </div>
+            </div>
+          </a>
+        </div>
+        <div
+          className="square light-grey-background greyscale">
+          <a
+            href="/dna-2d-services"
+            onClick={[Function]}>
+            <div
+              className="square-content">
+              <div
+                className="table">
+                <div
+                  className="table-cell text-big">
+                  <img
+                    className="responsive-img grey"
+                    src="/images/dna-2d-services.png" />
+                  <div
+                    className="text-little">
+                    0
+                  </div>
+                </div>
+              </div>
+            </div>
+          </a>
+        </div>
+        <div
+          className="square light-grey-background greyscale">
+          <a
+            href="/dna-3d-services"
+            onClick={[Function]}>
+            <div
+              className="square-content">
+              <div
+                className="table">
+                <div
+                  className="table-cell text-big">
+                  <img
+                    className="responsive-img grey"
+                    src="/images/dna-3d-services.png" />
+                  <div
+                    className="text-little">
+                    0
+                  </div>
+                </div>
+              </div>
+            </div>
+          </a>
+        </div>
+        <div
+          className="square light-grey-background greyscale">
+          <a
+            href="/dna-xd-services"
+            onClick={[Function]}>
+            <div
+              className="square-content">
+              <div
+                className="table">
+                <div
+                  className="table-cell text-big">
+                  <img
+                    className="responsive-img grey"
+                    src="/images/dna-xd-services.png" />
+                  <div
+                    className="text-little">
+                    0
+                  </div>
+                </div>
+              </div>
+            </div>
+          </a>
+        </div>
+      </div>
+      <div>
+        <div
+          className="square dark-grey-background">
+          <div
+            className="square-content">
+            <div
+              className="table">
+              <div
+                className="table-cell text-big">
+                <span>
+                  RNA
+                </span>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div
+          className="square light-grey-background greyscale">
+          <a
+            href="/rna-1d-services"
+            onClick={[Function]}>
+            <div
+              className="square-content">
+              <div
+                className="table">
+                <div
+                  className="table-cell text-big">
+                  <img
+                    className="responsive-img grey"
+                    src="/images/rna-1d-services.png" />
+                  <div
+                    className="text-little">
+                    0
+                  </div>
+                </div>
+              </div>
+            </div>
+          </a>
+        </div>
+        <div
+          className="square light-grey-background greyscale">
+          <a
+            href="/rna-2d-services"
+            onClick={[Function]}>
+            <div
+              className="square-content">
+              <div
+                className="table">
+                <div
+                  className="table-cell text-big">
+                  <img
+                    className="responsive-img grey"
+                    src="/images/rna-2d-services.png" />
+                  <div
+                    className="text-little">
+                    0
+                  </div>
+                </div>
+              </div>
+            </div>
+          </a>
+        </div>
+        <div
+          className="square light-grey-background greyscale">
+          <a
+            href="/rna-3d-services"
+            onClick={[Function]}>
+            <div
+              className="square-content">
+              <div
+                className="table">
+                <div
+                  className="table-cell text-big">
+                  <img
+                    className="responsive-img grey"
+                    src="/images/rna-3d-services.png" />
+                  <div
+                    className="text-little">
+                    0
+                  </div>
+                </div>
+              </div>
+            </div>
+          </a>
+        </div>
+        <div
+          className="square light-grey-background greyscale">
+          <a
+            href="/rna-xd-services"
+            onClick={[Function]}>
+            <div
+              className="square-content">
+              <div
+                className="table">
+                <div
+                  className="table-cell text-big">
+                  <img
+                    className="responsive-img grey"
+                    src="/images/rna-xd-services.png" />
+                  <div
+                    className="text-little">
+                    0
+                  </div>
+                </div>
+              </div>
+            </div>
+          </a>
+        </div>
+      </div>
+      <div>
+        <div
+          className="square dark-grey-background">
+          <div
+            className="square-content">
+            <div
+              className="table">
+              <div
+                className="table-cell text-big">
+                <span>
+                  Protein
+                </span>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div
+          className="square light-grey-background greyscale">
+          <a
+            href="/protein-1d-services"
+            onClick={[Function]}>
+            <div
+              className="square-content">
+              <div
+                className="table">
+                <div
+                  className="table-cell text-big">
+                  <img
+                    className="responsive-img grey"
+                    src="/images/protein-1d-services.png" />
+                  <div
+                    className="text-little">
+                    0
+                  </div>
+                </div>
+              </div>
+            </div>
+          </a>
+        </div>
+        <div
+          className="square light-grey-background greyscale">
+          <a
+            href="/protein-2d-services"
+            onClick={[Function]}>
+            <div
+              className="square-content">
+              <div
+                className="table">
+                <div
+                  className="table-cell text-big">
+                  <img
+                    className="responsive-img grey"
+                    src="/images/protein-2d-services.png" />
+                  <div
+                    className="text-little">
+                    0
+                  </div>
+                </div>
+              </div>
+            </div>
+          </a>
+        </div>
+        <div
+          className="square light-grey-background greyscale">
+          <a
+            href="/protein-3d-services"
+            onClick={[Function]}>
+            <div
+              className="square-content">
+              <div
+                className="table">
+                <div
+                  className="table-cell text-big">
+                  <img
+                    className="responsive-img grey"
+                    src="/images/protein-3d-services.png" />
+                  <div
+                    className="text-little">
+                    0
+                  </div>
+                </div>
+              </div>
+            </div>
+          </a>
+        </div>
+        <div
+          className="square light-grey-background greyscale">
+          <a
+            href="/protein-xd-services"
+            onClick={[Function]}>
+            <div
+              className="square-content">
+              <div
+                className="table">
+                <div
+                  className="table-cell text-big">
+                  <img
+                    className="responsive-img grey"
+                    src="/images/protein-xd-services.png" />
+                  <div
+                    className="text-little">
+                    0
+                  </div>
+                </div>
+              </div>
+            </div>
+          </a>
+        </div>
+      </div>
+      <div>
+        <div
+          className="square dark-grey-background">
+          <div
+            className="square-content">
+            <div
+              className="table">
+              <div
+                className="table-cell text-big">
+                <span>
+                  Drugs and other small molecules
+                </span>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div
+          className="square light-grey-background greyscale">
+          <a
+            href="/drug-1d-services"
+            onClick={[Function]}>
+            <div
+              className="square-content">
+              <div
+                className="table">
+                <div
+                  className="table-cell text-big">
+                  <img
+                    className="responsive-img grey"
+                    src="/images/drug-1d-services.png" />
+                  <div
+                    className="text-little">
+                    0
+                  </div>
+                </div>
+              </div>
+            </div>
+          </a>
+        </div>
+        <div
+          className="square light-grey-background greyscale">
+          <a
+            href="/drug-2d-services"
+            onClick={[Function]}>
+            <div
+              className="square-content">
+              <div
+                className="table">
+                <div
+                  className="table-cell text-big">
+                  <img
+                    className="responsive-img grey"
+                    src="/images/drug-2d-services.png" />
+                  <div
+                    className="text-little">
+                    0
+                  </div>
+                </div>
+              </div>
+            </div>
+          </a>
+        </div>
+        <div
+          className="square light-grey-background greyscale">
+          <a
+            href="/drug-3d-services"
+            onClick={[Function]}>
+            <div
+              className="square-content">
+              <div
+                className="table">
+                <div
+                  className="table-cell text-big">
+                  <img
+                    className="responsive-img grey"
+                    src="/images/drug-3d-services.png" />
+                  <div
+                    className="text-little">
+                    0
+                  </div>
+                </div>
+              </div>
+            </div>
+          </a>
+        </div>
+        <div
+          className="square light-grey-background greyscale">
+          <a
+            href="/drug-xd-services"
+            onClick={[Function]}>
+            <div
+              className="square-content">
+              <div
+                className="table">
+                <div
+                  className="table-cell text-big">
+                  <img
+                    className="responsive-img grey"
+                    src="/images/drug-xd-services.png" />
+                  <div
+                    className="text-little">
+                    0
+                  </div>
+                </div>
+              </div>
+            </div>
+          </a>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+`;

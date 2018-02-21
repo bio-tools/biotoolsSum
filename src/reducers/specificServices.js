@@ -22,16 +22,23 @@ export const specificServicesWithName = (servicesName = '') =>
       case Actions.SERVICES_FETCH:
         return R.evolve({
           serviceLoading: R.T,
+          serviceLoaded: R.F,
           citationsLoading: R.F,
+          citationsLoaded: R.F,
         })(state)
 
       case Actions.SERVICES_FETCH_SUCCESS: {
         const { count, list } = payload.service
-        const pickedData = pickData(list)
+        let finalList = pickData(list)
+
+        if (state.list.length !== 0) {
+          const oldListByIds = R.groupBy(R.prop('id'), state.list)
+          finalList = R.map(tool => R.mergeDeepLeft(tool, oldListByIds[tool.id] ? oldListByIds[tool.id][0] : {}), finalList)
+        }
 
         return R.evolve({
           count: R.always(count),
-          list: R.always(pickedData),
+          list: R.always(finalList),
           serviceLoading: R.F,
           serviceLoaded: R.T,
           citationsLoading: R.T,

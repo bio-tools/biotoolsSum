@@ -5,14 +5,14 @@ import ReactTable from 'react-table'
 import ReadMore from '../common/ReadMore'
 import { Label } from 'react-bootstrap'
 import FontAwesome from 'react-fontawesome'
-import { OverlayTooltip } from '../common/OverlayTooltip'
+import OverlayTooltip from '../common/OverlayTooltip'
 import ShowMore from '../common/ShowMore'
 import { MAIN_ROW_CELLS_COUNT, PAGE_SIZE } from '../../constants/toolsTable'
 import { getCellsCount, getChartConfig } from '../../biotoolsSum/services/index'
 import ReactHighcharts from 'react-highcharts'
 import HighChartsExporting from 'highcharts-exporting'
 import HighChartsNoData from 'highcharts-no-data-to-display'
-import { getCitationsSource, getPublicationLink } from '../../biotoolsSum/table/index'
+import { getPublicationAndCitationsLink } from '../../biotoolsSum/table/index'
 HighChartsExporting(ReactHighcharts.Highcharts)
 HighChartsNoData(ReactHighcharts.Highcharts)
 
@@ -22,15 +22,14 @@ const getColumns = (includePropsChosen) => {
   let columns = [{
     Header: `Name ${isInfoMode ? '(Sortable, filterable)' : ''}`,
     id: 'name',
-    accessor: data => data.name,
+    accessor: ({ name }) => name,
     sortable: isInfoMode,
     sortMethod: (a, b) => {
       return a.toLowerCase() > b.toLowerCase() ? 1 : -1
     },
     filterable: isInfoMode,
     filterMethod: (filter, row) => row[filter.id].toLowerCase().includes(filter.value.toLowerCase()),
-    Cell: data => {
-      const {id, version, name, homepage, toolType} = data.original
+    Cell: ({ original: { id, version, name, homepage, toolType } }) => {
       return <div>
         <a href={homepage} target='_blank'>{name}</a>
         {version && <span>{` v.${version}`}</span>}
@@ -62,10 +61,10 @@ const getColumns = (includePropsChosen) => {
       {
         Header: 'Institute',
         id: 'institute',
-        accessor: data => data.credit,
-        Cell: data => data.value.length > 0
+        accessor: ({ credit }) => credit,
+        Cell: ({ value }) => value.length > 0
           ? <ul className='table-list-item'>
-            {data.value.map((institute, index) =>
+            {value.map((institute, index) =>
               <li key={index}>{institute.name}</li>
             )}
           </ul>
@@ -80,10 +79,10 @@ const getColumns = (includePropsChosen) => {
       {
         Header: `Description ${isInfoMode ? '(Filterable)' : ''}`,
         id: 'description',
-        accessor: data => data.description,
+        accessor: ({ description }) => description,
         filterable: isInfoMode,
         filterMethod: (filter, row) => row[filter.id].toLowerCase().includes(filter.value.toLowerCase()),
-        Cell: data => <ReadMore chars={350} text={data.value} />,
+        Cell: ({ value }) => <ReadMore chars={350} text={value} />,
         minWidth: 150,
       }
     )
@@ -96,31 +95,23 @@ const getColumns = (includePropsChosen) => {
       {
         Header: `Publications info ${isInfoMode ? '(Sortable)' : ''}`,
         id: 'additional-info',
-        accessor: data => R.isNil(data.citations) ? '-' : data.citations,
+        accessor: ({ citations }) => R.isNil(citations) ? '-' : citations,
         sortable: isInfoMode,
         sortMethod: (a, b) => {
           if (a === '-') return -1
           if (b === '-') return 1
           return a - b
         },
-        Cell: data => {
-          const { publication: publications, publicationsIdSourcePairs } = data.original
-          const citations = data.value
-          const filteredPublications = R.filter(
-            publication => publication.doi !== null || publication.pmid !== null || publication.pmcid !== null,
-            publications
-          )
-
+        Cell: ({ original: { publication: publications, citations } }) => {
           return <div>
             {(isInfoMode || includePublications) &&
               <div>
                 <strong>{'Publications: '}</strong>
-                {filteredPublications.length > 0
-                  ? filteredPublications.map((publication, index) =>
+                {publications.length > 0
+                  ? publications.map((publication, index) =>
                     <span key={index}>
-                      {'['}
-                      {getPublicationLink(publication, index + 1)}
-                      {index + 1 < filteredPublications.length ? '], ' : ']'}
+                      {getPublicationAndCitationsLink(publication, index + 1)}
+                      {index + 1 < publications.length && ', '}
                     </span>
                   )
                   : 'no'
@@ -133,20 +124,8 @@ const getColumns = (includePropsChosen) => {
             {(isInfoMode || includeCitations) &&
               <div>
                 <strong>
-                  {`Total Citations: ${citations}`}
+                  {`Total Citations: ${citations || '-'}`}
                 </strong>
-                <br />
-                <strong>{`Citations source: `}</strong>
-                {publicationsIdSourcePairs && publicationsIdSourcePairs.length > 0 && citations > 0
-                  ? publicationsIdSourcePairs.map((idSourcePair, index) =>
-                    <span key={index}>
-                      {'['}
-                      {getCitationsSource(idSourcePair, index + 1)}
-                      {index + 1 < publicationsIdSourcePairs.length ? '], ' : ']'}
-                    </span>
-                  )
-                  : '-'
-                }
               </div>
             }
           </div>
@@ -169,7 +148,7 @@ const getSubColumns = (includePropsChosen) => {
       {
         Header: 'Topic',
         id: 'topic',
-        accessor: data => <ShowMore lines={3} searchTermName='topic' list={data.topic} ulClassName='table-list-item' />,
+        accessor: ({ topic }) => <ShowMore lines={3} searchTermName='topic' list={topic} ulClassName='table-list-item' />,
         minWidth: 120,
       }
     )
@@ -193,8 +172,7 @@ const getSubColumns = (includePropsChosen) => {
       {
         Header: 'Additional info',
         id: 'additional-info',
-        Cell: data => {
-          const { maturity, operatingSystem } = data.original
+        Cell: ({ original: { maturity, operatingSystem } }) => {
           const labelStyle = maturity === 'Mature' ? 'success' : maturity === 'Emerging' ? 'info' : 'danger'
 
           if (!maturity && operatingSystem.length === 0) {
@@ -251,19 +229,18 @@ const expander = {
   expander: true,
   Header: 'More',
   width: 55,
-  Expander: ({isExpanded, ...rest}) =>
+  Expander: ({ isExpanded }) =>
     isExpanded
       ? <OverlayTooltip id='tooltip-show-less-info' tooltipText='Show less info'>
-        <FontAwesome className='more-icon' name='minus' />
+        <FontAwesome className='more-icon' name='caret-up' />
       </OverlayTooltip>
       : <OverlayTooltip id='tooltip-show-more-info' tooltipText='Show more info'>
-        <FontAwesome className='more-icon' name='plus' />
+        <FontAwesome className='more-icon' name='caret-down' />
       </OverlayTooltip>,
   className: 'table-expander',
 }
 
 class ToolsTable extends React.PureComponent {
-
   render () {
     const { list, includePropsChosen } = this.props
 
@@ -290,7 +267,7 @@ class ToolsTable extends React.PureComponent {
         minRows={1}
         className='-highlight'
         SubComponent={cellsPerRowCount <= MAIN_ROW_CELLS_COUNT ? null : row => {
-          const {original} = row
+          const { original } = row
           const subList = [{
             func: original.function,
             topic: original.topic,
@@ -298,7 +275,8 @@ class ToolsTable extends React.PureComponent {
             operatingSystem: original.operatingSystem,
           }]
 
-          const citationsYears = original.citationsYears
+          const { citationsYears, citations, publication } = original
+          const seriesNames = R.map(R.join(': '), R.pluck('publicationIdSourcePair', publication))
 
           return (
             <div className='sub-table'>
@@ -309,8 +287,8 @@ class ToolsTable extends React.PureComponent {
                 showPagination={false}
                 sortable={false}
               />
-              {citationsYears && !R.isEmpty(citationsYears) &&
-              <ReactHighcharts config={getChartConfig(citationsYears, original.name)} />
+              {citationsYears && !R.isEmpty(citationsYears) && citations > 0 &&
+                <ReactHighcharts config={getChartConfig(citationsYears, original.name, seriesNames)} />
               }
             </div>
           )

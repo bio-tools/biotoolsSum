@@ -1,0 +1,376 @@
+exports[`test Renders MatrixCellWithLink with link and name correctly 1`] = `
+<nav
+  className="navbar navbar-default">
+  <div
+    className="container">
+    <div
+      className="navbar-header">
+      <img
+        className="navbar-brand img-responsive"
+        src="elixir-logo.png"
+        style={
+          Object {
+            "height": "73px",
+            "marginBottom": "-15px",
+            "marginTop": "-10px",
+            "width": "97px",
+          }
+        } />
+      <a
+        className="navbar-brand"
+        href="/"
+        onClick={[Function]}>
+        Services Matrix
+      </a>
+      <button
+        className="navbar-toggle collapsed"
+        onClick={[Function]}
+        type="button">
+        <span
+          className="sr-only">
+          Toggle navigation
+        </span>
+        <span
+          className="icon-bar" />
+        <span
+          className="icon-bar" />
+        <span
+          className="icon-bar" />
+      </button>
+    </div>
+    <div
+      aria-expanded={null}
+      className="navbar-collapse collapse">
+      <ul
+        className="nav navbar-nav"
+        role={null}>
+        <li
+          className=""
+          role="presentation"
+          style={undefined}>
+          <a
+            href="/all-services"
+            onClick={[Function]}>
+            All Services
+          </a>
+        </li>
+        <li
+          className="dropdown"
+          style={undefined}>
+          <a
+            aria-expanded={false}
+            aria-haspopup={true}
+            className="dropdown-toggle"
+            href="#"
+            id="DNA-nav-dropdown"
+            onClick={[Function]}
+            onKeyDown={[Function]}
+            role="button">
+            DNA
+             
+            <span
+              className="caret" />
+          </a>
+          <ul
+            aria-labelledby="DNA-nav-dropdown"
+            className="dropdown-menu"
+            role="menu">
+            <li
+              className=""
+              role="presentation"
+              style={undefined}>
+              <a
+                href="/dna-1d-services"
+                onClick={[Function]}
+                onKeyDown={[Function]}
+                role="menuitem"
+                tabIndex="-1">
+                DNA 1D sequence
+              </a>
+            </li>
+            <li
+              className=""
+              role="presentation"
+              style={undefined}>
+              <a
+                href="/dna-2d-services"
+                onClick={[Function]}
+                onKeyDown={[Function]}
+                role="menuitem"
+                tabIndex="-1">
+                DNA 2D topology
+              </a>
+            </li>
+            <li
+              className=""
+              role="presentation"
+              style={undefined}>
+              <a
+                href="/dna-3d-services"
+                onClick={[Function]}
+                onKeyDown={[Function]}
+                role="menuitem"
+                tabIndex="-1">
+                DNA 3D structure
+              </a>
+            </li>
+            <li
+              className=""
+              role="presentation"
+              style={undefined}>
+              <a
+                href="/dna-xd-services"
+                onClick={[Function]}
+                onKeyDown={[Function]}
+                role="menuitem"
+                tabIndex="-1">
+                DNA xD omics
+              </a>
+            </li>
+          </ul>
+        </li>
+        <li
+          className="dropdown"
+          style={undefined}>
+          <a
+            aria-expanded={false}
+            aria-haspopup={true}
+            className="dropdown-toggle"
+            href="#"
+            id="RNA-nav-dropdown"
+            onClick={[Function]}
+            onKeyDown={[Function]}
+            role="button">
+            RNA
+             
+            <span
+              className="caret" />
+          </a>
+          <ul
+            aria-labelledby="RNA-nav-dropdown"
+            className="dropdown-menu"
+            role="menu">
+            <li
+              className=""
+              role="presentation"
+              style={undefined}>
+              <a
+                href="/rna-1d-services"
+                onClick={[Function]}
+                onKeyDown={[Function]}
+                role="menuitem"
+                tabIndex="-1">
+                RNA 1D sequence
+              </a>
+            </li>
+            <li
+              className=""
+              role="presentation"
+              style={undefined}>
+              <a
+                href="/rna-2d-services"
+                onClick={[Function]}
+                onKeyDown={[Function]}
+                role="menuitem"
+                tabIndex="-1">
+                RNA 2D topology
+              </a>
+            </li>
+            <li
+              className=""
+              role="presentation"
+              style={undefined}>
+              <a
+                href="/rna-3d-services"
+                onClick={[Function]}
+                onKeyDown={[Function]}
+                role="menuitem"
+                tabIndex="-1">
+                RNA 3D structure
+              </a>
+            </li>
+            <li
+              className=""
+              role="presentation"
+              style={undefined}>
+              <a
+                href="/rna-xd-services"
+                onClick={[Function]}
+                onKeyDown={[Function]}
+                role="menuitem"
+                tabIndex="-1">
+                RNA xD omics
+              </a>
+            </li>
+          </ul>
+        </li>
+        <li
+          className="dropdown"
+          style={undefined}>
+          <a
+            aria-expanded={false}
+            aria-haspopup={true}
+            className="dropdown-toggle"
+            href="#"
+            id="Protein-nav-dropdown"
+            onClick={[Function]}
+            onKeyDown={[Function]}
+            role="button">
+            Protein
+             
+            <span
+              className="caret" />
+          </a>
+          <ul
+            aria-labelledby="Protein-nav-dropdown"
+            className="dropdown-menu"
+            role="menu">
+            <li
+              className=""
+              role="presentation"
+              style={undefined}>
+              <a
+                href="/protein-1d-services"
+                onClick={[Function]}
+                onKeyDown={[Function]}
+                role="menuitem"
+                tabIndex="-1">
+                Protein 1D sequence
+              </a>
+            </li>
+            <li
+              className=""
+              role="presentation"
+              style={undefined}>
+              <a
+                href="/protein-2d-services"
+                onClick={[Function]}
+                onKeyDown={[Function]}
+                role="menuitem"
+                tabIndex="-1">
+                Protein 2D topology
+              </a>
+            </li>
+            <li
+              className=""
+              role="presentation"
+              style={undefined}>
+              <a
+                href="/protein-3d-services"
+                onClick={[Function]}
+                onKeyDown={[Function]}
+                role="menuitem"
+                tabIndex="-1">
+                Protein 3D structure
+              </a>
+            </li>
+            <li
+              className=""
+              role="presentation"
+              style={undefined}>
+              <a
+                href="/protein-xd-services"
+                onClick={[Function]}
+                onKeyDown={[Function]}
+                role="menuitem"
+                tabIndex="-1">
+                Protein xD omics
+              </a>
+            </li>
+          </ul>
+        </li>
+        <li
+          className="dropdown"
+          style={undefined}>
+          <a
+            aria-expanded={false}
+            aria-haspopup={true}
+            className="dropdown-toggle"
+            href="#"
+            id="Drugs and other small molecules-nav-dropdown"
+            onClick={[Function]}
+            onKeyDown={[Function]}
+            role="button">
+            Drugs and other small molecules
+             
+            <span
+              className="caret" />
+          </a>
+          <ul
+            aria-labelledby="Drugs and other small molecules-nav-dropdown"
+            className="dropdown-menu"
+            role="menu">
+            <li
+              className=""
+              role="presentation"
+              style={undefined}>
+              <a
+                href="/drug-1d-services"
+                onClick={[Function]}
+                onKeyDown={[Function]}
+                role="menuitem"
+                tabIndex="-1">
+                Drugs and other small molecules 1D sequence
+              </a>
+            </li>
+            <li
+              className=""
+              role="presentation"
+              style={undefined}>
+              <a
+                href="/drug-2d-services"
+                onClick={[Function]}
+                onKeyDown={[Function]}
+                role="menuitem"
+                tabIndex="-1">
+                Drugs and other small molecules 2D topology
+              </a>
+            </li>
+            <li
+              className=""
+              role="presentation"
+              style={undefined}>
+              <a
+                href="/drug-3d-services"
+                onClick={[Function]}
+                onKeyDown={[Function]}
+                role="menuitem"
+                tabIndex="-1">
+                Drugs and other small molecules 3D structure
+              </a>
+            </li>
+            <li
+              className=""
+              role="presentation"
+              style={undefined}>
+              <a
+                href="/drug-xd-services"
+                onClick={[Function]}
+                onKeyDown={[Function]}
+                role="menuitem"
+                tabIndex="-1">
+                Drugs and other small molecules xD omics
+              </a>
+            </li>
+          </ul>
+        </li>
+      </ul>
+      <ul
+        className="nav navbar-nav navbar-right"
+        role={null}>
+        <li
+          className=""
+          role="presentation"
+          style={undefined}>
+          <a
+            href="#"
+            onClick={[Function]}
+            role="button">
+            Report mode
+          </a>
+        </li>
+      </ul>
+    </div>
+  </div>
+</nav>
+`;

@@ -1,5 +1,5 @@
 import React, { PureComponent } from 'react'
-import { Button, FormControl, FormGroup, Image, MenuItem, Nav, Navbar, NavDropdown, NavItem } from 'react-bootstrap'
+import { Image, MenuItem, Nav, Navbar, NavDropdown, NavItem } from 'react-bootstrap'
 import { Link } from 'react-router-dom'
 import { LinkContainer } from 'react-router-bootstrap'
 import * as R from 'ramda'
@@ -8,7 +8,10 @@ import { connect } from 'react-redux'
 import * as ActionTypes from '../../constants/actionTypes'
 import buildActionCreators from '../../helpers/buildActionCreators'
 import elixirLogo from '../../images/elixir-logo.png'
-import { allowCollectionChange, allowReportMode, config } from '../../common/helperFunctions'
+import {
+  allowCollectionChange, allowReportMode, config,
+  showOnlyAllServicesInCollection
+} from '../../biotoolsSum/common/helperFunctions'
 import NavbarForm from './NavbarForm'
 
 class ServicesNavbar extends PureComponent {
@@ -35,30 +38,32 @@ class ServicesNavbar extends PureComponent {
             <Image src={elixirLogo} responsive style={{ width: '97px', height: '73px', marginTop: '-10px', marginBottom: '-15px' }} />
           </Navbar.Brand>
           <Navbar.Brand>
-            <Link to='/'>{'Services Matrix'}</Link>
+            {!showOnlyAllServicesInCollection && <Link to='/'>{'Services Matrix'}</Link>}
           </Navbar.Brand>
           <Navbar.Toggle />
         </Navbar.Header>
         <Navbar.Collapse>
-          <Nav activeKey={activeMenuItem} onSelect={this.handleSelect}>
-            <LinkContainer to={`/${ALL_SERVICES}`}>
-              <NavItem eventKey={-1}>
-                {'All Services'}
-              </NavItem>
-            </LinkContainer>
-            {config.rows.map((row, rowIndex) =>
-              <NavDropdown key={rowIndex} eventKey={rowIndex} title={row.name} id={`${row.name}-nav-dropdown`}>
-                {R.take(4, row.cells).map((cell, cellIndex) => R.isEmpty(cell) || !cell.route
-                  ? null
-                  : <LinkContainer key={cellIndex} to={`/${cell.route}`}>
-                    <MenuItem eventKey={`${rowIndex}.${cellIndex}`}>
-                      {`${row.name} ${AbstractionCategory[cellIndex]}`}
-                    </MenuItem>
-                  </LinkContainer>
-                )}
-              </NavDropdown>
-            )}
-          </Nav>
+          {!showOnlyAllServicesInCollection &&
+            <Nav activeKey={activeMenuItem} onSelect={this.handleSelect}>
+              <LinkContainer to={`/${ALL_SERVICES}`}>
+                <NavItem eventKey={-1}>
+                  {'All Services'}
+                </NavItem>
+              </LinkContainer>
+              {config.rows.map((row, rowIndex) =>
+                <NavDropdown key={rowIndex} eventKey={rowIndex} title={row.name} id={`${row.name}-nav-dropdown`}>
+                  {R.take(4, row.cells).map((cell, cellIndex) => R.isEmpty(cell) || !cell.route
+                    ? null
+                    : <LinkContainer key={cellIndex} to={`/${cell.route}`}>
+                      <MenuItem eventKey={`${rowIndex}.${cellIndex}`}>
+                        {`${row.name} ${AbstractionCategory[cellIndex]}`}
+                      </MenuItem>
+                    </LinkContainer>
+                  )}
+                </NavDropdown>
+              )}
+            </Nav>
+          }
           {allowCollectionChange &&
             <Navbar.Form pullRight>
               <NavbarForm />

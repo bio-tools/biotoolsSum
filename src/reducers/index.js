@@ -5,11 +5,11 @@ import { specificServicesWithName } from './specificServices'
 import * as R from 'ramda'
 import { ui } from './ui'
 import { collection } from './collection'
-import { servicesNames } from '../common/helperFunctions'
+import { getServicesNames } from '../biotoolsSum/common/helperFunctions'
 
 const biotoolsSumApp = () => {
-  const reducers = R.map(specificServicesWithName, servicesNames)
-  const servicesReducers = R.zipObj(servicesNames, reducers)
+  const reducers = R.map(specificServicesWithName, getServicesNames)
+  const servicesReducers = R.zipObj(getServicesNames, reducers)
 
   return combineReducers(R.merge(servicesReducers, {
     ui,

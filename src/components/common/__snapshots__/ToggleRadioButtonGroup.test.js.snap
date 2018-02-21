@@ -1,0 +1,56 @@
+exports[`test Renders ToggleRadioButtonGroup correctly 1`] = `
+<div
+  className="form-group">
+  <label
+    className="col-sm-2 control-label"
+    htmlFor={undefined}>
+    Toggle one thing, please
+  </label>
+  <div
+    className="col-sm-10">
+    <div
+      className="btn-group"
+      data-toggle="buttons">
+      <label
+        className="btn btn-default active"
+        disabled={false}
+        type="button">
+        <input
+          autoComplete="off"
+          checked={true}
+          name="toggleRadioButtonGroup"
+          onChange={[Function]}
+          type="radio"
+          value="value1" />
+        Value 1
+      </label>
+      <label
+        className="btn btn-default"
+        disabled={false}
+        type="button">
+        <input
+          autoComplete="off"
+          checked={false}
+          name="toggleRadioButtonGroup"
+          onChange={[Function]}
+          type="radio"
+          value="value2" />
+        Value 2
+      </label>
+      <label
+        className="btn btn-default"
+        disabled={false}
+        type="button">
+        <input
+          autoComplete="off"
+          checked={false}
+          name="toggleRadioButtonGroup"
+          onChange={[Function]}
+          type="radio"
+          value="value3" />
+        Value 3
+      </label>
+    </div>
+  </div>
+</div>
+`;

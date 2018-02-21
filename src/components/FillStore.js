@@ -2,7 +2,10 @@ import React from 'react'
 import { connect } from 'react-redux'
 import buildActionCreators from '../helpers/buildActionCreators'
 import * as ActionTypes from '../constants/actionTypes'
-import { camelCased, createQueryString, config, servicesNames, configCollection } from '../common/helperFunctions'
+import {
+  hyphenDelimitedToCamelCased, createQueryString, config, getServicesNames, configCollection,
+  showOnlyAllServicesInCollection
+} from '../biotoolsSum/common/helperFunctions'
 import * as R from 'ramda'
 import { ALL_SERVICES } from '../constants/stringConstants'
 import { getServicesInfo } from '../selectors/servicesSelector'
@@ -25,17 +28,17 @@ class FillStore extends React.PureComponent {
     this.fetchData(true)
   }
 
-  fetchData = (shouldFetch) => {
+  fetchData = (shouldRefetch) => {
     const { activeCollection, isUserEnteredCollection, servicesInfo, servicesFetch, citationsFetch, setCollection } = this.props
 
-    const allServices = camelCased(ALL_SERVICES)
+    const allServices = hyphenDelimitedToCamelCased(ALL_SERVICES)
     const allServicesInfo = servicesInfo[allServices]
 
     if (!isUserEnteredCollection) {
       setCollection({ collection: configCollection, userEnteredCollection: false })
     }
 
-    if (shouldFetch || activeCollection !== configCollection || allServicesInfo.persistExpiresAt < Date.now() ||
+    if (shouldRefetch || allServicesInfo.persistExpiresAt < Date.now() ||
       !allServicesInfo.serviceLoaded) {
       servicesFetch({
         name: allServices,
@@ -43,32 +46,34 @@ class FillStore extends React.PureComponent {
       })
     } else if (!allServicesInfo.citationsLoaded) {
       citationsFetch({
-        service: allServicesInfo.list,
+        service: allServicesInfo,
         name: allServices,
       })
     }
 
-    config.rows.forEach(row =>
-      R.take(4, row.cells).forEach(cell => {
-        if (!R.isEmpty(cell) && cell.route) {
-          const name = camelCased(cell.route)
-          const namedServicesInfo = servicesInfo[name]
+    if (!showOnlyAllServicesInCollection) {
+      config.rows.forEach(row =>
+        R.take(4, row.cells).forEach(cell => {
+          if (!R.isEmpty(cell) && cell.route) {
+            const name = hyphenDelimitedToCamelCased(cell.route)
+            const namedServicesInfo = servicesInfo[name]
 
-          if (activeCollection !== configCollection || namedServicesInfo.persistExpiresAt < Date.now() ||
-            !namedServicesInfo.serviceLoaded) {
-            servicesFetch({
-              name: name,
-              query: createQueryString(R.assoc('collectionID', activeCollection || configCollection, cell.qsObject)),
-            })
-          } else if (!namedServicesInfo.citationsLoaded) {
-            citationsFetch({
-              service: namedServicesInfo.list,
-              name,
-            })
+            if (shouldRefetch || namedServicesInfo.persistExpiresAt < Date.now() ||
+              !namedServicesInfo.serviceLoaded) {
+              servicesFetch({
+                name: name,
+                query: createQueryString(R.assoc('collectionID', activeCollection || configCollection, cell.qsObject)),
+              })
+            } else if (!namedServicesInfo.citationsLoaded) {
+              citationsFetch({
+                service: namedServicesInfo,
+                name,
+              })
+            }
           }
-        }
-      })
-    )
+        })
+      )
+    }
   }
 
   render () {
@@ -77,11 +82,11 @@ class FillStore extends React.PureComponent {
 }
 
 export default FillStore = connect(state => ({
-  servicesInfo: getServicesInfo(state, servicesNames),
+  servicesInfo: getServicesInfo(state, getServicesNames),
   activeCollection: getActiveCollection(state),
   isUserEnteredCollection: getUserEnteredCollection(state),
 }), buildActionCreators({
   servicesFetch: ActionTypes.SERVICES_FETCH,
-  citationsFetch: ActionTypes.SERVICES_FETCH_SUCCESS,
+  citationsFetch: ActionTypes.CITATIONS_FETCH,
   setCollection: ActionTypes.SET_COLLECTION,
 }))(FillStore)

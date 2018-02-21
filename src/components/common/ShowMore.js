@@ -2,7 +2,7 @@ import React, { PureComponent } from 'react'
 import PropTypes from 'prop-types'
 import * as R from 'ramda'
 import FontAwesome from 'react-fontawesome'
-import { OverlayTooltip } from './OverlayTooltip'
+import OverlayTooltip from './OverlayTooltip'
 
 export default class ReadMore extends PureComponent {
   constructor (props) {

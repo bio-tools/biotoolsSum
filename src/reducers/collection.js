@@ -1,6 +1,6 @@
 import * as R from 'ramda'
 import * as Actions from '../constants/actionTypes'
-import { configCollection } from '../common/helperFunctions'
+import { configCollection } from '../biotoolsSum/common/helperFunctions'
 
 const initialState = {
   activeCollection: '',

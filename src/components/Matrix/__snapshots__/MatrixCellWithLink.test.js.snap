@@ -1,0 +1,20 @@
+exports[`test Renders MatrixCellWithLink with link and name correctly 1`] = `
+<div
+  className="square light-grey-background greyscale">
+  <a
+    href="https://google.com/"
+    onClick={[Function]}>
+    <div
+      className="square-content">
+      <div
+        className="table">
+        <div
+          className="table-cell text-big">
+          <div
+            className="text-little" />
+        </div>
+      </div>
+    </div>
+  </a>
+</div>
+`;

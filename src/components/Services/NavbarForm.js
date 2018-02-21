@@ -5,22 +5,24 @@ import * as ActionTypes from '../../constants/actionTypes'
 import { connect } from 'react-redux'
 import { Button, Form } from 'react-bootstrap'
 import NavbarTextField from '../common/NavbarTextField'
+import { getActiveCollection } from '../../selectors/collectionSelector'
 
 class NavbarForm extends React.PureComponent {
   setCollection = event => {
     event.preventDefault()
-    const { setCollection, enteredCollection } = this.props
-    setCollection({ collection: enteredCollection, userEnteredCollection: true })
+    const { setCollection, servicesAndCitationsFetchCancel, enteredCollection, activeCollection } = this.props
+    if (activeCollection !== enteredCollection) {
+      servicesAndCitationsFetchCancel()
+      setCollection({collection: enteredCollection, userEnteredCollection: true})
+    }
   }
 
   render () {
-    const { submitting } = this.props
-
     return (
       <Form onSubmit={this.setCollection}>
         <Field name='enteredCollection' component={NavbarTextField} placeholder='Enter collection' />
         {' '}
-        <Button type='submit' disabled={submitting}>{'Submit'}</Button>
+        <Button type='submit'>{'Submit'}</Button>
       </Form>
     )
   }
@@ -36,7 +38,9 @@ export default connect(state => {
   return {
     enteredCollection: selector(state, 'enteredCollection'),
     initialValues: { enteredCollection: '' },
+    activeCollection: getActiveCollection(state),
   }
 }, buildActionCreators({
+  servicesAndCitationsFetchCancel: ActionTypes.SERVICES_AND_CITATIONS_FETCH_CANCEL,
   setCollection: ActionTypes.SET_COLLECTION,
 }))(NavbarForm)

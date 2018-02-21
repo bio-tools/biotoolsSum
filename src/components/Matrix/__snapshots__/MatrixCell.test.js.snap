@@ -1,0 +1,27 @@
+exports[`test Renders MatrixCell correctly 1`] = `
+<div
+  className="square white-background">
+  <div
+    className="square-content">
+    <div
+      className="table">
+      <div
+        className="table-cell text-big" />
+    </div>
+  </div>
+</div>
+`;
+
+exports[`test Renders MatrixCell with name correctly 1`] = `
+<div
+  className="square white-background">
+  <div
+    className="square-content">
+    <div
+      className="table">
+      <div
+        className="table-cell text-big" />
+    </div>
+  </div>
+</div>
+`;

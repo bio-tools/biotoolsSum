@@ -1,0 +1,72 @@
+exports[`test Renders ShowMore correctly 1`] = `
+<div>
+  <ul
+    className="table-list-item">
+    <li>
+      <a
+        href="https://bio.tools/?function=term1"
+        target="_blank">
+        term1
+      </a>
+      <a
+        href="https://www.google.com/"
+        onBlur={[Function]}
+        onClick={null}
+        onFocus={[Function]}
+        onMouseOut={[Function]}
+        onMouseOver={[Function]}
+        target="_blank">
+        <span
+          aria-hidden={true}
+          className="fa fa-question-circle icons" />
+      </a>
+    </li>
+    <li>
+      <a
+        href="https://bio.tools/?function=term2"
+        target="_blank">
+        term2
+      </a>
+      <a
+        href="https://www.google.com/"
+        onBlur={[Function]}
+        onClick={null}
+        onFocus={[Function]}
+        onMouseOut={[Function]}
+        onMouseOver={[Function]}
+        target="_blank">
+        <span
+          aria-hidden={true}
+          className="fa fa-question-circle icons" />
+      </a>
+    </li>
+    <li>
+      <a
+        href="https://bio.tools/?function=term3"
+        target="_blank">
+        term3
+      </a>
+      <a
+        href="https://www.google.com/"
+        onBlur={[Function]}
+        onClick={null}
+        onFocus={[Function]}
+        onMouseOut={[Function]}
+        onMouseOver={[Function]}
+        target="_blank">
+        <span
+          aria-hidden={true}
+          className="fa fa-question-circle icons" />
+      </a>
+    </li>
+  </ul>
+  <span
+    className="table-showmore-button">
+    <a
+      href="#"
+      onClick={[Function]}>
+      Show more
+    </a>
+  </span>
+</div>
+`;

@@ -11,17 +11,19 @@ import { generateDocx, generateXlsx } from '../biotoolsSum/generation/index'
 
 export const fetchServicesEpic = (action$, { getState }) =>
   action$.ofType(ActionTypes.SERVICES_FETCH)
-    .concatMap(({ payload: { name, query } }) => Rx.Observable
+    .mergeMap(({ payload: { name, query } }) => Rx.Observable
       .fromPromise(getServices(query))
-      .map((service) => buildActionWithName(ActionTypes.SERVICES_FETCH_SUCCESS, {service, name}))
+      .takeUntil(action$.ofType(ActionTypes.SERVICES_AND_CITATIONS_FETCH_CANCEL))
+      .map((service) => buildActionWithName(ActionTypes.SERVICES_FETCH_SUCCESS, { service, name }))
       .retry(3)
       .catch(serverIsDown)
       .catch(() => Rx.Observable.of(buildAction(ActionTypes.SERVICES_FETCH_FAILURE))))
 
 export const fetchCitationsEpic = (action$) =>
-  action$.ofType(ActionTypes.SERVICES_FETCH_SUCCESS)
-    .concatMap(({ payload: { service, name } }) => Rx.Observable
+  action$.ofType(ActionTypes.SERVICES_FETCH_SUCCESS, ActionTypes.CITATIONS_FETCH)
+    .mergeMap(({ payload: { service, name } }) => Rx.Observable
       .combineLatest(updatedData(service.list))
+      .takeUntil(action$.ofType(ActionTypes.SERVICES_AND_CITATIONS_FETCH_CANCEL))
       .map(tools => {
         const updatedService = R.assoc('list', tools, service)
         return buildActionWithName(ActionTypes.CITATIONS_FETCH_SUCCESS, { updatedService, name })
@@ -35,9 +37,7 @@ export const generateFile = (action$, { getState }) => {
   return action$.ofType(ActionTypes.GENERATE_FILE)
     .switchMap(({ payload: { list } }) => {
       const { form: { fileGenerationForm: { values } } } = getState()
-      if (values.reportType === reportType.JPG) {
-        // for now nothing here
-      } else if (values.reportType === reportType.DOCX) {
+      if (values.reportType === reportType.DOCX) {
         let pickedListOfTools = R.map(
           R.pick(
             ['name', 'credit', 'description', 'publicationsStrings', 'citations',

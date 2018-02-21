@@ -5,6 +5,6 @@ export const getServices = (appState, servicesStateName) => appState[servicesSta
 export const getServicesCounts = appState => R.pluck('count', appState)
 
 export const getServicesInfo = (appState, servicesStateName) => R.compose(
-    R.map(R.omit([ 'serviceLoading', 'citationsLoading'])),
+    R.map(R.omit(['serviceLoading', 'citationsLoading'])),
     R.pick(servicesStateName),
   )(appState)

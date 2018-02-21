@@ -1,0 +1,40 @@
+exports[`test Renders MatrixNavbar correctly 1`] = `
+<nav
+  className="navbar navbar-default">
+  <div
+    className="container">
+    <div
+      className="navbar-header">
+      <img
+        className="navbar-brand img-responsive"
+        src="elixir-logo.png"
+        style={
+          Object {
+            "height": "73px",
+            "marginBottom": "-15px",
+            "marginTop": "-10px",
+            "width": "112px",
+          }
+        } />
+      <button
+        className="navbar-toggle collapsed"
+        onClick={[Function]}
+        type="button">
+        <span
+          className="sr-only">
+          Toggle navigation
+        </span>
+        <span
+          className="icon-bar" />
+        <span
+          className="icon-bar" />
+        <span
+          className="icon-bar" />
+      </button>
+    </div>
+    <div
+      aria-expanded={null}
+      className="navbar-collapse collapse" />
+  </div>
+</nav>
+`;

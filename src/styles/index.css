@@ -19,8 +19,8 @@ img.center {
 
 .matrix {
   position: relative;
-  width: 85%;
-  padding-bottom: 85%;
+  width: 90%;
+  padding-bottom: 90%;
   margin-left: auto;
   margin-right: auto;
 }
@@ -124,8 +124,8 @@ img.center {
 }
 
 .more-icon {
-  padding-top: 34px;
-  font-size: 20px;
+  padding-top: 22px;
+  font-size: 34px;
   color: grey;
 }
 
@@ -221,7 +221,7 @@ img.center {
   animation: sk-bouncedelay 0.8s infinite ease-in-out both;
 }
 
-.loader-text {
+.center-text {
   font-size: 12px;
   text-align: center;
 }
@@ -374,6 +374,43 @@ img.center {
   .navbar-default .navbar-nav .open .dropdown-menu > .active > a:focus {
     color: #ffffff;
     background-color: #d66900;
+  }
+}
+
+@media (max-width: 1199px) {
+  .navbar-header {
+    float: none;
+  }
+  .navbar-left,.navbar-right {
+    float: none !important;
+  }
+  .navbar-toggle {
+    display: block;
+  }
+  .navbar-collapse {
+    border-top: 1px solid transparent;
+    box-shadow: inset 0 1px 0 rgba(255,255,255,0.1);
+  }
+  .navbar-fixed-top {
+    top: 0;
+    border-width: 0 0 1px;
+  }
+  .navbar-collapse.collapse {
+    display: none!important;
+  }
+  .navbar-nav {
+    float: none!important;
+    margin-top: 7.5px;
+  }
+  .navbar-nav>li {
+    float: none;
+  }
+  .navbar-nav>li>a {
+    padding-top: 10px;
+    padding-bottom: 10px;
+  }
+  .collapse.in{
+    display:block !important;
   }
 }
 

@@ -203,7 +203,7 @@ export function generateDocx (data, includeProps) {
       } else {
         const publicationsTextRun = publicationParagraph.addRun()
         publicationsTextRun.addFormat().addFonts().setAscii('Calibri')
-        publicationsTextRun.addText('No publications')
+        publicationsTextRun.addText('No publication info')
       }
     }
     // Publication END
