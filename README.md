@@ -1,4 +1,4 @@
-**biotoosSum** is a client-side web application for rendering views and reports of tool descriptions from the [ELIXIR Tools & Data Services Registry](https://bio.tools), for use on local websites.  For an example see https://biotools-sum.firebaseapp.com/.
+**bio.tools Sum** is a client-side web application for rendering views and reports of tool descriptions from the [ELIXIR Tools & Data Services Registry](https://bio.tools), for use on local websites.  For an example see https://biotools-sum.firebaseapp.com/.
 
 For running this project, you need to install [node package manager](https://www.npmjs.com/get-npm).
 
