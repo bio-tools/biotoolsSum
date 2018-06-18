@@ -5,7 +5,7 @@ import OverlayTooltip from '../../components/common/OverlayTooltip'
 export function getPublicationLink (publication, index) {
   if (publication.doi) {
     return <OverlayTooltip key={publication.doi + index} id='tooltip-doi' tooltipText='DOI'>
-      <a href={`https://dx.doi.org/${publication.doi}`} target='_blank'>
+      <a href={`https://doi.org/${publication.doi}`} target='_blank'>
         <strong>{index}</strong>
       </a>
     </OverlayTooltip>
