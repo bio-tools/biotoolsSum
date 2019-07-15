@@ -29,7 +29,8 @@ export const pickData = R.map(
       'credit',
       'publicationsStrings',
       'publicationsIdSourcePairs',
-    ])
+    ]),
+    R.converge(R.assoc('id'), [R.prop('biotoolsID'), R.identity])
   )
 )
 
@@ -143,7 +144,7 @@ export const updatedData = tools => {
             publication: R.compose(
               publication => publication.map((publication, index) =>
                 R.assoc('publicationIdSourcePair', publicationsIdSourcePairs[index], publication)),
-              R.filter(publication => publication.doi === null && publication.pmid === null && publication.pmcid === null),
+              R.filter(publication => publication.doi !== null || publication.pmid !== null || publication.pmcid !== null),
             ),
           })
         )(tool)

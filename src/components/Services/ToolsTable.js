@@ -159,7 +159,7 @@ const getSubColumns = (includePropsChosen) => {
       {
         Header: 'Function',
         id: 'function',
-        accessor: data => <ShowMore lines={3} searchTermName='function' list={data.func || data.function} ulClassName='table-list-item' />,
+        accessor: data => <ShowMore lines={3} searchTermName='operation' list={data.func || data.function} ulClassName='table-list-item' />,
         minWidth: 120,
       }
     )

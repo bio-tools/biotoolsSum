@@ -1,6 +1,6 @@
 export default class config {
   static getBioToolsApiUrl (path = '') {
-    return `https://bio.tools/api/tool/${path}`
+    return `https://bio.tools/api/tool/${path}&format=json`
   }
 
   static getCitationsApiUrl (src = '', id = '', page = '') {

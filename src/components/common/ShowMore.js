@@ -33,7 +33,7 @@ export default class ReadMore extends PureComponent {
         <ul className={ulClassName}>
           {showList.map((item, index) => {
             return <li key={index}>
-              <a href={`https://bio.tools/?${searchTermName}=${item.term}`} target='_blank'>
+              <a href={`https://bio.tools/t?${searchTermName}=${item.term}`} target='_blank'>
                 {item.term}
               </a>
               <OverlayTooltip id='tooltip-windows' tooltipText={`EDAM: ${item.term}`}>
