@@ -153,20 +153,38 @@ export const updatedData = tools => {
 }
 
 export function getServices (query, page = '?page=1') {
+  if (query.constructor === Array && query.length > 0) {
+    const url = config.getBioToolsApiUrl(`${page}&${query[0]}`)
+    query = query.slice(1)
+    return fetch(url)
+      .then(response => response.json())
+      .then(data => {
+        if (query.length > 0) {
+          return getServices(query)
+            .then(nextData =>
+              R.evolve({
+                list: R.concat(nextData.list),
+                count: R.add(nextData.list.length)
+              }, data)
+            )
+        }
+        return data
+      })
+  }
   const url = config.getBioToolsApiUrl(`${page}&${query}`)
-  return fetch(url)
-    .then(response => response.json())
-    .then(data => {
-      if (data.next !== null) {
-        return getServices(query, data.next)
-          .then(nextData =>
-            R.evolve({
-              list: R.concat(nextData.list),
-            }, data)
-          )
-      }
-      return data
-    })
+    return fetch(url)
+      .then(response => response.json())
+      .then(data => {
+        if (data.next !== null) {
+          return getServices(query, data.next)
+            .then(nextData =>
+              R.evolve({
+                list: R.concat(nextData.list),
+              }, data)
+            )
+        }
+        return data
+      })
 }
 
 export function getCellsCount (includePropsChosen) {

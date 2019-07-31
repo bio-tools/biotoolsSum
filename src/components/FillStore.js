@@ -4,7 +4,7 @@ import buildActionCreators from '../helpers/buildActionCreators'
 import * as ActionTypes from '../constants/actionTypes'
 import {
   hyphenDelimitedToCamelCased, createQueryString, config, getServicesNames, configCollection,
-  showOnlyAllServicesInCollection
+  showOnlyAllServicesInCollection, configBiotools
 } from '../biotoolsSum/common/helperFunctions'
 import * as R from 'ramda'
 import { ALL_SERVICES } from '../constants/stringConstants'
@@ -40,10 +40,17 @@ class FillStore extends React.PureComponent {
 
     if (shouldRefetch || allServicesInfo.persistExpiresAt < Date.now() ||
       !allServicesInfo.serviceLoaded) {
-      servicesFetch({
-        name: allServices,
-        query: `collectionID="${activeCollection || configCollection}"`,
-      })
+        if (configBiotools) {
+           servicesFetch({
+             name: allServices,
+             query: configBiotools.map(id => `biotoolsID="${id}"`)
+           })
+        } else {
+          servicesFetch({
+            name: allServices,
+            query: `collectionID="${activeCollection || configCollection}"`,
+          })
+        }
     } else if (!allServicesInfo.citationsLoaded) {
       citationsFetch({
         service: allServicesInfo,

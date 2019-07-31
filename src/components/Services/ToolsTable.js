@@ -13,6 +13,8 @@ import ReactHighcharts from 'react-highcharts'
 import HighChartsExporting from 'highcharts-exporting'
 import HighChartsNoData from 'highcharts-no-data-to-display'
 import { getPublicationAndCitationsLink } from '../../biotoolsSum/table/index'
+import {configRatings} from '../../biotoolsSum/common/helperFunctions'
+import StarRating from '../common/StarRating'
 HighChartsExporting(ReactHighcharts.Highcharts)
 HighChartsNoData(ReactHighcharts.Highcharts)
 
@@ -38,6 +40,14 @@ const getColumns = (includePropsChosen) => {
             <FontAwesome className='icons' name='question-circle' />
           </a>
         </OverlayTooltip>
+        {configRatings && configRatings[id] && (
+          <div>
+            <hr className="table-delimiter"/>
+            <StarRating value={configRatings[id].maturity}>Maturity</StarRating>
+            <StarRating value={configRatings[id].performance}>Performance</StarRating>
+            <StarRating value={configRatings[id].documentation}>Documentation</StarRating>
+          </div>
+        )}
         {(isInfoMode || includePropsChosen.includes('toolType')) &&
           <div>
             <hr className='table-delimiter' />

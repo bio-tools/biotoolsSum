@@ -107,7 +107,7 @@ export default BioToolsData = connect(state => {
   const activeCollection = getActiveCollection(state)
 
   const message = servicesName === ALL_SERVICES
-    ? `All ${activeCollection} services`
+    ? `All ${activeCollection || 'selected'} services`
     : R.compose(
       R.concat(`All ${activeCollection} `),
       R.prop('message'),

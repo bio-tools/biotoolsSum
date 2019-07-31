@@ -16,6 +16,10 @@ export const config = window.config || require('../../../public/config.js').conf
 
 export const configCollection = config.collectionID
 
+export const configBiotools = config.biotoolsIDS
+
+export const configRatings = config.ratings
+
 export const allowReportMode = config.allowReportMode
 
 export const allowCollectionChange = config.allowCollectionChange
