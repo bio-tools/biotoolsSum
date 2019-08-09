@@ -13,8 +13,8 @@ import ReactHighcharts from 'react-highcharts'
 import HighChartsExporting from 'highcharts-exporting'
 import HighChartsNoData from 'highcharts-no-data-to-display'
 import { getPublicationAndCitationsLink } from '../../biotoolsSum/table/index'
-import {configRatings} from '../../biotoolsSum/common/helperFunctions'
-import StarRating from '../common/StarRating'
+// import {configRatings, configRatingsKeys} from '../../biotoolsSum/common/helperFunctions'
+// import StarRating from '../common/StarRating'
 HighChartsExporting(ReactHighcharts.Highcharts)
 HighChartsNoData(ReactHighcharts.Highcharts)
 
@@ -40,14 +40,12 @@ const getColumns = (includePropsChosen) => {
             <FontAwesome className='icons' name='question-circle' />
           </a>
         </OverlayTooltip>
-        {configRatings && configRatings[id] && (
-          <div>
-            <hr className="table-delimiter"/>
-            <StarRating value={configRatings[id].maturity}>Maturity</StarRating>
-            <StarRating value={configRatings[id].performance}>Performance</StarRating>
-            <StarRating value={configRatings[id].documentation}>Documentation</StarRating>
-          </div>
-        )}
+        {/*{configRatings && configRatings[id] && (*/}
+        {/*  <div>*/}
+        {/*    <hr className="table-delimiter"/>*/}
+        {/*    {Object.keys(configRatingsKeys).map(key => <StarRating key={key} value={configRatings[id][key]}>{configRatingsKeys[key]}</StarRating>)}*/}
+        {/*  </div>*/}
+        {/*)}*/}
         {(isInfoMode || includePropsChosen.includes('toolType')) &&
           <div>
             <hr className='table-delimiter' />
@@ -163,7 +161,6 @@ const getSubColumns = (includePropsChosen) => {
       }
     )
   }
-
   if (isInfoMode || includePropsChosen.includes('function')) {
     subColumns.push(
       {
@@ -279,12 +276,11 @@ class ToolsTable extends React.PureComponent {
         SubComponent={cellsPerRowCount <= MAIN_ROW_CELLS_COUNT ? null : row => {
           const { original } = row
           const subList = [{
-            func: original.function,
+            func: R.compose(R.prop('operation'), R.head)(original.function),
             topic: original.topic,
             maturity: original.maturity,
             operatingSystem: original.operatingSystem,
           }]
-
           const { citationsYears, citations, publication } = original
           const seriesNames = R.map(R.join(': '), R.pluck('publicationIdSourcePair', publication))
 

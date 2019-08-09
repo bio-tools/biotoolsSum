@@ -24,7 +24,7 @@ it('Renders ShowMore correctly', () => {
 
   const tree = renderer
     .create(
-      <ShowMore lines={3} searchTermName='function' list={list} ulClassName='table-list-item' />
+      <ShowMore lines={3} searchTermName='operation' list={list} ulClassName='table-list-item' />
     )
     .toJSON()
 

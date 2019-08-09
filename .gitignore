@@ -16,8 +16,15 @@
 npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
+*.iml
 
 # firebase
+.firebase
 .firebaserc
 firebase.json
+
+
+
+
+todo.txt
 

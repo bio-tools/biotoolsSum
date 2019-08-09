@@ -12,11 +12,15 @@ export const createQueryString = R.compose(
 
 export const hyphenDelimitedToCamelCased = string => string.replace(/-([a-z0-9])/g, match => match[1].toUpperCase())
 
-export const config = window.config || require('../../../public/config.js').config
+export const config = window.config || require('../../../public/config_select.js').config
+
+export const impacts = window.impacts || require('../../../public/wos.js').impacts
 
 export const configCollection = config.collectionID
 
 export const configBiotools = config.biotoolsIDS
+
+export const configRatingsKeys = config.ratingsKeys
 
 export const configRatings = config.ratings
 

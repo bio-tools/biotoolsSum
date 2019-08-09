@@ -1,25 +1,33 @@
 import React from 'react'
-import { Alert } from 'react-bootstrap'
-import { connect } from 'react-redux'
+import {Alert} from 'react-bootstrap'
+import {connect} from 'react-redux'
 import ToolsTable from './ToolsTable'
-import { getServices } from '../../selectors/servicesSelector'
-import { hyphenDelimitedToCamelCased, config, showOnlyAllServicesInCollection } from '../../biotoolsSum/common/helperFunctions'
+import {getServices} from '../../selectors/servicesSelector'
+import {
+  hyphenDelimitedToCamelCased,
+  config,
+  showOnlyAllServicesInCollection
+} from '../../biotoolsSum/common/helperFunctions'
 import Loader from '../common/Loader'
 import * as R from 'ramda'
-import { ALL_SERVICES } from '../../constants/stringConstants'
+import {ALL_SERVICES} from '../../constants/stringConstants'
 import FileGenerationForm from './FileGenerationForm'
-import { formValueSelector } from 'redux-form'
-import { orderByAttributeAndTakeFirstX } from '../../biotoolsSum/services/index'
+import {formValueSelector} from 'redux-form'
+import {orderByAttributeAndTakeFirstX} from '../../biotoolsSum/services/index'
 import ToolsTableWithChart from './ToolsTableWithChart'
-import { reportType } from '../../constants/generateFile'
-import { getActiveCollection } from '../../selectors/collectionSelector'
+import {reportType} from '../../constants/generateFile'
+import {getActiveCollection} from '../../selectors/collectionSelector'
+import ToolsBasicTable from "./tables/ToolsBasicTable";
+import ToolsExpertEvaluationTable from "./tables/ToolsExpertEvaluationTable";
+import {Route, Switch} from "react-router";
+import ToolsScientometryAvailabilityTable from "./tables/ToolsScientometryAvailabilityTable";
 
 class BioToolsData extends React.PureComponent {
-  shouldComponentUpdate (nextProps) {
+  shouldComponentUpdate(nextProps) {
     return !!nextProps.services
   }
 
-  render () {
+  render() {
     const {
       services,
       message,
@@ -31,7 +39,7 @@ class BioToolsData extends React.PureComponent {
       order,
       takeFirstX,
     } = this.props
-    const { count, list, serviceLoading, citationsLoading } = services
+    const {count, list, serviceLoading, citationsLoading} = services
 
     let toolsList = list
     if (reportTypeChosen !== reportType.CHART && sortBy && order) {
@@ -45,44 +53,62 @@ class BioToolsData extends React.PureComponent {
             <Alert bsStyle='warning'>
               <div className='center-text'>
                 {message + '.'}
-                <br />
+                <br/>
                 {'There is a total number of '}<strong>{count}</strong>{' tools available.'}
               </div>
               {serviceLoading &&
-                <div className='center-text'>
-                  <br />
-                  {'Reloading tools...'}
-                  <br />
-                  {'This might take some time...'}
-                  <Loader />
-                </div>
+              <div className='center-text'>
+                <br/>
+                {'Reloading tools...'}
+                <br/>
+                {'This might take some time...'}
+                <Loader/>
+              </div>
               }
               {citationsLoading &&
               <div>
                 <div className='center-text'>
-                  <br />
+                  <br/>
                   {'Reloading citations count...'}
-                  <br />
+                  <br/>
                   {'This might take some time, but you are free to explore tools.'}
                 </div>
-                <Loader />
+                <Loader/>
               </div>
               }
             </Alert>
-            {showReportPage && <FileGenerationForm list={toolsList} />}
-            {reportTypeChosen === reportType.CHART
-              ? <ToolsTableWithChart list={toolsList} createGraph={createGraph} />
-              : <ToolsTable list={toolsList} includePropsChosen={includePropsChosen} sortBy={sortBy} order={order} />
-            }
+            {showReportPage && <FileGenerationForm list={toolsList}/>}
+            {/*<ToolsBasicTable list={toolsList}/>*/}
+            {/*<ToolsExpertEvaluationTable list={toolsList}/>*/}
+            {/*{reportTypeChosen === reportType.CHART*/}
+            {/*  ? <ToolsTableWithChart list={toolsList} createGraph={createGraph} />*/}
+            {/*  : <ToolsTable list={toolsList} includePropsChosen={includePropsChosen} sortBy={sortBy} order={order} />*/}
+            {/*}*/}
+            <Switch>
+              {!showReportPage &&
+              <Route path="/views/evaluation"
+                     render={(props) => <ToolsExpertEvaluationTable {...props} list={toolsList}/>}/>}
+              {!showReportPage &&
+              <Route path="/views/basic" render={(props) => <ToolsBasicTable {...props} list={toolsList}/>}/>}
+              {!showReportPage &&
+              <Route path="/views/scientometry"
+                     render={(props) => <ToolsScientometryAvailabilityTable {...props} list={toolsList}/>}/>
+              }
+              <Route path="/" render={(props) => reportTypeChosen === reportType.CHART
+                ? <ToolsTableWithChart {...props} list={toolsList} createGraph={createGraph}/>
+                : <ToolsTable {...props} list={toolsList} includePropsChosen={includePropsChosen} sortBy={sortBy}
+                              order={order}/>
+              }/>
+            </Switch>
           </div>
           : serviceLoading
             ? <Alert bsStyle='warning'>
               <div className='center-text'>
-                <br />
+                <br/>
                 {'Loading tools...'}
-                <br />
+                <br/>
                 {'This might take some time...'}
-                <Loader />
+                <Loader/>
               </div>
             </Alert>
             : <Alert bsStyle='danger'>{'We are sorry, but there are no services.'}</Alert>

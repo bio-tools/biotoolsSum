@@ -259,8 +259,8 @@ export function generateDocx (data, includeProps) {
       let functionTextRun = functionParagraph.addRun()
       item.function.forEach((functionItem, index) =>
         index + 1 < item.function.length
-          ? functionTextRun.addText(`${functionItem.term}, `)
-          : functionTextRun.addText(`${functionItem.term}.`)
+          ? functionTextRun.addText(`${functionItem.operation[0].term}, `)
+          : functionTextRun.addText(`${functionItem.operation[0].term}.`)
       )
       let functionTextFormat = functionTextRun.addFormat()
       functionTextFormat.addFonts().setAscii('Calibri')

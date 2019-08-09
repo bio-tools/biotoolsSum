@@ -19,7 +19,7 @@ class Stars extends Component {
             stars.push(<FontAwesome key={i} style={starStyle} className='icons' name={i < this.props.value ? 'star' : 'star-o'}/>)
         }
         return (
-            <span>
+            <span style={{whiteSpace: "nowrap"}}>
                 {stars}
             </span>
         )

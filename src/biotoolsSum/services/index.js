@@ -1,13 +1,14 @@
 import config from '../common/config'
 import * as R from 'ramda'
 import * as Rx from 'rxjs'
-import { MAX_ROW_CELLS_COUNT } from '../../constants/toolsTable'
+import {MAX_ROW_CELLS_COUNT} from '../../constants/toolsTable'
+import {impacts} from "../common/helperFunctions";
 
 export const pickData = R.map(
   R.compose(
     R.evolve(
       {
-        function: R.compose(R.prop('operation'), R.head),
+        // function: R.compose(R.prop('operation'), R.head),
         pmids: R.reject(R.isNil),
         credit: R.filter(R.propEq('typeEntity', 'Institute')),
       }),
@@ -29,6 +30,8 @@ export const pickData = R.map(
       'credit',
       'publicationsStrings',
       'publicationsIdSourcePairs',
+      'license',
+      'documentation'
     ]),
     R.converge(R.assoc('id'), [R.prop('biotoolsID'), R.identity])
   )
@@ -53,7 +56,7 @@ const getPublicationsInfo = uniquePublications => uniquePublications.map(pub => 
       if (!result) {
         return null
       }
-      const { source, id: resultId, citedByCount } = result
+      const {source, id: resultId, citedByCount} = result
       const pages = Math.ceil(citedByCount / 1000)
 
       let apiPromises = []
@@ -75,7 +78,7 @@ const getPublicationsInfo = uniquePublications => uniquePublications.map(pub => 
           )(citationsInfo)
           : {}
 
-        return ({ publicationInfo, citationsYears })
+        return ({publicationInfo, citationsYears})
       })
     })
   )
@@ -87,7 +90,7 @@ export const updatedData = tools => {
   }
 
   return tools.map(tool => {
-    const { publication } = tool
+    const {publication} = tool
 
     if (publication.length === 0) {
       return Rx.Observable.of(R.compose(
@@ -143,7 +146,11 @@ export const updatedData = tools => {
           R.evolve({
             publication: R.compose(
               publication => publication.map((publication, index) =>
-                R.assoc('publicationIdSourcePair', publicationsIdSourcePairs[index], publication)),
+                R.compose(
+                  R.assoc('impact', impacts[publication.metadata.journal.toUpperCase()]),
+                  R.assoc('publicationIdSourcePair', publicationsIdSourcePairs[index]),
+                )(publication)
+              ),
               R.filter(publication => publication.doi !== null || publication.pmid !== null || publication.pmcid !== null),
             ),
           })
@@ -152,7 +159,7 @@ export const updatedData = tools => {
   })
 }
 
-export function getServices (query, page = '?page=1') {
+export function getServices(query, page = '?page=1') {
   if (query.constructor === Array && query.length > 0) {
     const url = config.getBioToolsApiUrl(`${page}&${query[0]}`)
     query = query.slice(1)
@@ -172,22 +179,22 @@ export function getServices (query, page = '?page=1') {
       })
   }
   const url = config.getBioToolsApiUrl(`${page}&${query}`)
-    return fetch(url)
-      .then(response => response.json())
-      .then(data => {
-        if (data.next !== null) {
-          return getServices(query, data.next)
-            .then(nextData =>
-              R.evolve({
-                list: R.concat(nextData.list),
-              }, data)
-            )
-        }
-        return data
-      })
+  return fetch(url)
+    .then(response => response.json())
+    .then(data => {
+      if (data.next !== null) {
+        return getServices(query, data.next)
+          .then(nextData =>
+            R.evolve({
+              list: R.concat(nextData.list),
+            }, data)
+          )
+      }
+      return data
+    })
 }
 
-export function getCellsCount (includePropsChosen) {
+export function getCellsCount(includePropsChosen) {
   if (includePropsChosen === undefined) {
     return MAX_ROW_CELLS_COUNT
   }
@@ -213,17 +220,17 @@ export function getCellsCount (includePropsChosen) {
   return count
 }
 
-export function orderByAttributeAndTakeFirstX (list, sortBy, order, takeFirstX) {
+export function orderByAttributeAndTakeFirstX(list, sortBy, order, takeFirstX) {
   return R.compose(
     R.take(takeFirstX),
     R.sort(order === 'ascend'
-        ? R.ascend(R.prop(sortBy))
-        : R.descend(R.prop(sortBy)),
+      ? R.ascend(R.prop(sortBy))
+      : R.descend(R.prop(sortBy)),
       R.__),
   )(list)
 }
 
-export function getChartConfig (citationsYears, toolName, seriesNames) {
+export function getChartConfig(citationsYears, toolName, seriesNames) {
   const allCitationsYears = R.reduce(R.mergeWith(R.add), 0, citationsYears)
 
   let years = R.keys(allCitationsYears)
@@ -241,7 +248,9 @@ export function getChartConfig (citationsYears, toolName, seriesNames) {
       R.map(R.values),
       R.map(obj => {
         let newObj = obj
-        R.forEach(year => { if (!R.has(year, obj)) newObj[year] = 0 }, years)
+        R.forEach(year => {
+          if (!R.has(year, obj)) newObj[year] = 0
+        }, years)
         return newObj
       }),
     )(citationsYears)
@@ -257,7 +266,9 @@ export function getChartConfig (citationsYears, toolName, seriesNames) {
     R.values,
     obj => {
       let newObj = obj
-      R.forEach(year => { if (!R.has(year, obj)) newObj[year] = 0 }, years)
+      R.forEach(year => {
+        if (!R.has(year, obj)) newObj[year] = 0
+      }, years)
       return newObj
     },
   )(allCitationsYears)
