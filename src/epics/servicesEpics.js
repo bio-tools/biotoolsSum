@@ -27,7 +27,7 @@ export const fetchCitationsEpic = (action$) =>
       .takeUntil(action$.ofType(ActionTypes.SERVICES_AND_CITATIONS_FETCH_CANCEL))
       .map(tools => {
         const updatedService = R.assoc('list', tools, service)
-        return buildActionWithName(ActionTypes.CITATIONS_FETCH_SUCCESS, { updatedService, name })
+        return buildActionWithName(ActionTypes.CITATIONS_FETCH_SUCCESS, { service: updatedService, name })
       })
       .retry(3)
       .catch(serverIsDown)
@@ -41,7 +41,7 @@ export const fetchUptimeEpic = (action$) =>
       .takeUntil(action$.ofType(ActionTypes.SERVICES_AND_CITATIONS_FETCH_CANCEL))
       .map(tools => {
         const updatedService = R.assoc('list', tools, service)
-        return buildActionWithName(ActionTypes.UPTIME_FETCH_SUCCESS, { updatedService, name })
+        return buildActionWithName(ActionTypes.UPTIME_FETCH_SUCCESS, { service: updatedService, name })
       })
       .retry(3)
       .catch(serverIsDown)

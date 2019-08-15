@@ -54,7 +54,7 @@ export const specificServicesWithName = (servicesName = '') =>
       }
 
       case Actions.CITATIONS_FETCH_SUCCESS: {
-        const { count, list } = payload.updatedService
+        const { count, list } = payload.service
         const pickedData = pickData(list)
 
         return R.evolve({
@@ -72,7 +72,7 @@ export const specificServicesWithName = (servicesName = '') =>
         })(state)
 
       case Actions.UPTIME_FETCH_SUCCESS: {
-        const { count, list } = payload.updatedService
+        const { count, list } = payload.service
         const pickedData = pickData(list)
 
         return R.evolve({

@@ -211,7 +211,7 @@ export const uptimeData = tools => {
       )(tool))
     }
     return Rx.Observable
-      .combineLatest(getUptimeInfo(biotoolsID))
+      .from(getUptimeInfo(biotoolsID))
       .map(uptimeInfo => {
         return R.compose(
           R.assoc('uptime', uptimeInfo)
