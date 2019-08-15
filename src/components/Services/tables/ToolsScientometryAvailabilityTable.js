@@ -36,7 +36,8 @@ export default class ToolsScientometryAvailabilityTable extends Component {
       accessor: ({publication}) => R.compose(R.converge(R.divide, [R.sum, R.length]), R.pluck('impact'))(publication)
     }, {
       Header: 'Availability',
-      id: 'availability'
+      id: 'availability',
+      accessor: ({uptime}) => R.compose(R.contains(200), R.pluck('code'))(uptime) ? 'Available' : 'Not Available'
     }, {
       Header: 'Documentation',
       id: 'documentation',
