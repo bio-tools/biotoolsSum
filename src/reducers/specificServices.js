@@ -71,6 +71,20 @@ export const specificServicesWithName = (servicesName = '') =>
           citationsLoaded: R.F,
         })(state)
 
+      case Actions.UPTIME_FETCH_SUCCESS: {
+        const { count, list } = payload.updatedService
+        const pickedData = pickData(list)
+
+        return R.evolve({
+          count: R.always(count),
+          list: R.always(pickedData),
+        })(state)
+      }
+
+      case Actions.UPTIME_FETCH_FAILURE: {
+        // todo
+      }
+
       default:
         return state
     }

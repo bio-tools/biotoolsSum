@@ -12,4 +12,12 @@ export default class config {
     return `https://www.ebi.ac.uk/europepmc/webservices/rest/search?query=${id}&format=json`
     // https://www.ebi.ac.uk/europepmc/webservices/rest/search?query=ext_id:27174934%20src:med&format=json
   }
+
+  static getOpenEBenchInfoApiUrl(id = '') {
+    return `https://openebench.bsc.es/monitor/rest/aggregate?id=${id}`
+  }
+
+  static getOpenEBenchUptimeApiUrl(id, type, domain, limit = 8) {
+    return `https://openebench.bsc.es/monitor/rest/homepage/${id}/${type}/${domain}?limit=${limit}`
+  }
 }

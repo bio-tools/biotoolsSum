@@ -31,11 +31,50 @@ export const pickData = R.map(
       'publicationsStrings',
       'publicationsIdSourcePairs',
       'license',
-      'documentation'
+      'documentation',
+      'uptime'
     ]),
     R.converge(R.assoc('id'), [R.prop('biotoolsID'), R.identity])
   )
 )
+
+const getUptimeInfo = id => {
+  return Rx.Observable.fromPromise(fetch(config.getOpenEBenchInfoApiUrl(id))
+    .then(response => response.json())
+    .then(openEBenchInfo => {
+      if (!openEBenchInfo || !openEBenchInfo.length) {
+        return Rx.Observable.of([])
+      }
+      const first = openEBenchInfo[0]
+      if (!first.entities || !first.entities.length) {
+        return Rx.Observable.of([])
+      }
+
+      const tool = R.compose(
+        R.head,
+        R.prop('tools'),
+        R.find(e => e.type)
+      )(first.entities);
+
+      const split = R.compose(
+        R.split('/')
+      )(tool['@id'])
+
+      if (split.length < 3) {
+        return Rx.Observable.of([])
+      }
+
+      const domain = split[split.length - 1]
+      const type = split[split.length - 2]
+      const ebenchId = split[split.length - 3]
+
+      return fetch(config.getOpenEBenchUptimeApiUrl(ebenchId, type, domain))
+        .then(response => {
+          return response.json();
+        })
+    })
+  )
+}
 
 const getPublicationsInfo = uniquePublications => uniquePublications.map(pub => {
   let id = ''
@@ -154,6 +193,28 @@ export const updatedData = tools => {
               R.filter(publication => publication.doi !== null || publication.pmid !== null || publication.pmcid !== null),
             ),
           })
+        )(tool)
+      })
+  })
+}
+
+export const uptimeData = tools => {
+  if (tools.length === 0) {
+    return Rx.Observable.of([])
+  }
+
+  return tools.map(tool => {
+    const {biotoolsID} = tool;
+    if (!biotoolsID) {
+      return Rx.Observable.of(R.compose(
+        R.assoc('uptime', []),
+      )(tool))
+    }
+    return Rx.Observable
+      .combineLatest(getUptimeInfo(biotoolsID))
+      .map(uptimeInfo => {
+        return R.compose(
+          R.assoc('uptime', uptimeInfo)
         )(tool)
       })
   })
