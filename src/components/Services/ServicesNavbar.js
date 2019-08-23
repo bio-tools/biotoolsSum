@@ -13,6 +13,7 @@ import {
   showOnlyAllServicesInCollection
 } from '../../biotoolsSum/common/helperFunctions'
 import NavbarForm from './NavbarForm'
+import {Route} from "react-router";
 
 class ServicesNavbar extends PureComponent {
   constructor (props) {
@@ -69,13 +70,30 @@ class ServicesNavbar extends PureComponent {
               <NavbarForm />
             </Navbar.Form>
           }
-          {allowReportMode &&
-            <Nav pullRight>
+          {allowReportMode && <Route exact path="/" render={(props) => (
+          <Nav pullRight>
               <NavItem onClick={changeReportPageVisibility}>
                 {showReportPage ? 'Info mode' : 'Report mode'}
               </NavItem>
             </Nav>
-          }
+          )}/>}
+          <Nav pullRight>
+            <NavDropdown eventKey={'view'} title="View" id="page-nav-dropdown">
+                <LinkContainer active={false} exact key="overview" to={'/'}>
+                    <MenuItem eventKey={"view-overview"}>Overview</MenuItem>
+                </LinkContainer>
+                <LinkContainer active={false} key="basic" to={'/views/basic'}>
+                    <MenuItem eventKey={"view-basic"}>Basic</MenuItem>
+                </LinkContainer>
+                <LinkContainer active={false} key="evaluation" to={'/views/evaluation'}>
+                    <MenuItem eventKey={"view-evaluation"}>Evaluation</MenuItem>
+                </LinkContainer>
+                <LinkContainer active={false} key="scientometry" to={'/views/scientometry'}>
+                    <MenuItem eventKey={"view-scientometry"}>Scientometry</MenuItem>
+                </LinkContainer>
+            </NavDropdown>
+          </Nav>
+
         </Navbar.Collapse>
       </Navbar>
     )
@@ -87,3 +105,4 @@ export default ServicesNavbar = connect(state => ({
 }), buildActionCreators({
   changeReportPageVisibility: ActionTypes.REPORT_PAGE_CHANGE_VISIBILITY,
 }))(ServicesNavbar)
+9
