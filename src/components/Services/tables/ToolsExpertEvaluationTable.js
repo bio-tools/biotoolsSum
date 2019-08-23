@@ -1,6 +1,8 @@
 import React, {Component} from "react";
 import {configRatingsKeys, configRatings} from '../../../biotoolsSum/common/helperFunctions'
 import ReactTable from "react-table";
+import FontAwesome from 'react-fontawesome'
+import OverlayTooltip from '../../common/OverlayTooltip'
 
 
 export default class ToolsExpertEvaluationTable extends Component {
@@ -18,13 +20,16 @@ export default class ToolsExpertEvaluationTable extends Component {
             sortMethod: (a, b) => {
                 return a.toLowerCase() > b.toLowerCase() ? 1 : -1
             },
-            getProps: () => {
-                return {
-                    style: {
-                        fontWeight: "bold"
-                    }
-                }
-            },
+            Cell: ({ original: { id, version, name, homepage, toolType } }) => (
+            <div>
+                <a href={homepage} target='_blank'>{name}</a>
+                {version && <span>{` v.${version}`}</span>}
+                <OverlayTooltip id='tooltip-windows' tooltipText={`Bio.tools: ${name}`}>
+                <a href={`https://bio.tools/${id}`} target='_blank'>
+                    <FontAwesome className='icons' name='question-circle' />
+                </a>
+                </OverlayTooltip>
+            </div>),
             filterable: true,
             filterMethod: (filter, row) => row[filter.id].toLowerCase().includes(filter.value.toLowerCase()),
         }];

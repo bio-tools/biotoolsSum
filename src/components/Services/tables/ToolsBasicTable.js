@@ -1,6 +1,8 @@
 import React, {Component} from "react";
 import ReactTable from "react-table";
 import * as R from "ramda";
+import FontAwesome from 'react-fontawesome'
+import OverlayTooltip from '../../common/OverlayTooltip'
 
 const subRows = (data, separator) => {
   const subRows = R.compose(
@@ -31,13 +33,16 @@ export default class ToolsBasicTable extends Component {
         },
         filterable: true,
         filterMethod: (filter, row) => row[filter.id].toLowerCase().includes(filter.value.toLowerCase()),
-        getProps: () => {
-          return {
-            style: {
-              fontWeight: "bold"
-            }
-          }
-        },
+        Cell: ({ original: { id, version, name, homepage, toolType } }) => (
+            <div>
+                <a href={homepage} target='_blank'>{name}</a>
+                {version && <span>{` v.${version}`}</span>}
+                <OverlayTooltip id='tooltip-windows' tooltipText={`Bio.tools: ${name}`}>
+                <a href={`https://bio.tools/${id}`} target='_blank'>
+                    <FontAwesome className='icons' name='question-circle' />
+                </a>
+                </OverlayTooltip>
+            </div>),
       },
       {
         Header: <div style={{display: "flex"}}><div style={{paddingTop: 5, paddingBottom: 5, flex: "1", borderRight: "1px solid rgba(0,0,0,0.1)"}}>Input</div><div style={{paddingTop: 5, paddingBottom: 5, flex: "1", borderRight: "1px solid rgba(0,0,0,0.1)"}}>Output</div><div style={{paddingTop: 5, paddingBottom: 5, flex: "1"}}>Operations</div></div>,

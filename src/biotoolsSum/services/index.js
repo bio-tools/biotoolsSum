@@ -34,7 +34,7 @@ export const pickData = R.map(
       'documentation',
       'uptime'
     ]),
-    R.converge(R.assoc('id'), [R.prop('biotoolsID'), R.identity])
+    obj => R.assoc('id', obj.biotoolsID, obj)
   )
 )
 
