@@ -11,6 +11,7 @@ export const pickData = R.map(
         // function: R.compose(R.prop('operation'), R.head),
         pmids: R.reject(R.isNil),
         credit: R.filter(R.propEq('typeEntity', 'Institute')),
+        version: R.head
       }),
     R.pick([
       'id',
@@ -186,7 +187,6 @@ export const updatedData = tools => {
             publication: R.compose(
               publication => publication.map((publication, index) =>
                 R.compose(
-                  R.assoc('impact', impacts[publication.metadata.journal.toUpperCase()]),
                   R.assoc('publicationIdSourcePair', publicationsIdSourcePairs[index]),
                 )(publication)
               ),
@@ -227,6 +227,11 @@ export function getServices(query, page = '?page=1') {
     return fetch(url)
       .then(response => response.json())
       .then(data => {
+        data.list.forEach(tool => {
+          tool.publication.forEach(pub => {
+            pub.impact = impacts[pub.metadata.journal.toUpperCase()]
+          })
+        });
         if (query.length > 0) {
           return getServices(query)
             .then(nextData =>
@@ -251,6 +256,11 @@ export function getServices(query, page = '?page=1') {
             }, data)
           )
       }
+      data.list.forEach(tool => {
+        tool.publication.forEach(pub => {
+          pub.impact = impacts[pub.metadata.journal.toUpperCase()]
+        })
+      });
       return data
     })
 }

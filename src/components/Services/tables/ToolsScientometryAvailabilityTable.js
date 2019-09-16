@@ -42,7 +42,8 @@ export default class ToolsScientometryAvailabilityTable extends Component {
     }, {
       Header: 'Availability',
       id: 'availability',
-      accessor: ({uptime}) => uptime ? `${Math.round((R.compose(R.length, R.reject(c => c !== 200), R.pluck('code'))(uptime)/uptime.length) * 100)}%` : 'N/A',
+      // accessor: ({uptime}) => uptime ? `${Math.round((R.compose(R.length, R.reject(c => c !== 200), R.pluck('code'))(uptime)/uptime.length) * 100)}%` : 'N/A',
+      accessor: ({uptime}) => uptime ? `${R.compose(R.multiply(100),Math.round, codes => R.filter(c => c === 200, codes).length / codes.length, R.reject(R.isNil), R.pluck('code'))(uptime)}%` : 'N/A',
       Cell: data => (
           <div>
             {data.row.availability}

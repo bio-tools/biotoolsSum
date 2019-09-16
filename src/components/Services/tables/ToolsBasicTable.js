@@ -120,7 +120,25 @@ export default class ToolsBasicTable extends Component {
       {
         Header: 'Platform',
         id: 'platform',
-        accessor: ({operatingSystem}) => operatingSystem ? operatingSystem.map(s => s[0]).join(", ") : "",
+        Cell: ({original: {operatingSystem}}) => (
+          <div>
+            {R.contains('Windows', operatingSystem) &&
+            <OverlayTooltip id='tooltip-windows' tooltipText='Platform: Windows'>
+              <FontAwesome className='icons' name='windows' />
+            </OverlayTooltip>
+            }
+            {R.contains('Linux', operatingSystem) &&
+            <OverlayTooltip id='tooltip-linux' tooltipText='Platform: Linux'>
+              <FontAwesome className='icons' name='linux' />
+            </OverlayTooltip>
+            }
+            {R.contains('Mac', operatingSystem) &&
+            <OverlayTooltip id='tooltip-mac' tooltipText='Platform: Mac'>
+              <FontAwesome className='icons' name='apple' />
+            </OverlayTooltip>
+            }
+          </div>
+        )
       }, {
         Header: 'License',
         id: 'license',
