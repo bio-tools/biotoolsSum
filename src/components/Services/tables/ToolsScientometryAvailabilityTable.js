@@ -38,7 +38,6 @@ export default class ToolsScientometryAvailabilityTable extends Component {
     }, {
       Header: 'Impact factor',
       id: 'impactFactor',
-    //   accessor: ({publication}) => R.compose(R.converge(R.divide, [R.sum, R.length]), R.pluck('impact'))(publication)
       accessor: ({publication}) => {
         return R.compose(R.prop('impact'), R.defaultTo(publication[0]), R.find(R.propEq("type", "Primary")))(publication) || "N/A";
       }
