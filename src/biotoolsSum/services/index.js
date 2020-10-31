@@ -229,7 +229,11 @@ export function getServices(query, page = '?page=1') {
       .then(data => {
         data.list.forEach(tool => {
           tool.publication.forEach(pub => {
-            pub.impact = impacts[pub.metadata.journal.toUpperCase()]
+            if (pub.metadata === null || pub.metadata.journal === null) {
+              pub.impact = 0
+            } else {
+              pub.impact = impacts[pub.metadata.journal.toUpperCase()]
+            }
           })
         });
         if (query.length > 0) {
@@ -258,7 +262,11 @@ export function getServices(query, page = '?page=1') {
       }
       data.list.forEach(tool => {
         tool.publication.forEach(pub => {
-          pub.impact = impacts[pub.metadata.journal.toUpperCase()]
+          if (pub.metadata === null || pub.metadata.journal === null) {
+            pub.impact = 0
+          } else {
+            pub.impact = impacts[pub.metadata.journal.toUpperCase()]
+          }
         })
       });
       return data
