@@ -6,7 +6,7 @@ import {getServices} from '../../selectors/servicesSelector'
 import {
   hyphenDelimitedToCamelCased,
   config,
-  showOnlyAllServicesInCollection
+  showOnlyAllServicesInCollection,
 } from '../../biotoolsSum/common/helperFunctions'
 import Loader from '../common/Loader'
 import * as R from 'ramda'
@@ -17,17 +17,17 @@ import {orderByAttributeAndTakeFirstX} from '../../biotoolsSum/services/index'
 import ToolsTableWithChart from './ToolsTableWithChart'
 import {reportType} from '../../constants/generateFile'
 import {getActiveCollection} from '../../selectors/collectionSelector'
-import ToolsBasicTable from "./tables/ToolsBasicTable";
-import ToolsExpertEvaluationTable from "./tables/ToolsExpertEvaluationTable";
-import {Route, Switch} from "react-router";
-import ToolsScientometryAvailabilityTable from "./tables/ToolsScientometryAvailabilityTable";
+import ToolsBasicTable from './tables/ToolsBasicTable'
+import ToolsExpertEvaluationTable from './tables/ToolsExpertEvaluationTable'
+import {Route, Switch} from 'react-router'
+import ToolsScientometryAvailabilityTable from './tables/ToolsScientometryAvailabilityTable'
 
 class BioToolsData extends React.PureComponent {
-  shouldComponentUpdate(nextProps) {
+  shouldComponentUpdate (nextProps) {
     return !!nextProps.services
   }
 
-  render() {
+  render () {
     const {
       services,
       message,
@@ -53,7 +53,7 @@ class BioToolsData extends React.PureComponent {
             <Alert bsStyle='warning'>
               <div className='center-text'>
                 {message + '.'}
-                <br/>
+                <br />
                 {'There is a total number of '}<strong>{count}</strong>{' tools available.'}
               </div>
               {serviceLoading &&

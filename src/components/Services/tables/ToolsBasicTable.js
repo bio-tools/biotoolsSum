@@ -1,27 +1,12 @@
-import React, {Component} from "react";
-import ReactTable from "react-table";
-import * as R from "ramda";
+import React, {Component} from 'react'
+import ReactTable from 'react-table'
+import * as R from 'ramda'
 import FontAwesome from 'react-fontawesome'
 import OverlayTooltip from '../../common/OverlayTooltip'
 
-const subRows = (data, separator) => {
-  const subRows = R.compose(
-    R.dropLast(1),
-    R.flatten,
-    R.flip(R.zip)(R.repeat(separator, data.length)),
-    R.map(t => <div>{t}</div>)
-  )(data);
-  return (<div>{subRows}</div>)
-};
-
 export default class ToolsBasicTable extends Component {
-  constructor(props) {
-    super(props);
-  }
-
-  render() {
-    const {list} = this.props;
-    const cellSeparator = <div style={{height: 1, width: "100%", paddingBottom: 8, borderBottom: "1px solid black"}}/>;
+  render () {
+    const {list} = this.props
     const columns = [
       {
         Header: 'Tool',
@@ -34,18 +19,18 @@ export default class ToolsBasicTable extends Component {
         filterable: true,
         filterMethod: (filter, row) => row[filter.id].toLowerCase().includes(filter.value.toLowerCase()),
         Cell: ({ original: { id, version, name, homepage, toolType } }) => (
-            <div>
-                <a href={homepage} target='_blank'>{name}</a>
-                {version && <span>{` v.${version}`}</span>}
-                <OverlayTooltip id='tooltip-windows' tooltipText={`Bio.tools: ${name}`}>
-                <a href={`https://bio.tools/${id}`} target='_blank'>
-                    <FontAwesome className='icons' name='question-circle' />
-                </a>
-                </OverlayTooltip>
-            </div>),
+          <div>
+            <a href={homepage} target='_blank'>{name}</a>
+            {version && <span>{` v.${version}`}</span>}
+            <OverlayTooltip id='tooltip-windows' tooltipText={`Bio.tools: ${name}`}>
+              <a href={`https://bio.tools/${id}`} target='_blank'>
+                <FontAwesome className='icons' name='question-circle' />
+              </a>
+            </OverlayTooltip>
+          </div>),
       },
       {
-        Header: <div style={{display: "flex"}}><div style={{paddingTop: 5, paddingBottom: 5, flex: "1", borderRight: "1px solid rgba(0,0,0,0.1)"}}>Input</div><div style={{paddingTop: 5, paddingBottom: 5, flex: "1", borderRight: "1px solid rgba(0,0,0,0.1)"}}>Output</div><div style={{paddingTop: 5, paddingBottom: 5, flex: "1"}}>Operations</div></div>,
+        Header: <div style={{display: 'flex'}}><div style={{paddingTop: 5, paddingBottom: 5, flex: '1', borderRight: '1px solid rgba(0,0,0,0.1)'}}>Input</div><div style={{paddingTop: 5, paddingBottom: 5, flex: '1', borderRight: '1px solid rgba(0,0,0,0.1)'}}>Output</div><div style={{paddingTop: 5, paddingBottom: 5, flex: '1'}}>Operations</div></div>,
         headerStyle: {padding: 0},
         id: 'functions',
         accessor: R.prop('function'),
@@ -54,9 +39,9 @@ export default class ToolsBasicTable extends Component {
         getProps: () => {
           return {
             style: {
-              padding: 0
+              padding: 0,
             },
-          };
+          }
         },
         Cell: data => {
           return (
@@ -69,23 +54,23 @@ export default class ToolsBasicTable extends Component {
                 {
                   Header: 'Input',
                   id: 'input',
-                  accessor: R.compose(R.join(', '), R.map(R.compose(R.prop('term'), R.prop('data'))), R.propOr([], 'input'))
+                  accessor: R.compose(R.join(', '), R.map(R.compose(R.prop('term'), R.prop('data'))), R.propOr([], 'input')),
                 },
                 {
                   Header: 'Output',
                   id: 'output',
-                  accessor: R.compose(R.join(', '), R.map(R.compose(R.prop('term'), R.prop('data'))), R.propOr([], 'output'))
+                  accessor: R.compose(R.join(', '), R.map(R.compose(R.prop('term'), R.prop('data'))), R.propOr([], 'output')),
                 },
                 {
                   Header: 'Operations',
                   id: 'operations',
-                  accessor: R.compose(R.join(', '), R.map(R.prop('term')), R.propOr([], 'operation'))
-                }
+                  accessor: R.compose(R.join(', '), R.map(R.prop('term')), R.propOr([], 'operation')),
+                },
               ]}
               data={data.row.functions}
             />
           )
-        }
+        },
       },
       // {
       //   Header: 'Input data',
@@ -138,14 +123,13 @@ export default class ToolsBasicTable extends Component {
             </OverlayTooltip>
             }
           </div>
-        )
+        ),
       }, {
         Header: 'License',
         id: 'license',
         accessor: ({license}) => license,
-      }
-    ];
-
+      },
+    ]
 
     return (
       <ReactTable

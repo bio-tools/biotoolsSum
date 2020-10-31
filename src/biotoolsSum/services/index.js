@@ -2,7 +2,7 @@ import config from '../common/config'
 import * as R from 'ramda'
 import * as Rx from 'rxjs'
 import {MAX_ROW_CELLS_COUNT} from '../../constants/toolsTable'
-import {impacts} from "../common/helperFunctions";
+import {impacts} from '../common/helperFunctions'
 
 export const pickData = R.map(
   R.compose(
@@ -11,7 +11,7 @@ export const pickData = R.map(
         // function: R.compose(R.prop('operation'), R.head),
         pmids: R.reject(R.isNil),
         credit: R.filter(R.propEq('typeEntity', 'Institute')),
-        version: R.head
+        version: R.head,
       }),
     R.pick([
       'id',
@@ -33,7 +33,7 @@ export const pickData = R.map(
       'publicationsIdSourcePairs',
       'license',
       'documentation',
-      'uptime'
+      'uptime',
     ]),
     obj => R.assoc('id', obj.biotoolsID, obj)
   )
@@ -59,7 +59,7 @@ const getUptimeInfo = id => {
         R.head,
         R.prop('tools'),
         R.find(e => e.type)
-      )(first.entities);
+      )(first.entities)
 
       const split = R.compose(
         R.split('/')
@@ -75,7 +75,7 @@ const getUptimeInfo = id => {
 
       return fetch(config.getOpenEBenchUptimeApiUrl(ebenchId, type, domain))
         .then(response => {
-          return response.json();
+          return response.json()
         })
     })
   )
@@ -210,7 +210,7 @@ export const uptimeData = tools => {
   }
 
   return tools.map(tool => {
-    const {biotoolsID} = tool;
+    const {biotoolsID} = tool
     if (!biotoolsID) {
       return Rx.Observable.of(R.compose(
         R.assoc('uptime', []),
