@@ -51,6 +51,10 @@ const getUptimeInfo = id => {
         return Rx.Observable.of([])
       }
 
+      if (R.find(e => e.type)(first.entities) === undefined) {
+        return Rx.Observable.of([])
+      }
+
       const tool = R.compose(
         R.head,
         R.prop('tools'),
@@ -177,6 +181,8 @@ export const updatedData = tools => {
           citationsYears = R.compose(
             R.pluck('citationsYears'),
           )(publicationsInfo)
+        } else {
+          return null
         }
 
         return R.compose(
