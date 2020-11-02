@@ -34,7 +34,7 @@ export default class ToolsExpertEvaluationTable extends Component {
       columns.push({
         Header: label,
         id: key,
-        accessor: ({id}) => configRatings[id] ? configRatings[id][key] : null,
+        accessor: ({id}) => configRatings[id.toLowerCase()] ? configRatings[id.toLowerCase()][key] : null,
         sortable: true,
         sortMethod: (a, b) => {
           return a - b
