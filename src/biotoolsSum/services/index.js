@@ -77,7 +77,8 @@ const getUptimeInfo = id => {
         .then(response => {
           return response.json()
         })
-    })
+        .catch(() => Rx.Observable.of([]))
+    }),
   )
 }
 
@@ -260,21 +261,22 @@ export function getServices(query, page = '?page=1') {
     .then(data => {
       if (data.next !== null) {
         return getServices(query, data.next)
-          .then(nextData =>
-            R.evolve({
+          .then(nextData => {
+            nextData.list.forEach(tool => {
+              tool.publication.forEach(pub => {
+                if (pub.metadata === null || pub.metadata.journal === null) {
+                  pub.impact = 0
+                } else {
+                  pub.impact = impacts[pub.metadata.journal.toUpperCase()]
+                }
+              })
+            })
+            return R.evolve({
               list: R.concat(nextData.list),
             }, data)
+          },
           )
       }
-      data.list.forEach(tool => {
-        tool.publication.forEach(pub => {
-          if (pub.metadata === null || pub.metadata.journal === null) {
-            pub.impact = 0
-          } else {
-            pub.impact = impacts[pub.metadata.journal.toUpperCase()]
-          }
-        })
-      });
       return data
     })
 }
