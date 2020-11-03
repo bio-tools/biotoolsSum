@@ -259,22 +259,21 @@ export function getServices(query, page = '?page=1') {
   return fetch(url)
     .then(response => response.json())
     .then(data => {
+      data.list.forEach(tool => {
+        tool.publication.forEach(pub => {
+          if (pub.metadata === null || pub.metadata.journal === null) {
+            pub.impact = 0
+          } else {
+            pub.impact = impacts[pub.metadata.journal.toUpperCase()]
+          }
+        })
+      })
       if (data.next !== null) {
         return getServices(query, data.next)
-          .then(nextData => {
-            nextData.list.forEach(tool => {
-              tool.publication.forEach(pub => {
-                if (pub.metadata === null || pub.metadata.journal === null) {
-                  pub.impact = 0
-                } else {
-                  pub.impact = impacts[pub.metadata.journal.toUpperCase()]
-                }
-              })
-            })
-            return R.evolve({
-              list: R.concat(nextData.list),
-            }, data)
-          },
+          .then(nextData =>
+             R.evolve({
+               list: R.concat(nextData.list),
+             }, data)
           )
       }
       return data
